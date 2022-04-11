@@ -1,11 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+
+const image = { uri: "/Users/hoonkwon/Desktop/GithubProjects/Mental-Health-Mobile-Games/MobileGame/assets/dusk_background.jpg" };
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      </ImageBackground>
     </View>
   );
 }
@@ -13,8 +15,10 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
+  image: {
+    flex: 1,
+    justifyContent: "center"
+  },
+
 });
