@@ -16,6 +16,7 @@ export default function App() {
           resizeMode="center"
           style = {styles.butterfly}
           />
+          <Text style={styles.title}>Arora</Text>
         </View>
         <View style={styles.loginView}>
           <TextInput 
@@ -70,8 +71,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginHorizontal: 15,
     marginVertical: 10,
-    
+    color: 'white',
   },
-  
+  title: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 30,
+  }
 
 });
