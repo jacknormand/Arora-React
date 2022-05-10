@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from "react";
-import { ImageBackground, StyleSheet, Text, View, Image, TextInput } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, } from 'react-native';
 //View
 export default function App() {
   const [text, onChangeText] = React.useState("Useless Text");
@@ -29,6 +29,9 @@ export default function App() {
             style={styles.textIn}
             placeholder= "Password"
           />
+          <TouchableOpacity style={styles.loginBtn}>
+            <Text style={styles.loginText}>LOGIN</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
       
@@ -45,15 +48,14 @@ const styles = StyleSheet.create({
   butterflyView: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 50
   },
   loginView: {
-    backgroundColor: 'rgba(163, 163, 163, 0.6)',
+    backgroundColor: 'rgba(163, 163, 163, 0.8)',
     flex: 1,
-    marginBottom: 25,
+    marginBottom: 50,
     marginHorizontal: 20,
-    marginTop: 500,
-    borderRadius: 10
+    marginTop: 40,
+    borderRadius: 10,
   },
   image: {
     flex: 1,
@@ -71,12 +73,24 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginHorizontal: 15,
     marginVertical: 10,
-    color: 'white',
+    color: 'black',
   },
   title: {
     fontWeight: 'bold',
     color: 'white',
     fontSize: 30,
-  }
+    
+  },
+
+  loginBtn: {
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 35,
+    backgroundColor: 'rgba(140, 200, 250, 0.3)',
+    marginHorizontal: 30,
+  },
 
 });
