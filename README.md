@@ -1,1 +1,1 @@
-Arora now in React Native!
+Arora in React Native!
