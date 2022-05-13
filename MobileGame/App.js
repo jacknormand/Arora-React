@@ -8,6 +8,7 @@ import HomeScreen from './screens/HomeScreen';
 import PracticeScreen from './screens/PracticeScreen';
 import LearnScreen from './screens/LearnScreen';
 import AtriumScreen from './screens/AtriumScreen';
+import SplashScreen from './screens/SplashScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -18,13 +19,14 @@ export default function App() {
         <Stack.Navigator
         screenOptions={{
           headerShown: false
-        }}>
+        }} initialRouteName="Splash" >
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Wellness" component={WellnessScreen} />
           <Stack.Screen name="Home" component={ HomeScreen } />
           <Stack.Screen name="Practice" component={ PracticeScreen } />
           <Stack.Screen name="Learn" component={ LearnScreen } />
           <Stack.Screen name="Atrium" component={ AtriumScreen } />
+          <Stack.Screen name="Splash" component={ SplashScreen } />
         </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>
