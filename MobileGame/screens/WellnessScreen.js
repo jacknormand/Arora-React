@@ -1,20 +1,27 @@
 import React from 'react';
-import { StyleSheet, View , TouchableOpacity , Text } from 'react-native';
+import { StyleSheet, View , TouchableOpacity , Text , ImageBackground , Image } from 'react-native';
 import { Card } from 'react-native-paper';
 import { DefaultTheme } from 'react-native-paper';
 
 function WellnessScreen ({ navigation }) {
   return (
     <View style={styles.container}>
+     <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ styles.backgroundImage }>
       <Card style={styles.card}>
-        <Card.Title title="This is Slider One" />
+        <Text style={ styles.cardText }>How is your mood today?</Text>
       </Card>
-      <Card style={styles.card}>
-        <Card.Title title="This is Slider Two" />
+      <Card style={styles.cardTwo}>
+        <Text style={ styles.cardText }>How stressed are you today?</Text>
       </Card>
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-        <Text style={ styles.skip }> SKIP </Text>
-      </TouchableOpacity>
+      <View style={ styles.textAlign }>
+       <TouchableOpacity style={ styles.button } onPress={() => navigation.navigate('Home')}>
+        <Text style={ styles.buttonText }> SKIP </Text>
+       </TouchableOpacity>
+       <TouchableOpacity style={ styles.submitButton } onPress={() => navigation.navigate('Home')}>
+        <Text style={ styles.buttonText }>SUBMIT</Text>
+       </TouchableOpacity>
+      </View>
+     </ImageBackground>
     </View>
   );
 }
@@ -22,23 +29,66 @@ function WellnessScreen ({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: DefaultTheme.colors.background,
-    alignItems: 'center',
-    paddingTop: 10
-  },
-  card: {
-    backgroundColor: 'rgba(163, 163, 163, 0.8)',
-    flex: 1,
-    marginBottom: 20,
-    marginHorizontal: 20,
-    marginTop: 40,
-    borderRadius: 5,
-    width: '80%',
   },
   
-  skip:{
-    fontSize:50,
+  cardText:{
+    color: 'white',
+    fontSize: 30,
+  },
+  
+  textAlign:{
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  
+  backgroundImage:{
+    flex: 1,
+  },
+  
+  button:{
+    backgroundColor: 'rgba(140, 200, 250, 1)',
+    height: 50,
+    width: 80,
+    marginBottom: 10,
+    marginLeft: 20,
+  },
+  
+  submitButton:{
+    backgroundColor: 'rgba(140, 200, 250, 1)',
+    height: 50,
+    width: 80,
+    marginBottom: 10,
+    marginLeft: 210,
+  },
+  
+  buttonText:{
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 15,
+    fontSize: 20,
+  },
+  
+  card: {
+    backgroundColor: 'rgba(163, 163, 163, 0.2)',
+    marginBottom: 20,
+    marginHorizontal: 20,
+    marginTop: 50,
+    borderRadius: 5,
+    width: '90%',
+    height: '40%',
+    alignItems 'center',
+  },
+  
+  cardTwo:{
+    backgroundColor: 'rgba(163, 163, 163, 0.2)',
+    marginBottom: 20,
+    marginHorizontal: 20,
+    marginTop: 5,
+    borderRadius: 5,
+    width: '90%',
+    height: '40%',
+    alignItems: 'center',   
   },
 });
 
