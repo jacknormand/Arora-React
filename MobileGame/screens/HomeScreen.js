@@ -7,27 +7,42 @@
   - Finalize the styles to be used  
 */
 import React from "react";
-import { TouchableOpacity , Text ,ImageBackground , View , StyleSheet , Image } from "react-native"
+import { TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 
 export default function HomeScreen( { navigation }){
     return(
         <View style={ style.main }>
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>
-                <Image style={ style.userIcon } source={require('../assets/user-placeholder-icon.png')}/>
+                <Image style={ style.userIcon } source={require('../assets/profile_button_unfilled.png')} resizeMode='contain'/>
                 <Image style={ style.butterfly } source={require('../assets/blue_butterfly_image.png')}/>
                 <View style={ style.itemBox }>
-                    <Image style={ style.boxIcon }/>
-                    <Text style={ style.text }>Total Pollen Count</Text>
+                  <View style={ style.textAlign } >
+                    <Image style={ style.boxIcon } source={require('../assets/half_pollen.png')} resizeMode='contain'/>
+                    <Text style={ style.boxText }>Total Pollen Count</Text>
+                    <Text style={ style.userPollen }>0</Text>
+                   </View>
                 </View>
-                <View style={ style.itemBox }>
-                    <Image style={ style.boxIcon }/>
-                    <Text style={ style.text }>Attrium - View All Butterfies</Text>
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate('Atrium') }>
+                  <View style={ style.itemBox }>
+                     <View style={ style.textAlign }>
+                      <Image style={ style.boxIcon } source={require('../assets/jar_button.png')} resizeMode='contain'/>
+                      <Text style={ style.boxText }>Attrium - View All Butterfies</Text>
+                     </View>
+                  </View>
+                </TouchableOpacity>
                 <View style={ style.footer }>
                   <View>
-                    <Image></Image>
-                    <Image></Image>
-                    <Image style={ style.learnIcon } source={require('../assets/learnIcon.png')}></Image>
+                    <View style={ style.textAlign }>
+                     <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                      <Image style={ style.profileIcon } source={require('../assets/profile_filled_button.png')} resizeMode='contain'></Image>
+                     </TouchableOpacity>
+                     <TouchableOpacity onPress={() => navigation.navigate('Practice')}>
+                      <Image style={ style.practiceIcon } source={require('../assets/mindfullness_meditation_icon.png')} resizeMode='contain'></Image>
+                     </TouchableOpacity>
+                     <TouchableOpacity onPress={() => navigation.navigate('Learn')}>
+                      <Image style={ style.learnIcon } source={require('../assets/learnIcon.png')} resizeMode='contain'></Image>
+                     </TouchableOpacity>                      
+                    </View>
                   </View>
                   <View style={ style.textAlign }>
                       <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -51,10 +66,11 @@ const style = StyleSheet.create({
      flex:1,
     },
 
-    text:{
+    boxText:{
       color: 'white',
       fontSize: 20,
       paddingLeft: 10,
+      marginTop: 25,
     },
 
     butterfly:{
@@ -77,16 +93,25 @@ const style = StyleSheet.create({
     },
 
     userIcon:{
-      marginLeft: 290,
+      marginLeft: 250,
       height: 100,
       width: 100,
     },
-
-    boxIcon:{
-     paddingTop: 5,
-     paddingBottom: 5,
-     paddingLeft: 10,
-     paddingRight: 10,
+  
+     boxIcon:{
+      height: 50,
+      width: 50,
+      marginTop: 10,
+      marginLeft: 10,
+      marginBottom: 10,
+      paddingRight: 10,
+    },
+  
+      userPollen:{
+       color: 'white',
+       fontSize: 20,
+       paddingLeft: 50,
+       marginTop: 25,
     },
 
     image:{
@@ -98,8 +123,8 @@ const style = StyleSheet.create({
     footer:{
       backgroundColor: 'rgba(0, 0, 0, 0.14)',
       marginTop: 200,
-      width:410,
-      height:90,
+      width: 410,
+      height: 90,
     },
 
     textAlign:{
@@ -109,28 +134,41 @@ const style = StyleSheet.create({
     },
 
     learnIcon:{
-      marginLeft: 350,
-      marginTop: 10,
-      height: 40,
-      width: 32,
+      marginLeft: 120,
+      marginTop: 20,
+      height: 30,
+      width: 30,
       borderColor: 'white',
     },
 
     profileText:{
-      marginLeft: 15,
+      marginLeft: 25,
       marginBottom: 5,
       color: 'white',
     },
+  
+     profileIcon:{
+       marginTop: 20,
+       marginLeft: 30,
+       height: 30,
+       width: 30,
+     },
 
-    practiceText:{
-      marginLeft: 125,
-      marginBottom: 5,
-      color: 'white',
+     practiceText:{
+       marginLeft: 105,
+       marginBottom: 5,
+       color: 'white',
+     },
+  
+      practiceIcon:{
+       marginLeft: 125,
+       height: 30,
+       width: 30,
+       marginTop: 20,
     },
 
     learnText:{
-     marginLeft: 345,
+     marginLeft: 110,
      color: 'white',
-     marginBottom: 10
-    }
+    },
 });
