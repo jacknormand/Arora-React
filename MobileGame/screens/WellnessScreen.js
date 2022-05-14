@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: '90%',
     height: '40%',
-    alignItems 'center',
+    alignItems: 'center',
   },
   
   cardTwo:{
