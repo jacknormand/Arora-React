@@ -7,6 +7,7 @@
 */
 import React from 'react';
 import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity } from 'react-native';
+import Footer from '../components/Footer'
 
 export default function PracticeScreen({ navigation }){
     return(
@@ -25,24 +26,7 @@ export default function PracticeScreen({ navigation }){
               <Text style={style.boxText}>Superfly</Text>
               <Image></Image>
             </View>
-            <View style={ style.footer }>
-               <View>
-                 <Image></Image>
-                 <Image></Image>
-                 <Image></Image>
-               </View>
-               <View style={ style.textAlign}>
-                 <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                   <Text style={ style.profileText }>Profile</Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity onPress={() => navigation.navigate('Practice')}>
-                   <Text style={ style.practiceText }>Practice</Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity onPress={() => navigation.navigate('Learn')}>
-                   <Text style={ style.learnText }>Learn</Text>
-                 </TouchableOpacity>
-               </View>
-            </View>
+           <Footer />
          </ImageBackground>
         </View>
     );
@@ -58,33 +42,6 @@ const style = StyleSheet.create({
         fontSize: 20,
     },
 
-    footer:{
-        width: 450,
-        height: 100,
-        backgroundColor: 'rgba(0, 0, 0, 0.14)',
-        marginTop: 475,
-    },
-
-    profileText:{
-     marginLeft: 15,
-     marginBottom: 5,
-     color: 'white',
-    },
-
-    practiceText:{
-        marginLeft: 125,
-        marginBottom: 5,
-        color: 'white',
-    },
-
-    footerText:{
-        color: 'white',
-    },
-
-    learnText:{
-     marginLeft: 345,
-     color: 'white',
-    },
     
     textAlign:{
      flexWrap: 'wrap',

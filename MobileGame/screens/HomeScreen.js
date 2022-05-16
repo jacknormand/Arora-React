@@ -8,6 +8,7 @@
 */
 import React from "react";
 import { TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
+import Footer from '../components/Footer'
 
 export default function HomeScreen( { navigation }){
     return(
@@ -30,32 +31,7 @@ export default function HomeScreen( { navigation }){
                      </View>
                   </View>
                 </TouchableOpacity>
-                <View style={ style.footer }>
-                  <View>
-                    <View style={ style.textAlign }>
-                     <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                      <Image style={ style.profileIcon } source={require('../assets/profile_filled_button.png')} resizeMode='contain'></Image>
-                     </TouchableOpacity>
-                     <TouchableOpacity onPress={() => navigation.navigate('Practice')}>
-                      <Image style={ style.practiceIcon } source={require('../assets/mindfullness_meditation_icon.png')} resizeMode='contain'></Image>
-                     </TouchableOpacity>
-                     <TouchableOpacity onPress={() => navigation.navigate('Learn')}>
-                      <Image style={ style.learnIcon } source={require('../assets/learnIcon.png')} resizeMode='contain'></Image>
-                     </TouchableOpacity>                      
-                    </View>
-                  </View>
-                  <View style={ style.textAlign }>
-                      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                         <Text style={ style.profileText }>Profile</Text>
-                      </TouchableOpacity>
-                      < TouchableOpacity onPress={() => navigation.navigate('Practice')}>
-                         <Text style={ style.practiceText }>Practice</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => navigation.navigate('Learn')}>
-                         <Text style={ style.learnText }>Learn</Text>
-                      </TouchableOpacity>
-                  </View>
-                </View>
+                <Footer />
             </ImageBackground>
         </View>
     );
@@ -120,55 +96,9 @@ const style = StyleSheet.create({
       alignItems: 'center'
     },
 
-    footer:{
-      backgroundColor: 'rgba(0, 0, 0, 0.14)',
-      marginTop: 200,
-      width: 410,
-      height: 90,
-    },
-
     textAlign:{
       flexWrap: 'wrap',
       flexDirection: 'row',
       alignItems: 'flex-start',
-    },
-
-    learnIcon:{
-      marginLeft: 120,
-      marginTop: 20,
-      height: 30,
-      width: 30,
-      borderColor: 'white',
-    },
-
-    profileText:{
-      marginLeft: 25,
-      marginBottom: 5,
-      color: 'white',
-    },
-  
-     profileIcon:{
-       marginTop: 20,
-       marginLeft: 30,
-       height: 30,
-       width: 30,
-     },
-
-     practiceText:{
-       marginLeft: 105,
-       marginBottom: 5,
-       color: 'white',
-     },
-  
-      practiceIcon:{
-       marginLeft: 125,
-       height: 30,
-       width: 30,
-       marginTop: 20,
-    },
-
-    learnText:{
-     marginLeft: 110,
-     color: 'white',
     },
 });

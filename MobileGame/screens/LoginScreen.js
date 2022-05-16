@@ -28,6 +28,7 @@ function LoginScreen ({ navigation }) {
               <TextInput 
                 style={styles.textIn}
                 placeholder= "Password"
+                secureTextEntry={ true }
               />
               <TouchableOpacity style={styles.loginBtn} 
               onPress={() => navigation.navigate('Wellness')}>
