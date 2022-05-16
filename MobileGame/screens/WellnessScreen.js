@@ -1,10 +1,48 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { StyleSheet, View , TouchableOpacity , Text , ImageBackground , Image } from 'react-native';
 import { Card } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 
 function WellnessScreen ({ navigation }) {
-  
+  const [range,setRange] = useState(0)
+  const [rangeTwo,setRangeTwo] = useState(0)
+  var out1
+  var out2
+  switch(range) {
+    case 0:
+      out1 = "Very Unpleasant"
+      break;
+    case 1:
+      out1 = "Unpleasant"
+      break;
+    case 2:
+      out1 = "Neutral"
+      break;
+    case 3:
+      out1 = "Pleasant"
+      break;
+    case 4:
+      out1 = "Very Pleasant"
+      break;
+    }
+
+  switch(rangeTwo) {
+    case 0:
+      out2 = "Very Tense"
+      break;
+    case 1:
+      out2 = "Tense"
+      break;
+    case 2:
+      out2 = "Neutral"
+      break;
+    case 3:
+      out2 = "Calm"
+      break;
+    case 4:
+      out2 = "Very Calm"
+      break;
+      }
   return (
     <View style={styles.container}>
      <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ styles.backgroundImage }>
@@ -15,22 +53,35 @@ function WellnessScreen ({ navigation }) {
         <Slider
         style={ styles.slider }
         minimumValue={0}
-        maximumValue={100}
+        maximumValue={4}
+        step={1}
         minimumTrackTintColor="#ff0045"
         maximumTrackTintColor="#000000"
+        thumbTintColor='pink'
+        onValueChange={(value) => setRange(value)}
       />
+      <Text style={styles.bottomText}>
+
+          {out1}
+        </Text>
       </Card>
 
       <Card style={styles.cardTwo}>
         <Text style={ styles.cardText }>How stressed are you today?</Text>
         <Image source={require('../assets/surveryScreen/black_butterfly.png')} style={ styles.butterfly }/>
-        <Slider
+      <Slider
         style={ styles.slider }
         minimumValue={0}
-        maximumValue={100}
+        maximumValue={4}
+        step={1}
         minimumTrackTintColor="#ff0045"
         maximumTrackTintColor="#000000"
+        thumbTintColor='pink'
+        onValueChange={(value) => setRangeTwo(value)}
       />
+      <Text style={styles.bottomText}>
+          {out2}
+        </Text>
       </Card>
 
       <View style={ styles.textAlign }>
@@ -74,6 +125,12 @@ const styles = StyleSheet.create({
   slider:{
     alignSelf: 'center',
     width: 250,
+  },
+
+  bottomText:{
+    color: 'white',
+    fontSize: 20,
+    textAlign: 'center',
   },
   
   button:{
