@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, ImageBackground } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -14,12 +15,15 @@ const Stack = createNativeStackNavigator()
 
 export default function App() {
   return (
+    <View style={{ flex: 1,}}>
+    <ImageBackground source={require('./assets/dusk_background.jpg')} resizeMode="cover" style={ {flex: 1,} }>
     <PaperProvider>
       <NavigationContainer>
         <Stack.Navigator
         screenOptions={{
-          headerShown: false
-        }} initialRouteName="Splash" >
+          headerShown: false, 
+          gestureEnabled: false
+        }} initialRouteName="Splash">
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Wellness" component={WellnessScreen} />
           <Stack.Screen name="Home" component={ HomeScreen } />
@@ -30,5 +34,8 @@ export default function App() {
         </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>
+    </ImageBackground>
+    </View>
+    
   );
 }

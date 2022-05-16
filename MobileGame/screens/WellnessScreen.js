@@ -9,51 +9,51 @@ function WellnessScreen ({ navigation }) {
   var out1
   var out2
   switch(range) {
-    case 0:
+    case -2:
       out1 = "Very Unpleasant"
       break;
-    case 1:
+    case -1:
       out1 = "Unpleasant"
       break;
-    case 2:
+    case 0:
       out1 = "Neutral"
       break;
-    case 3:
+    case 1:
       out1 = "Pleasant"
       break;
-    case 4:
+    case 2:
       out1 = "Very Pleasant"
       break;
     }
 
   switch(rangeTwo) {
-    case 0:
+    case -2:
       out2 = "Very Tense"
       break;
-    case 1:
+    case -1:
       out2 = "Tense"
       break;
-    case 2:
+    case 0:
       out2 = "Neutral"
       break;
-    case 3:
+    case 1:
       out2 = "Calm"
       break;
-    case 4:
+    case 2:
       out2 = "Very Calm"
       break;
       }
   return (
     <View style={styles.container}>
-     <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ styles.backgroundImage }>
+    <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ styles.backgroundImage }>
 
       <Card style={styles.card}>
         <Text style={ styles.cardText }>How is your mood today?</Text>
         <Image source={require('../assets/surveryScreen/black_butterfly.png')} style={ styles.butterfly }/>
         <Slider
         style={ styles.slider }
-        minimumValue={0}
-        maximumValue={4}
+        minimumValue={-2}
+        maximumValue={2}
         step={1}
         minimumTrackTintColor="#ff0045"
         maximumTrackTintColor="#000000"
@@ -71,8 +71,8 @@ function WellnessScreen ({ navigation }) {
         <Image source={require('../assets/surveryScreen/black_butterfly.png')} style={ styles.butterfly }/>
       <Slider
         style={ styles.slider }
-        minimumValue={0}
-        maximumValue={4}
+        minimumValue={-2}
+        maximumValue={2}
         step={1}
         minimumTrackTintColor="#ff0045"
         maximumTrackTintColor="#000000"
@@ -92,8 +92,9 @@ function WellnessScreen ({ navigation }) {
         <Text style={ styles.buttonText }>SUBMIT</Text>
        </TouchableOpacity>
       </View>
-     </ImageBackground>
+      </ImageBackground>
     </View>
+
   );
 }
 
@@ -134,26 +135,28 @@ const styles = StyleSheet.create({
   },
   
   button:{
-    backgroundColor: 'rgba(140, 200, 250, 1)',
+    borderRadius: 15,
+    backgroundColor: 'rgba(140, 200, 250, .7)',
     height: 50,
     width: 80,
     marginBottom: 10,
     marginLeft: 20,
+    justifyContent: 'center',
   },
   
   submitButton:{
-    backgroundColor: 'rgba(140, 200, 250, 1)',
+    borderRadius: 15,
+    backgroundColor: 'rgba(140, 200, 250, .7)',
     height: 50,
     width: 80,
     marginBottom: 10,
-    position: 'absolute', right: 20
+    position: 'absolute', right: 20,
+    justifyContent: 'center',
   },
   
   buttonText:{
     color: 'white',
     textAlign: 'center',
-    marginTop: 15,
-    fontSize: 20,
   },
   
   card: {

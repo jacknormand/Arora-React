@@ -2,14 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import React from "react";
 import { Button, Card } from 'react-native-paper';
 import { DefaultTheme } from 'react-native-paper';
-import { ImageBackground, ScrollView, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, } from 'react-native';
 
 function LoginScreen ({ navigation }) {
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState(null);
     return (
-      // <ScrollView style={styles.scrollView}>
-      //   <Card style={styles.card}>
           <View style={styles.container}>
           <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={styles.image}>
             <View style={styles.butterflyView}>
@@ -39,8 +37,6 @@ function LoginScreen ({ navigation }) {
             </View>
           </ImageBackground>
         </View>
-      //   </Card>
-      // </ScrollView>
     )
   }
 
@@ -104,9 +100,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 35,
-    backgroundColor: 'rgba(140, 200, 250, 0.3)',
+    backgroundColor: 'rgba(140, 200, 250, 0.7)',
     marginHorizontal: 30,
     flex: .6,
+  },
+
+  loginText: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 25,
+    
   },
 
 
