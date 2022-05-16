@@ -10,6 +10,9 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@react-native-community/slider": "^4.2.2",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
     "expo": "~44.0.0",
@@ -20,7 +23,8 @@
     "react-native-paper": "^4.12.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
-    "react-native-web": "0.17.1"
+    "react-native-web": "0.17.1",
+    "react-slider": "^2.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
