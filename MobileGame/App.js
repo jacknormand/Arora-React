@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ImageBackground } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import LoginScreen from './screens/LoginScreen';
@@ -16,14 +16,17 @@ const Stack = createNativeStackNavigator()
 export default function App() {
   return (
     <View style={{ flex: 1,}}>
-    <ImageBackground source={require('./assets/dusk_background.jpg')} resizeMode="cover" style={ {flex: 1,} }>
     <PaperProvider>
-      <NavigationContainer>
+    <ImageBackground source={require('./assets/dusk_background.jpg')} resizeMode="cover" style={ {flex: 1,} }>
+      <NavigationContainer theme={DarkTheme}>
         <Stack.Navigator
         screenOptions={{
           headerShown: false, 
-          gestureEnabled: false
-        }} initialRouteName="Splash">
+          gestureEnabled: true,
+          animation: 'none',
+        }} 
+        mode="modal"
+        initialRouteName="Splash">
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Wellness" component={WellnessScreen} />
           <Stack.Screen name="Home" component={ HomeScreen } />
@@ -33,8 +36,9 @@ export default function App() {
           <Stack.Screen name="Splash" component={ SplashScreen } />
         </Stack.Navigator>
     </NavigationContainer>
-    </PaperProvider>
     </ImageBackground>
+    </PaperProvider>
+
     </View>
     
   );
