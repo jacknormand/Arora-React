@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 80,
     marginBottom: 10,
-    marginLeft: 210,
+    position: 'absolute', right: 20
   },
   
   buttonText:{
@@ -71,11 +71,10 @@ const styles = StyleSheet.create({
   
   card: {
     backgroundColor: 'rgba(163, 163, 163, 0.2)',
-    marginBottom: 20,
+    marginBottom: 5,
     marginHorizontal: 20,
-    marginTop: 50,
-    borderRadius: 5,
-    width: '90%',
+    marginTop: 30,
+    width: '85%',
     height: '40%',
     alignItems: 'center',
   },
@@ -85,8 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginHorizontal: 20,
     marginTop: 5,
-    borderRadius: 5,
-    width: '90%',
+    width: '85%',
     height: '40%',
     alignItems: 'center',   
   },
