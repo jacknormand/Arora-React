@@ -8,39 +8,51 @@ function WellnessScreen ({ navigation }) {
   const [rangeTwo,setRangeTwo] = useState(0)
   var out1
   var out2
+  var imgPathOne
+  var imgPathTwo
   switch(range) {
     case -2:
       out1 = "Very Unpleasant"
+      imgPathOne = require('../assets/surveryScreen/-2.png')
       break;
     case -1:
       out1 = "Unpleasant"
+      imgPathOne = require('../assets/surveryScreen/-1.png')
       break;
     case 0:
       out1 = "Neutral"
+      imgPathOne = require('../assets/surveryScreen/0.png')
       break;
     case 1:
       out1 = "Pleasant"
+      imgPathOne = require('../assets/surveryScreen/1.png')
       break;
     case 2:
       out1 = "Very Pleasant"
+      imgPathOne = require('../assets/surveryScreen/2.png')
       break;
     }
 
   switch(rangeTwo) {
     case -2:
       out2 = "Very Tense"
+      imgPathTwo = require('../assets/surveryScreen/-2.png')
       break;
     case -1:
       out2 = "Tense"
+      imgPathTwo = require('../assets/surveryScreen/-1.png')
       break;
     case 0:
       out2 = "Neutral"
+      imgPathTwo = require('../assets/surveryScreen/0.png')
       break;
     case 1:
       out2 = "Calm"
+      imgPathTwo = require('../assets/surveryScreen/1.png')
       break;
     case 2:
       out2 = "Very Calm"
+      imgPathTwo = require('../assets/surveryScreen/2.png')
       break;
       }
   return (
@@ -49,7 +61,7 @@ function WellnessScreen ({ navigation }) {
 
       <Card style={styles.card}>
         <Text style={ styles.cardText }>How is your mood today?</Text>
-        <Image source={require('../assets/surveryScreen/black_butterfly.png')} style={ styles.butterfly }/>
+        <Image source={imgPathOne} style={ styles.butterfly }/>
         <Slider
         style={ styles.slider }
         minimumValue={-2}
@@ -68,7 +80,7 @@ function WellnessScreen ({ navigation }) {
 
       <Card style={styles.cardTwo}>
         <Text style={ styles.cardText }>How stressed are you today?</Text>
-        <Image source={require('../assets/surveryScreen/black_butterfly.png')} style={ styles.butterfly }/>
+        <Image source={imgPathTwo} style={ styles.butterfly }/>
       <Slider
         style={ styles.slider }
         minimumValue={-2}
