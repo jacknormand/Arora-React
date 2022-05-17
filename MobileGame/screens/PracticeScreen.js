@@ -16,16 +16,20 @@ export default function PracticeScreen({ navigation }){
             <Text style={ style.header }>
               Practice
             </Text>
-            <View style={ style.gameCard }>
-              <Image></Image>
+            <TouchableOpacity style={ style.gameCard }>
+             <View style={ style.align }>
+              <Image style={ style.boxIcon } source={require('../assets/catch_butterfly.png')} resizeMode="contain"></Image>
               <Text style={ style.boxText }>AR Game - Catch Butterfly</Text>
-              <Image></Image>
-            </View>
-            <View style={ style.gameCard }>
-              <Image></Image>
+              <Image style={ style.arrow } source={require('../assets/arrowIcon.png')} resizeMode="contain"></Image>
+             </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={ style.gameCard }>
+             <View style={ style.align }>
+              <Image style={ style.boxIcon } resizeMode="contain" source={require('../assets/superfly.png')}></Image>
               <Text style={style.boxText}>Superfly</Text>
-              <Image></Image>
-            </View>
+              <Image style={ style.arrow } source={require('../assets/arrowIcon.png')} resizeMode="contain"></Image>
+             </View>
+            </TouchableOpacity>
            <Footer />
          </ImageBackground>
         </View>
@@ -36,25 +40,39 @@ const style = StyleSheet.create({
     main:{
         flex: 1,
     },
+ 
+    arrow:{
+        position: 'absolute',
+        right: 0,
+        marginTop: 10,
+    },
 
     boxText:{
         color: 'white',
-        fontSize: 20,
+        fontSize: 15,
+        marginTop: 15,
     },
 
     
-    textAlign:{
+    align:{
      flexWrap: 'wrap',
      flexDirection: 'row',
-     alignItems: 'flex-start',
+    },
+ 
+     boxIcon:{
+        height: 60,
+        width: 60,
+        marginLeft: 10,
+        marginRight: 10,
     },
 
     gameCard:{
-        height: 80,
-        width: 350,
+        height: '10%',
+        width: '90$',
         marginTop: 30,
         backgroundColor: 'rgba(0, 0, 0, 0.14)',
         borderRadius: 5,
+        justifyContent: 'center',
     },
 
     image:{
