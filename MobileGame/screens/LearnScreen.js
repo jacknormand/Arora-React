@@ -93,8 +93,6 @@ const style = StyleSheet.create({
     height: 50,
     resizeMode: 'contain',
     marginLeft: 5,
-    color: 'white',
-    fontSize: 20,
     position: 'absolute', left: 0,
   },
 
@@ -103,8 +101,6 @@ const style = StyleSheet.create({
     height: 35,
     resizeMode: 'contain',
     marginRight: 5,
-    color: 'white',
-    fontSize: 20,
     position: 'absolute', right: 0,
   },
 
