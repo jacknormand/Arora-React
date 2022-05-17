@@ -1,8 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import React from "react";
-import { Button, Card } from 'react-native-paper';
-import { DefaultTheme } from 'react-native-paper';
-import { ImageBackground, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 
 function LoginScreen ({ navigation }) {
   const [text, onChangeText] = React.useState("Useless Text");
@@ -12,12 +9,17 @@ function LoginScreen ({ navigation }) {
           <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={styles.image}>
             <View style={styles.butterflyView}>
               <Image
-              source = {require('../assets/blue_butterfly_image.png')}
+              source = {require('../assets/loginScreen/orange_butterfly_image.png')}
               resizeMode="center"
               style = {styles.butterfly}
               />
               <Text style={styles.title}>Arora</Text>
             </View>
+
+            <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
             <View style={styles.loginView}>
               <TextInput 
                 style={styles.textIn}
@@ -36,6 +38,7 @@ function LoginScreen ({ navigation }) {
                 <Text style={styles.loginText}>LOGIN</Text>
               </TouchableOpacity>
             </View>
+            </KeyboardAvoidingView>
           </ImageBackground>
         </View>
     )
@@ -44,30 +47,22 @@ function LoginScreen ({ navigation }) {
 //Style sheet
 const styles = StyleSheet.create({
 
-  scrollView: {
-    //backgroundColor: DefaultTheme.colors.background,
-    //paddingTop: 10
-  },
-  card: {
-    width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  },
   container: {
     flex: 1,
   },
+
 
   butterflyView: {
     flex: 1,
     alignItems: 'center',
   },
   loginView: {
-    backgroundColor: 'rgba(163, 163, 163, 0.8)',
+    backgroundColor: 'rgba(163, 163, 163, 0.95)',
     flex: 1,
-    marginBottom: 50,
-    marginHorizontal: 20,
-    marginTop: 40,
-    borderRadius: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
+    width: "95%",
+    borderRadius: 20,
   },
   image: {
     flex: 1,
@@ -77,13 +72,13 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     justifyContent: "center",
-    paddingHorizontal: 20,
-    paddingTop: 100,
   },
   textIn: {
-    borderBottomColor: '#000000',
+    borderBottomColor: '#7a1133',
     borderBottomWidth: 1,
-    marginHorizontal: 15,
+    alignSelf: 'center',
+    width: "85%",
+    height: "10%",
     marginVertical: 10,
     color: 'black',
   },
@@ -96,20 +91,21 @@ const styles = StyleSheet.create({
 
   loginBtn: {
     width: "80%",
+    height: "40%",
     borderRadius: 25,
-    height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 35,
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 20,
     backgroundColor: 'rgba(140, 200, 250, 0.7)',
-    marginHorizontal: 30,
-    flex: .6,
+    flex: .8,
   },
 
   loginText: {
     fontWeight: 'bold',
     color: 'white',
-    fontSize: 25,
+    fontSize: 15,
     
   },
 

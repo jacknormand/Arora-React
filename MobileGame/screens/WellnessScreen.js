@@ -174,21 +174,22 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: 'rgba(163, 163, 163, 0.2)',
     marginBottom: 5,
-    marginHorizontal: 20,
     marginTop: 40,
     width: '85%',
     height: '40%',
+    alignSelf: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   
   cardTwo:{
     backgroundColor: 'rgba(163, 163, 163, 0.2)',
-    marginBottom: 20,
-    marginHorizontal: 20,
-    marginTop: 5,
+    marginBottom: 5,
     width: '85%',
-    height: '40%',
-    alignItems: 'center',   
+    height: '40%',  
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
 
