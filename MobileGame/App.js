@@ -30,8 +30,8 @@ export default function App() {
           <Stack.Screen options={{gestureEnabled: false}} name="Login" component={LoginScreen} />
           <Stack.Screen name="Wellness" component={WellnessScreen} />
           <Stack.Screen name="Home" component={ HomeScreen } />
-          <Stack.Screen name="Practice" component={ PracticeScreen } />
-          <Stack.Screen name="Learn" component={ LearnScreen } />
+          <Stack.Screen options={{animation: 'none'}} name="Practice" component={ PracticeScreen } />
+          <Stack.Screen options={{animation: 'none'}} name="Learn" component={ LearnScreen } />
           <Stack.Screen name="Atrium" component={ AtriumScreen } />
           <Stack.Screen name="Splash" component={ SplashScreen } />
         </Stack.Navigator>

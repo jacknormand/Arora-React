@@ -10,6 +10,7 @@ import React from "react";
 import { TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
 
+
 export default function HomeScreen( { navigation }){
     return(
         <View style={ style.main }>
