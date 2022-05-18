@@ -17,18 +17,14 @@ export default function PracticeScreen({ navigation }){
               Practice
             </Text>
             <TouchableOpacity style={ style.gameCard }>
-             <View style={ style.align }>
-              <Image style={ style.boxIcon } source={require('../assets/catch_butterfly.png')} resizeMode="contain"></Image>
-              <Text style={ style.boxText }>AR Game - Catch Butterfly</Text>
-              <Image style={ style.arrow } source={require('../assets/arrowIcon.png')} resizeMode="contain"></Image>
-             </View>
+              <Image style={ style.boxIcon } source={require('../assets/catch_butterfly.png')} resizeMode="center"></Image>
+              <Text style={ style.boxText }>AR Game - Catch {'\n'}Butterfly</Text>
+              <Image style={ style.arrow } source={require('../assets/learnScreen/ic_action_name.png')} resizeMode="center"></Image>
             </TouchableOpacity>
             <TouchableOpacity style={ style.gameCard }>
-             <View style={ style.align }>
-              <Image style={ style.boxIcon } resizeMode="contain" source={require('../assets/superfly.png')}></Image>
+              <Image style={ style.boxIconTwo } resizeMode="center" source={require('../assets/superfly.png')}></Image>
               <Text style={style.boxText}>Superfly</Text>
-              <Image style={ style.arrow } source={require('../assets/arrowIcon.png')} resizeMode="contain"></Image>
-             </View>
+              <Image style={ style.arrow } source={require('../assets/learnScreen/ic_action_name.png')} resizeMode="center"></Image>
             </TouchableOpacity>
            <Footer />
          </ImageBackground>
@@ -42,37 +38,43 @@ const style = StyleSheet.create({
     },
  
     arrow:{
-        position: 'absolute',
-        right: 0,
-        marginTop: 10,
+        width: 35,
+    height: 35,
+    resizeMode: 'contain',
+    marginRight: 5,
+    position: 'absolute', right: 0,
     },
 
     boxText:{
         color: 'white',
-        fontSize: 15,
-        marginTop: 15,
+    fontSize: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginLeft: 10,
     },
 
-    
-    align:{
-     flexWrap: 'wrap',
-     flexDirection: 'row',
-    },
  
      boxIcon:{
-        height: 60,
-        width: 60,
-        marginLeft: 10,
-        marginRight: 10,
+        width: 50,
+    height: 50,
+    resizeMode: 'contain',
+    position: 'absolute', left: 20,
+    },
+
+    boxIconTwo:{
+        width: 75,
+    height: 75,
+    resizeMode: 'contain',
+    position: 'absolute', left: 20,
     },
 
     gameCard:{
-        height: '10%',
-        width: '90%',
-        marginTop: 30,
-        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        borderRadius: 5,
-        justifyContent: 'center',
+        height: 80,
+    width: "90%",
+    marginTop: 30,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 5,
+    justifyContent: 'center',
     },
 
     image:{
@@ -81,9 +83,10 @@ const style = StyleSheet.create({
     },
 
     header:{
-        fontSize: 50,
-        color: 'white',
-        textAlign: 'center',
-        marginTop: 40,
+        fontSize: 30,
+    color: 'white',
+    marginTop: 70,
+    textAlign: 'center',
+    fontWeight: 'bold',
     }
 })

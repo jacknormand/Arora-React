@@ -31,7 +31,8 @@ export default function HomeScreen( { navigation }){
                 </View>
                 <TouchableOpacity style={style.itemBox} onPress={() => navigation.navigate('Atrium') }>
                       <Image style={ style.boxIcon } source={require('../assets/jar_button.png')} resizeMode='contain'/>
-                      <Text style={ style.boxText }>Atrium - View All Butterfies</Text>
+                      <Text style={ style.boxText }>Atrium - View All {'\n'}Butterfies</Text>
+                      <Text style={ style.userPollen }>0</Text>
                 </TouchableOpacity>
                 </View>
 
@@ -107,18 +108,16 @@ const style = StyleSheet.create({
     },
   
      boxIcon:{
-      width: 35,
-      height: 35,
+      width: 50,
+      height: 50,
       resizeMode: 'contain',
-      marginLeft: 5,
-      position: 'absolute', left: 0,
+      position: 'absolute', left: 20,
     },
   
       userPollen:{
        color: 'white',
        fontSize: 20,
-       marginRight: 20,
-       position: 'absolute', right: 0,
+       position: 'absolute', right: 20,
        fontWeight: 'bold',
     },
 
