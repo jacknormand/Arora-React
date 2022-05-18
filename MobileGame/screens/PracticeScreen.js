@@ -6,7 +6,7 @@
  - Finalize styles
 */
 import React from 'react';
-import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity } from 'react-native';
+import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity , PermissionsAndroid , Platform , Alert } from 'react-native';
 import Footer from '../components/Footer'
 
 export default function PracticeScreen({ navigation }){
@@ -16,7 +16,7 @@ export default function PracticeScreen({ navigation }){
             <Text style={ style.header }>
               Practice
             </Text>
-            <TouchableOpacity style={ style.gameCard }>
+            <TouchableOpacity style={ style.gameCard } onPress={() => Platform.OS != 'ios' ? cameraAcess() : Alert.alert("Alert" , "Function not allowed for ios yet " , [{text: "Ok" , onPress: () => navigation.navigate("Practice")}])}>
               <Image style={ style.boxIcon } source={require('../assets/catch_butterfly.png')} resizeMode="center"></Image>
               <Text style={ style.boxText }>AR Game - Catch {'\n'}Butterfly</Text>
               <Image style={ style.arrow } source={require('../assets/learnScreen/ic_action_name.png')} resizeMode="center"></Image>
