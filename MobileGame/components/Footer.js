@@ -10,7 +10,7 @@ export default function Footer(){
                   <View>
                     <View style={ style.textAlign }>
                     <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                      <Image style={ style.icon } source={require('../assets/profile_filled_button.png')}></Image>
+                      <Image style={ style.icon } source={require('../assets/footer/profile_button_unfilled.png')}></Image>
                       <Text style={style.iconText}>Profile</Text>
                      </TouchableOpacity>
 
@@ -19,7 +19,7 @@ export default function Footer(){
                       <Text style={style.iconText}>Practice</Text>
                      </TouchableOpacity>
                      <TouchableOpacity onPress={() => navigation.navigate('Learn')}>
-                      <Image style={ style.icon } source={require('../assets/learnIcon.png')}></Image>
+                      <Image style={ style.icon } source={require('../assets/footer/learnIcon.png')}></Image>
                       <Text style={style.iconText}>Learn</Text>
                      </TouchableOpacity>
                     </View>
@@ -56,6 +56,7 @@ const style = StyleSheet.create({
   iconText:{
     color: 'white',
     textAlign: 'center',
+    fontWeight: "bold",
   },
 
 

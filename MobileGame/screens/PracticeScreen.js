@@ -68,9 +68,9 @@ const style = StyleSheet.create({
 
     gameCard:{
         height: '10%',
-        width: '90$',
+        width: '90%',
         marginTop: 30,
-        backgroundColor: 'rgba(0, 0, 0, 0.14)',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
         borderRadius: 5,
         justifyContent: 'center',
     },

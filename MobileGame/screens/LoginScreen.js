@@ -57,13 +57,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginView: {
-    backgroundColor: 'rgba(163, 163, 163, 0.95)',
+    backgroundColor: 'rgba(163, 163, 163, 0.8)',
     flex: 1,
     marginBottom: 10,
     alignSelf: 'center',
     width: "95%",
     borderRadius: 20,
   },
+  
   image: {
     flex: 1,
     justifyContent: "center"
@@ -71,7 +72,6 @@ const styles = StyleSheet.create({
   butterfly: {
     width: 250,
     height: 250,
-    justifyContent: "center",
   },
   textIn: {
     borderBottomColor: '#7a1133',

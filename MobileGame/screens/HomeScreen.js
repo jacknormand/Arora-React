@@ -15,23 +15,27 @@ export default function HomeScreen( { navigation }){
     return(
         <View style={ style.main }>
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>
-                <Image style={ style.userIcon } source={require('../assets/profile_button_unfilled.png')} resizeMode='contain'/>
-                <Image style={ style.butterfly } source={require('../assets/blue_butterfly_image.png')}/>
+            
+              <View style={ style.userInfo }>
+                <Text style={ style.userText }>Username</Text>
+                <Image style={ style.userIcon } source={require('../assets/home/profile_filled_button.png')} resizeMode='contain'/>
+              </View>
+
+              <View style={ style.butterflyboxes }>
+                <Image style={ style.butterfly } source={require('../assets/loginScreen/orange_butterfly_image.png')} resizeMode='contain'/>
+                <View style={ style.boxes }>
                 <View style={ style.itemBox }>
-                  <View style={ style.textAlign } >
                     <Image style={ style.boxIcon } source={require('../assets/half_pollen.png')} resizeMode='contain'/>
                     <Text style={ style.boxText }>Total Pollen Count</Text>
                     <Text style={ style.userPollen }>0</Text>
-                   </View>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate('Atrium') }>
-                  <View style={ style.itemBox }>
-                     <View style={ style.textAlign }>
+                <TouchableOpacity style={style.itemBox} onPress={() => navigation.navigate('Atrium') }>
                       <Image style={ style.boxIcon } source={require('../assets/jar_button.png')} resizeMode='contain'/>
-                      <Text style={ style.boxText }>Attrium - View All Butterfies</Text>
-                     </View>
-                  </View>
+                      <Text style={ style.boxText }>Atrium - View All Butterfies</Text>
                 </TouchableOpacity>
+                </View>
+
+              </View>
                 <Footer />
             </ImageBackground>
         </View>
@@ -43,63 +47,82 @@ const style = StyleSheet.create({
      flex:1,
     },
 
-    boxText:{
+    userText:{
       color: 'white',
-      fontSize: 20,
-      paddingLeft: 10,
-      marginTop: 25,
+      fontSize: 15,
+      fontWeight: 'bold',
+     },
+
+
+    userIcon:{
+      height: 50,
+      width: 50,
     },
 
-    butterfly:{
-     marginTop: 50,
+     userInfo:{
+      position: 'absolute',
+      right: 20,
+      top: 50,
+      color: 'white',
+     fontSize: 15,
+     fontWeight: 'bold',
+     flexDirection: 'row',
+     alignItems: 'center',
+     },
+
+     butterflyboxes:{
+       flex: .87,
+       flexDirection: 'column',
+       justifyContent: 'center',
+       marginTop: 10,
+       marginBottom: 10,
+     },
+
+     
+    boxText:{
+      color: 'white',
+    fontSize: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginLeft: 10,
     },
 
     itemBox:{
-     backgroundColor: 'rgba(0, 0, 0, 0.14)',
-     marginTop: 30,
-     height: 75,
-     width: 335,
-     borderRadius: 5,
+      height: 80,
+      width: "90%",
+      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+      borderRadius: 5,
+      justifyContent: 'center', 
+      marginTop: 10,
+    },
+
+    boxes:{
+      alignItems: 'center',
     },
 
     butterfly:{
-      marginLeft: 50,
-      marginRight: 50,
       height: 250,
-      width: 300,
-    },
-
-    userIcon:{
-      marginLeft: 250,
-      height: 100,
-      width: 100,
+      width: 250,
+      alignSelf: 'center',
     },
   
      boxIcon:{
-      height: 50,
-      width: 50,
-      marginTop: 10,
-      marginLeft: 10,
-      marginBottom: 10,
-      paddingRight: 10,
+      width: 35,
+      height: 35,
+      resizeMode: 'contain',
+      marginLeft: 5,
+      position: 'absolute', left: 0,
     },
   
       userPollen:{
        color: 'white',
        fontSize: 20,
-       paddingLeft: 50,
-       marginTop: 25,
+       marginRight: 20,
+       position: 'absolute', right: 0,
+       fontWeight: 'bold',
     },
 
     image:{
       flex: 1,
-      paddingTop: 50,
-      alignItems: 'center'
-    },
-
-    textAlign:{
-      flexWrap: 'wrap',
-      flexDirection: 'row',
-      alignItems: 'flex-start',
     },
 });
