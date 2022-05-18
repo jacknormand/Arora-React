@@ -25,9 +25,9 @@ export default function LearnScreen({ navigation }){
                 <Text style={style.boxText}>Mindfulness Breathing</Text>
 
                 <Image
+              style = {style.iconsArrow}
               source = {require('../assets/learnScreen/ic_action_name.png')}
               resizeMode="center"
-              style = {style.iconsArrow}
               />
        </TouchableOpacity>
        <TouchableOpacity style={style.box}
@@ -40,9 +40,9 @@ export default function LearnScreen({ navigation }){
                 <Text style={style.boxText}>Mindfulness Meditation</Text>
 
                 <Image
+              style = {style.iconsArrow}
               source = {require('../assets/learnScreen/ic_action_name.png')}
               resizeMode="center"
-              style = {style.iconsArrow}
               />
        </TouchableOpacity>
        <TouchableOpacity style={style.box} 
@@ -55,9 +55,9 @@ export default function LearnScreen({ navigation }){
                 <Text style={style.boxText}>Mindfulness Walking</Text>
 
                 <Image
+              style = {style.iconsArrow}
               source = {require('../assets/learnScreen/ic_action_name.png')}
               resizeMode="center"
-              style = {style.iconsArrow}
               />
        </TouchableOpacity>
        < Footer />
