@@ -20,7 +20,7 @@ export default function App() {
     <View style={{ flex: 1,}}>
     <PaperProvider>
     <ImageBackground source={require('./assets/dusk_background.jpg')} resizeMode="cover" style={ {flex: 1,} }>
-      <NavigationContainer theme={{colors:{background: 'rgb(214, 137, 156)'}}}>
+      <NavigationContainer>
         <Stack.Navigator
         screenOptions={{
           headerShown: false, 

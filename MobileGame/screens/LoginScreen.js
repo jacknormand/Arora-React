@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   butterfly: {
     width: 250,
     height: 250,
+    resizeMode: 'contain',
   },
   textIn: {
     borderBottomColor: '#7a1133',

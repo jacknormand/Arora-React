@@ -104,6 +104,7 @@ const style = StyleSheet.create({
     butterfly:{
       height: 250,
       width: 250,
+      resizeMode: 'contain',
       alignSelf: 'center',
     },
   
