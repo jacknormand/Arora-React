@@ -6,11 +6,10 @@ function LoginScreen ({ navigation }) {
   const [number, onChangeNumber] = React.useState(null);
     return (
           <View style={styles.container}>
-          <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={styles.image}>
+          <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
             <View style={styles.butterflyView}>
               <Image
               source = {require('../assets/loginScreen/orange_butterfly_image.png')}
-              resizeMode="center"
               style = {styles.butterfly}
               />
               <Text style={styles.title}>Arora</Text>

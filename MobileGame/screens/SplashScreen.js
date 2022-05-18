@@ -1,10 +1,47 @@
 import React from 'react';
 import { StyleSheet , View ,Image } from 'react-native';
+import { Asset } from 'expo-asset';
+import AppLoading from 'expo-app-loading';
 
 export default function SplashScreen({ navigation }){
+  let [isLoaded, setIsLoaded] = React.useState(false);
+
+  let cacheResources = async () => {
+    const images = [
+    require("../assets/dusk_background.jpg"), 
+    require("../assets/loginScreen/orange_butterfly_image.png"),
+    require("../assets/atrium_background.jpg"),
+    require("../assets/blue_butterfly_image.png"),
+    require("../assets/atrium/blue_circle.png"),
+    require("../assets/atrium/green_butterfly_image.png"),
+    require("../assets/atrium/red_butterfly_image.png"),
+    require("../assets/atrium/yellow_butterfly_image.png"),
+    require("../assets/atrium/purple_butterfly_image.png"),
+    require("../assets/footer/learnIcon.png"),
+    require("../assets/footer/butterfly_logo.png"),
+    require("../assets/footer/profile_button_unfilled.png"),
+    ];
+    const cacheImages = images.map(image => {
+      return Asset.fromModule(image).downloadAsync();
+    });
+    return Promise.all(cacheImages);
+  }
+
+  React.useEffect(() => {
+    const loadResources = async () => {
+      await cacheResources();
+      setIsLoaded(true);
+    };
+
+    loadResources();
+  }, [])
+
+  if (!isLoaded) {
+    return <AppLoading />
+  }
     setTimeout(() => {
         navigation.navigate("Login");
-    }, 3000);  
+    }, 2000);  
   
     return(
       <View style={ style.main }>

@@ -11,9 +11,11 @@ import LearnScreen from './screens/LearnScreen';
 import AtriumScreen from './screens/AtriumScreen';
 import SplashScreen from './screens/SplashScreen';
 
+
 const Stack = createNativeStackNavigator()
 
 export default function App() {
+
   return (
     <View style={{ flex: 1,}}>
     <PaperProvider>

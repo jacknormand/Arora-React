@@ -19,7 +19,6 @@ export default function LearnScreen({ navigation }){
               onPress={() => navigation.navigate('Learn')}>
                 <Image
               source = {require('../assets/learnScreen/breath_button.png')}
-              resizeMode="center"
               style = {style.icons}
               />
                 <Text style={style.boxText}>Mindfulness Breathing</Text>
@@ -34,7 +33,6 @@ export default function LearnScreen({ navigation }){
               onPress={() => navigation.navigate('Learn')}>
                 <Image
               source = {require('../assets/learnScreen/mindfullness_meditation_icon.png')}
-              resizeMode="center"
               style = {style.icons}
               />
                 <Text style={style.boxText}>Mindfulness Meditation</Text>
@@ -49,7 +47,6 @@ export default function LearnScreen({ navigation }){
               onPress={() => navigation.navigate('Learn')}>
                 <Image
               source = {require('../assets/learnScreen/location_button.png')}
-              resizeMode="center"
               style = {style.icons}
               />
                 <Text style={style.boxText}>Mindfulness Walking</Text>
