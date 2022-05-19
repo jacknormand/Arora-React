@@ -1,10 +1,11 @@
-import React from 'react';
-import { StyleSheet , View ,Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet , View ,Image , Text } from 'react-native';
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
 
 export default function SplashScreen({ navigation }){
   let [isLoaded, setIsLoaded] = React.useState(false);
+  let [ loadBar , setLoadBar ] = React.useState( 0 );
 
   let cacheResources = async () => {
     const images = [
@@ -39,13 +40,15 @@ export default function SplashScreen({ navigation }){
   if (!isLoaded) {
     return <AppLoading />
   }
-    setTimeout(() => {
-        navigation.navigate("Login");
-    }, 2000);  
+
+  setTimeout(() => {
+      navigation.navigate("Login");
+  }, 2000);  
   
     return(
       <View style={ style.main }>
         <Image style={style.launchIcon } source={require('../assets/ic_launcher_round.png')} resizeMode="contain"></Image>
+        <Text style={ style.loading }>Loading...</Text>
       </View>
   );
 };
@@ -62,4 +65,9 @@ const style = StyleSheet.create({
        height: '40%',
        width: '50%'
     },
+
+   loading:{
+     fontSize: 30,
+     fontWeight: 'bold'
+   }
 });

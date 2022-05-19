@@ -6,17 +6,47 @@
  - Finalize styles
 */
 import React from 'react';
-import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity , PermissionsAndroid , Platform , Alert } from 'react-native';
+import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity , PermissionsAndroid , Platform , Alert , Linking } from 'react-native';
 import Footer from '../components/Footer'
 
 export default function PracticeScreen({ navigation }){
+
+    const requestCameraPermissionIos = async () => {
+       Alert.alert("You need to allow for camera permissions" , "AR gaming requires camera acess" ,
+      [{text: "cancel" , onPress: () => navigation.navigate("Practice")} , {text: "Go to settings" ,
+       onPress: () => Linking.openURL('app-settings:')}])
+    }
+
+    const requestCameraPermissionAndroid = async () => {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+              title: "Arora would like to acess your camera",
+              message:
+                "AR gaming requires camera acess",
+              buttonNegative: "Cancel",
+              buttonPositive: "OK"
+            }
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            navigation.navigate('Profile') //Root to game
+          } 
+          else {
+            navigation.navigate('Practice') //Root back to preactice screen
+          }
+        } catch (err) {
+          Alert.alert("Opps" , "An error occured" , [{text: "Retry" , onPress: () => navigation.navigate("Practice")}])
+        };
+    }
+
     return(
         <View style={ style.main }>
          <ImageBackground style={ style.image } resizeMode="cover" source={require('../assets/dusk_background.jpg')}>
             <Text style={ style.header }>
               Practice
             </Text>
-            <TouchableOpacity style={ style.gameCard } onPress={() => Platform.OS != 'ios' ? cameraAcess() : Alert.alert("Alert" , "Function not allowed for ios yet " , [{text: "Ok" , onPress: () => navigation.navigate("Practice")}])}>
+            <TouchableOpacity style={ style.gameCard } onPress={() => Platform.OS != 'ios' ? requestCameraPermissionAndroid() : requestCameraPermissionIos() }>
               <Image style={ style.boxIcon } source={require('../assets/catch_butterfly.png')} resizeMode="center"></Image>
               <Text style={ style.boxText }>AR Game - Catch {'\n'}Butterfly</Text>
               <Image style={ style.arrow } source={require('../assets/learnScreen/ic_action_name.png')} resizeMode="center"></Image>
