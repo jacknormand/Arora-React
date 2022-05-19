@@ -20,6 +20,7 @@
     "expo-cli": "^5.4.6",
     "expo-dev-client": "~0.8.5",
     "expo-status-bar": "~1.2.0",
+    "firebase": "^9.8.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",

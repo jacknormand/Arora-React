@@ -21,6 +21,11 @@ export default function SplashScreen({ navigation }){
     require("../assets/footer/learnIcon.png"),
     require("../assets/footer/butterfly_logo.png"),
     require("../assets/footer/profile_button_unfilled.png"),
+    require('../assets/surveryScreen/-2.png'),
+    require('../assets/surveryScreen/-1.png'),
+    require('../assets/surveryScreen/0.png'),
+    require('../assets/surveryScreen/1.png'),
+    require('../assets/surveryScreen/2.png'),
     ];
     const cacheImages = images.map(image => {
       return Asset.fromModule(image).downloadAsync();

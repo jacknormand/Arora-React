@@ -58,9 +58,8 @@ function WellnessScreen ({ navigation }) {
   return (
     <View style={styles.container}>
     <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ styles.backgroundImage }>
-
-      <Card style={styles.card}>
-        <Text style={ styles.cardText }>How is your mood today?</Text>
+      <View style={styles.card}>
+        <Text style={ styles.cardText }>How is your mood {'\n'}today?</Text>
         <Image source={imgPathOne} style={ styles.butterfly }/>
         <Slider
         style={ styles.slider }
@@ -76,10 +75,10 @@ function WellnessScreen ({ navigation }) {
 
           {out1}
         </Text>
-      </Card>
+      </View>
 
-      <Card style={styles.cardTwo}>
-        <Text style={ styles.cardText }>How stressed are you today?</Text>
+      <View style={styles.cardTwo}>
+        <Text style={ styles.cardText }>How stressed are {'\n'}you today?</Text>
         <Image source={imgPathTwo} style={ styles.butterfly }/>
       <Slider
         style={ styles.slider }
@@ -94,9 +93,8 @@ function WellnessScreen ({ navigation }) {
       <Text style={styles.bottomText}>
           {out2}
         </Text>
-      </Card>
-
-      <View style={ styles.textAlign }>
+      </View>
+      <View style={styles.cards}>
        <TouchableOpacity style={ styles.button } onPress={() => navigation.navigate('Home')}>
         <Text style={ styles.buttonText }> SKIP </Text>
        </TouchableOpacity>
@@ -117,14 +115,8 @@ const styles = StyleSheet.create({
   
   cardText:{
     color: 'white',
-    fontSize: 30,
-    textAlign: 'center',
-  },
-  
-  textAlign:{
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    fontSize: 25,
+    fontWeight: 'bold',
   },
   
   backgroundImage:{
@@ -132,11 +124,12 @@ const styles = StyleSheet.create({
   },
 
   butterfly:{
-    alignSelf: 'center',
+    height: 150,
+    width: 150,
+    resizeMode: 'contain',
   },
 
   slider:{
-    alignSelf: 'center',
     width: 250,
   },
 
@@ -174,7 +167,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: 'rgba(163, 163, 163, 0.2)',
     marginBottom: 5,
-    marginTop: 40,
+    marginTop: 60,
     width: '85%',
     height: '40%',
     alignSelf: 'center',
@@ -192,15 +185,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-
-
-
-
-
-
-
-
-  
 });
 
 export default WellnessScreen;

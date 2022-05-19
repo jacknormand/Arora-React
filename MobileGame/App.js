@@ -10,6 +10,7 @@ import PracticeScreen from './screens/PracticeScreen';
 import LearnScreen from './screens/LearnScreen';
 import AtriumScreen from './screens/AtriumScreen';
 import SplashScreen from './screens/SplashScreen';
+import { initializeApp } from 'firebase/app';
 
 
 const Stack = createNativeStackNavigator()
