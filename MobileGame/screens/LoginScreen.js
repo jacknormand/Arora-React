@@ -1,9 +1,21 @@
-import React from "react";
-import { ImageBackground, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import React,{useState} from 'react';
+import { ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { getDatabase, ref, set } from 'firebase/database';
+
+function storeUser(userId, pass) {
+  console.log(userId)
+  const db = getDatabase();
+  const reference = ref(db, 'users/' + userId);
+  set(reference, {
+    password: pass,
+  });
+}
 
 function LoginScreen ({ navigation }) {
-  const [text, onChangeText] = React.useState("Useless Text");
-  const [number, onChangeNumber] = React.useState(null);
+  const [user, setUser] = useState({
+    username: '',
+    password: '',
+  });
     return (
           <View style={styles.container}>
           <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
@@ -15,6 +27,7 @@ function LoginScreen ({ navigation }) {
               <Text style={styles.title}>Arora</Text>
             </View>
 
+            {/* MIGHT BE A PROBLEM ON ANDROID */}
             <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
@@ -22,17 +35,20 @@ function LoginScreen ({ navigation }) {
             <View style={styles.loginView}>
               <TextInput 
                 style={styles.textIn}
-                onChangeText={onChangeNumber}
-                value={number}
                 placeholder= "Username"
+                autoCapitalize="none"
+                value={user.username}
+                onChangeText={text => setUser({ username: text, password: user.password })}
               />
               <TextInput 
                 style={styles.textIn}
                 placeholder= "Password"
                 secureTextEntry={ true }
+                value={user.password}
+                onChangeText={text => setUser({ username: user.username, password: text })}
               />
               <TouchableOpacity style={styles.loginBtn} 
-              onPress={() => navigation.navigate('Wellness')}>
+              onPress={() => storeUser(user.username, user.password)}>
                 
                 <Text style={styles.loginText}>LOGIN</Text>
               </TouchableOpacity>

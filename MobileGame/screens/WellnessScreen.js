@@ -1,6 +1,5 @@
 import React,{useState} from 'react';
 import { StyleSheet, View , TouchableOpacity , Text , ImageBackground , Image } from 'react-native';
-import { Card } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 
 function WellnessScreen ({ navigation }) {
