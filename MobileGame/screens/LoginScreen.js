@@ -21,6 +21,7 @@ function storeUser(userId, pass) {
       const NewReference = ref(db, 'users/' + userId);
       set(NewReference, {
         password: pass,
+        pollen: 0,
       });
       Alert.alert(
       "Account Made Successfully",
