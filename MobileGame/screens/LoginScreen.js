@@ -1,5 +1,55 @@
 import React,{useState} from 'react';
-import { ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { Alert, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+
+// LOGIN FUNCTION
+async function loginUser( user, pass, navigation )
+{
+  var userID;
+  var token;
+
+  await fetch('http://104.248.178.78:8000/api-token-auth', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    "username": user,
+    "password": pass
+  })
+  })
+
+  .then(response => {
+    return response.json()
+  })
+  .then(data => {
+    userID = data.user_id
+    token = data.token
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+
+  // USER EXISTS and correct credentials
+  // If info entered isnt correct, userID wont be passed back and wont exist
+  if (userID){
+
+    // FROM HERE: store data in async to be used throughout the app
+
+
+    // go to wellness check
+    navigation.navigate("Wellness")
+  }
+  else {
+    Alert.alert(
+      "Incorrect Credentials",
+      "Try again",
+      [
+        { text: "Ok" }
+      ]
+    );
+  }
+}
 
 function LoginScreen ({ navigation }) {
   const [user, setUser] = useState({

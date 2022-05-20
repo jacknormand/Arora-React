@@ -7,6 +7,9 @@ export default function SplashScreen({ navigation }){
   let [isLoaded, setIsLoaded] = React.useState(false);
   let [ loadBar , setLoadBar ] = React.useState( 0 );
 
+  // i have no idea how this code works but it caches images
+  // add images here to cache them
+  // TODO: find a way to cache whole assets folder
   let cacheResources = async () => {
     const images = [
     require("../assets/dusk_background.jpg"), 
