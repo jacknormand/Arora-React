@@ -1,11 +1,88 @@
 import React,{useState} from 'react';
-import { ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { Alert, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { getDatabase, ref, set, get, child } from 'firebase/database';
+
+function storeUser( userId, pass ) {  
+  const dbRef = ref(getDatabase());
+  const db = getDatabase();
+  get(child(dbRef, `users/${userId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+
+    Alert.alert(
+      "Username Taken",
+      "Please choose a different username",
+      [
+        { text: "Ok" }
+      ]
+    );
+    } else {
+      const NewReference = ref(db, 'users/' + userId);
+      set(NewReference, {
+        password: pass,
+        pollen: 0,
+      });
+      Alert.alert(
+      "Account Made Successfully",
+      "Thank you for registering",
+      [
+        { text: "Ok" }
+      ]
+    );
+
+    }
+
+  }).catch((error) => {
+    console.error(error);
+  });
+
+}
+
+function loginUser(userId, pass, navigation) {  
+  const dbRef = ref(getDatabase());
+  const db = getDatabase();
+  get(child(dbRef, `users/${userId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      // if username exists, check password is correct
+      if ( snapshot.child("password").val() == pass ){
+
+        // go to wellness check
+        navigation.navigate("Wellness")
+      }
+
+      else{
+        Alert.alert(
+          "Incorrect Credentials",
+          "Try again",
+          [
+            { text: "Ok" }
+          ]
+        );
+      }
+    } else {
+
+    // otherwise username doesnt exist
+      Alert.alert(
+      "Incorrect Credentials",
+      "Try again",
+      [
+        { text: "Ok" }
+      ]
+    );
+
+    }
+
+  }).catch((error) => {
+    console.error(error);
+  });
+
+}
 
 function LoginScreen ({ navigation }) {
   const [user, setUser] = useState({
     username: '',
     password: '',
   });
+ 
     return (
           <View style={styles.container}>
           <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
