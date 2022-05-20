@@ -13,21 +13,6 @@ import SplashScreen from './screens/SplashScreen';
 import Walking from './screens/MindfullWalking';
 import Breathing from './screens/MindfullBreathing';
 import Meditation from './screens/Meditation';
-import { initializeApp } from 'firebase/app';
-
-// init firebase
-const firebaseConfig = {
-  apiKey: 'AIzaSyCvs7JxS3eYd48uwsGnJKzvHmhJwgpNF0s',
-  authDomain: 'arora-react-af141.firebaseapp.com',
-  databaseURL: 'https://arora-react-af141-default-rtdb.firebaseio.com',
-  projectId: 'arora-react-af141',
-  storageBucket: 'arora-react-af141.appspot.com',
-  messagingSenderId: '1044577763825',
-  appId: '1:1044577763825:web:8a91d4e50c730403cd0450',
-  measurementId: 'G-Y0JV2W2FQQ',
-};
-
-const app = initializeApp(firebaseConfig);
 
 const Stack = createNativeStackNavigator()
 
