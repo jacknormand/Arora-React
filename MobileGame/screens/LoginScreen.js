@@ -1,14 +1,81 @@
 import React,{useState} from 'react';
-import { ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
-import { getDatabase, ref, set } from 'firebase/database';
+import { Alert, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { getDatabase, ref, set, get, child } from 'firebase/database';
 
-function storeUser(userId, pass) {
-  console.log(userId)
+function storeUser(userId, pass) {  
+  const dbRef = ref(getDatabase());
   const db = getDatabase();
-  const reference = ref(db, 'users/' + userId);
-  set(reference, {
-    password: pass,
+  get(child(dbRef, `users/${userId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+
+    Alert.alert(
+      "Username Taken",
+      "Please choose a different username",
+      [
+        { text: "Ok" }
+      ]
+    );
+
+    } else {
+
+      const NewReference = ref(db, 'users/' + userId);
+      set(NewReference, {
+        password: pass,
+      });
+      Alert.alert(
+      "Account Made Successfully",
+      "Thank you for registering",
+      [
+        { text: "Ok" }
+      ]
+    );
+
+    }
+
+  }).catch((error) => {
+    console.error(error);
   });
+
+}
+
+function loginUser(userId, pass, navigation) {  
+  const dbRef = ref(getDatabase());
+  const db = getDatabase();
+  get(child(dbRef, `users/${userId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      // if username exists, check password is correct
+      if ( snapshot.child("password").val() == pass){
+
+        // go to wellness check
+        navigation.navigate("Wellness")
+      }
+
+      else{
+        Alert.alert(
+          "Incorrect Credentials",
+          "Try again",
+          [
+            { text: "Ok" }
+          ]
+        );
+      }
+    } else {
+
+    // otherwise username doesnt exist
+      Alert.alert(
+      "Incorrect Credentials",
+      "Try again",
+      [
+        { text: "Ok" }
+      ]
+    );
+
+    }
+
+  }).catch((error) => {
+    console.error(error);
+  });
+
 }
 
 function LoginScreen ({ navigation }) {
@@ -30,7 +97,7 @@ function LoginScreen ({ navigation }) {
             {/* MIGHT BE A PROBLEM ON ANDROID */}
             <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+      style={styles.keyboardPush}
     >
             <View style={styles.loginView}>
               <TextInput 
@@ -48,9 +115,15 @@ function LoginScreen ({ navigation }) {
                 onChangeText={text => setUser({ username: user.username, password: text })}
               />
               <TouchableOpacity style={styles.loginBtn} 
-              onPress={() => storeUser(user.username, user.password)}>
+              onPress={() => loginUser(user.username, user.password, navigation)}>
                 
                 <Text style={styles.loginText}>LOGIN</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.loginBtn} 
+              onPress={() => storeUser(user.username, user.password)}>
+                
+                <Text style={styles.loginText}>CREATE</Text>
               </TouchableOpacity>
             </View>
             </KeyboardAvoidingView>
@@ -66,6 +139,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  keyboardPush: {
+    flex: 1,
+  },
 
   butterflyView: {
     flex: 1,
@@ -73,7 +149,7 @@ const styles = StyleSheet.create({
   },
   loginView: {
     backgroundColor: 'rgba(163, 163, 163, 0.8)',
-    flex: 1,
+    height: '75%',
     marginBottom: 10,
     alignSelf: 'center',
     width: "95%",
@@ -107,15 +183,14 @@ const styles = StyleSheet.create({
 
   loginBtn: {
     width: "80%",
-    height: "40%",
     borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: 'center',
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: 0,
+    marginBottom: 10,
     backgroundColor: 'rgba(140, 200, 250, 0.7)',
-    flex: .8,
+    flex: 1,
   },
 
   loginText: {
