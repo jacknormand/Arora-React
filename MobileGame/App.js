@@ -10,6 +10,9 @@ import PracticeScreen from './screens/PracticeScreen';
 import LearnScreen from './screens/LearnScreen';
 import AtriumScreen from './screens/AtriumScreen';
 import SplashScreen from './screens/SplashScreen';
+import Walking from './screens/MindfullWalking';
+import Breathing from './screens/MindfullBreathing';
+import Meditation from './screens/Meditation';
 import { initializeApp } from 'firebase/app';
 
 // init firebase
@@ -49,6 +52,9 @@ export default function App() {
           <Stack.Screen options={{animation: 'none'}} name="Practice" component={ PracticeScreen } />
           <Stack.Screen options={{animation: 'none'}} name="Learn" component={ LearnScreen } />
           <Stack.Screen name="Atrium" component={ AtriumScreen } />
+          <Stack.Screen name="Walking" component={ Walking } />
+          <Stack.Screen name="Breathing" component={ Breathing } />
+          <Stack.Screen name="Meditation" component={ Meditation } />
           <Stack.Screen name="Splash" component={ SplashScreen } />
         </Stack.Navigator>
     </NavigationContainer>

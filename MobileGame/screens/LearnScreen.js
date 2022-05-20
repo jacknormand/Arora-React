@@ -16,7 +16,7 @@ export default function LearnScreen({ navigation }){
       <ImageBackground style={ style.backgroundImage} resizeMode="cover" source={ require('../assets/dusk_background.jpg')}>
        <Text style={ style.header }>Learn Mindfulness</Text>
        <TouchableOpacity style={style.box} 
-              onPress={() => navigation.navigate('Learn')}>
+              onPress={() => navigation.navigate("Breathing")}>
                 <Image
               source = {require('../assets/learnScreen/breath_button.png')}
               style = {style.icons}
@@ -27,10 +27,11 @@ export default function LearnScreen({ navigation }){
               style = {style.iconsArrow}
               source = {require('../assets/learnScreen/ic_action_name.png')}
               resizeMode="center"
+
               />
        </TouchableOpacity>
        <TouchableOpacity style={style.box}
-              onPress={() => navigation.navigate('Learn')}>
+              onPress={() => navigation.navigate("Meditation")}>
                 <Image
               source = {require('../assets/learnScreen/mindfullness_meditation_icon.png')}
               style = {style.icons}
@@ -44,7 +45,7 @@ export default function LearnScreen({ navigation }){
               />
        </TouchableOpacity>
        <TouchableOpacity style={style.box} 
-              onPress={() => navigation.navigate('Learn')}>
+              onPress={() => navigation.navigate("Walking")}>
                 <Image
               source = {require('../assets/learnScreen/location_button.png')}
               style = {style.icons}

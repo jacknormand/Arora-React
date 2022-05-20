@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import { Alert, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { getDatabase, ref, set, get, child } from 'firebase/database';
 
-function storeUser(userId, pass) {  
+function storeUser( userId, pass ) {  
   const dbRef = ref(getDatabase());
   const db = getDatabase();
   get(child(dbRef, `users/${userId}`)).then((snapshot) => {
@@ -15,9 +15,7 @@ function storeUser(userId, pass) {
         { text: "Ok" }
       ]
     );
-
     } else {
-
       const NewReference = ref(db, 'users/' + userId);
       set(NewReference, {
         password: pass,
@@ -45,7 +43,7 @@ function loginUser(userId, pass, navigation) {
   get(child(dbRef, `users/${userId}`)).then((snapshot) => {
     if (snapshot.exists()) {
       // if username exists, check password is correct
-      if ( snapshot.child("password").val() == pass){
+      if ( snapshot.child("password").val() == pass ){
 
         // go to wellness check
         navigation.navigate("Wellness")
@@ -84,6 +82,7 @@ function LoginScreen ({ navigation }) {
     username: '',
     password: '',
   });
+ 
     return (
           <View style={styles.container}>
           <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
