@@ -1,23 +1,23 @@
-/*
-  TODO:
-  - Find the rest of the icons
-  - Make the styles universal between platforms and different screen sizes.( find a way to calculate device mesurments)
-  - Create routes to other app screens
-  - Add functionality such as icon animations and User data( pollen count and username and so on.)
-  - Finalize the styles to be used  
-*/
-import React from "react";
+import React, { useState } from "react";
 import { TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 
 export default function HomeScreen( { navigation }){
+    const [ user , setUser ] = React.useState('')
+    const getUser = async () =>{
+      const userData = await AsyncStorage.getItem('@user')
+      setUser(userData)
+    }
+    getUser();
     return(
         <View style={ style.main }>
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>
             
               <View style={ style.userInfo }>
-                <Text style={ style.userText }>Username</Text>
+                <Text style={ style.userText }>{user}</Text>
                 <Image style={ style.userIcon } source={require('../assets/home/profile_filled_button.png')} resizeMode='contain'/>
               </View>
 

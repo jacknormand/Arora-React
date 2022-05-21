@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import { StyleSheet, View , TouchableOpacity , Text , ImageBackground , Image } from 'react-native';
 import Slider from '@react-native-community/slider';
+import { moodReportAPI } from '../network/apiCalls'
 
 function WellnessScreen ({ navigation }) {
   const [range,setRange] = useState(0)
@@ -31,7 +32,7 @@ function WellnessScreen ({ navigation }) {
       imgPathOne = require('../assets/surveryScreen/2.png')
       break;
     }
-
+  
   switch(rangeTwo) {
     case -2:
       out2 = "Very Tense"
@@ -54,6 +55,8 @@ function WellnessScreen ({ navigation }) {
       imgPathTwo = require('../assets/surveryScreen/2.png')
       break;
       }
+
+    
   return (
     <View style={styles.container}>
     <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ styles.backgroundImage }>
@@ -97,7 +100,7 @@ function WellnessScreen ({ navigation }) {
        <TouchableOpacity style={ styles.button } onPress={() => navigation.navigate('Home')}>
         <Text style={ styles.buttonText }> SKIP </Text>
        </TouchableOpacity>
-       <TouchableOpacity style={ styles.submitButton } onPress={() => navigation.navigate('Home')}>
+       <TouchableOpacity style={ styles.submitButton } onPress={() => moodReportAPI( out1 , out2 )}>
         <Text style={ styles.buttonText }>SUBMIT</Text>
        </TouchableOpacity>
       </View>
