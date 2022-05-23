@@ -8,27 +8,34 @@ function WellnessScreen ({ navigation }) {
   const [rangeTwo,setRangeTwo] = useState(0)
   var out1
   var out2
+  let moodType
+  let stressType
   var imgPathOne
   var imgPathTwo
   switch(range) {
     case -2:
       out1 = "Very Unpleasant"
+      moodType = 1;
       imgPathOne = require('../assets/surveryScreen/-2.png')
       break;
     case -1:
       out1 = "Unpleasant"
+      moodType = 2;
       imgPathOne = require('../assets/surveryScreen/-1.png')
       break;
     case 0:
       out1 = "Neutral"
+      moodType = 3;
       imgPathOne = require('../assets/surveryScreen/0.png')
       break;
     case 1:
       out1 = "Pleasant"
+      moodType = 4;
       imgPathOne = require('../assets/surveryScreen/1.png')
       break;
     case 2:
       out1 = "Very Pleasant"
+      moodType = 5;
       imgPathOne = require('../assets/surveryScreen/2.png')
       break;
     }
@@ -36,22 +43,27 @@ function WellnessScreen ({ navigation }) {
   switch(rangeTwo) {
     case -2:
       out2 = "Very Tense"
+      stressType = 1
       imgPathTwo = require('../assets/surveryScreen/-2.png')
       break;
     case -1:
       out2 = "Tense"
+      stressType = 2
       imgPathTwo = require('../assets/surveryScreen/-1.png')
       break;
     case 0:
       out2 = "Neutral"
+      stressType = 3
       imgPathTwo = require('../assets/surveryScreen/0.png')
       break;
     case 1:
       out2 = "Calm"
+      stressType = 4
       imgPathTwo = require('../assets/surveryScreen/1.png')
       break;
     case 2:
       out2 = "Very Calm"
+      stressType = 5
       imgPathTwo = require('../assets/surveryScreen/2.png')
       break;
       }
@@ -100,7 +112,7 @@ function WellnessScreen ({ navigation }) {
        <TouchableOpacity style={ styles.button } onPress={() => navigation.navigate('Home')}>
         <Text style={ styles.buttonText }> SKIP </Text>
        </TouchableOpacity>
-       <TouchableOpacity style={ styles.submitButton } onPress={() => moodReportAPI( out1 , out2 )}>
+       <TouchableOpacity style={ styles.submitButton } onPress={() => moodReportAPI( moodType , stressType , navigation )}>
         <Text style={ styles.buttonText }>SUBMIT</Text>
        </TouchableOpacity>
       </View>

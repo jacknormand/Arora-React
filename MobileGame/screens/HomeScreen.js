@@ -6,10 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 export default function HomeScreen( { navigation }){
-    const [ user , setUser ] = React.useState('')
+    const [ user , setUser ] = React.useState('');
     const getUser = async () =>{
-      const userData = await AsyncStorage.getItem('@user')
-      setUser(userData)
+      const username = await AsyncStorage.getItem('@user');
+      setUser( username );
     }
     getUser();
     return(
@@ -17,7 +17,7 @@ export default function HomeScreen( { navigation }){
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>
             
               <View style={ style.userInfo }>
-                <Text style={ style.userText }>{user}</Text>
+                <Text style={ style.userText }>{ user }</Text>
                 <Image style={ style.userIcon } source={require('../assets/home/profile_filled_button.png')} resizeMode='contain'/>
               </View>
 

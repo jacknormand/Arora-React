@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+//Api ip routes
 const loginApiIp = 'http://104.248.178.78:8000/api-token-auth';
 const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
+
+
+//When internet connection is detected upload to database
+
+
+//TODO: Find a way to get user pollen
+//const getUserApiIp = 'http://104.248.178.78:8000/userinfo/1';
+/*
+export async function getUser(){
+  await fetch( getUserApiIp )
+    .then(response => {
+      return response.json();
+    }).then( data => {
+     console.log(data)
+    }).catch( error => {
+      console.error(error)
+    })
+}
+*/
 
 export async function loginAPI( user, pass, navigation )
 {
@@ -22,12 +42,12 @@ export async function loginAPI( user, pass, navigation )
   })
   })
 
-  .then(response => {
+  .then( response => {
     return response.json()
   })
-  .then(data => {
-    userID = data.user_id
-    token = data.token
+  .then( data => {
+    userID = data.user_id;
+    token = data.token;
   })
   .catch((error) => {
     console.error('Error:', error);
@@ -36,12 +56,14 @@ export async function loginAPI( user, pass, navigation )
   // USER EXISTS and correct credentials
   // If info entered isnt correct, userID wont be passed back and wont exist
   if ( userID ){
-
     // FROM HERE: store data in async to be used throughout the app
     const storeData = async () => {
-        await AsyncStorage.setItem('@user' , user );
+        await AsyncStorage.setItem( '@user' , user );
+        await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
+        //Might not need
+        await AsyncStorage.setItem( '@userToken' , token );
     }
-
+    //Store local data
     storeData();
 
     // go to wellness check
@@ -80,5 +102,5 @@ export async function moodReportAPI( moodType , stressType , navigation ){
             console.error('Error:', error);
         });
         
-        //TODO: navigate to home without invalid promise
+        navigation.navigate('Home')
 }

@@ -5,11 +5,11 @@ import AppLoading from 'expo-app-loading';
 
 export default function SplashScreen({ navigation }){
   let [isLoaded, setIsLoaded] = React.useState(false);
-  let [ loadBar , setLoadBar ] = React.useState( 0 );
 
   // i have no idea how this code works but it caches images
   // add images here to cache them
   // TODO: find a way to cache whole assets folder
+  //Issues caching superfly and catch butterfly png's
   let cacheResources = async () => {
     const images = [
     require("../assets/dusk_background.jpg"), 
@@ -29,6 +29,15 @@ export default function SplashScreen({ navigation }){
     require('../assets/surveryScreen/0.png'),
     require('../assets/surveryScreen/1.png'),
     require('../assets/surveryScreen/2.png'),
+    require('../assets/jar_button.png'),
+    require('../assets/half_pollen.png'),
+    //Item caching messing up these images
+    //require('../assets/superfly.png'),
+    //require('../assets/catch_butterfly.png'),
+    //require('../assets/learnScreen/ic_action_name.png'),
+    //require('../assets/learnScreen/breath_button.png'),
+    //require('../assets/learnScreen/mindfullness_meditation_icon.png'),
+    //require('../assets/learnScreen/location_button.png')
     ];
     const cacheImages = images.map(image => {
       return Asset.fromModule(image).downloadAsync();
