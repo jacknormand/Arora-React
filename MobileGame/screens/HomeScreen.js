@@ -7,9 +7,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function HomeScreen( { navigation }){
     const [ user , setUser ] = React.useState('');
+    const [ userPollen , setUserPollen ] = React.useState( 0 );
     const getUser = async () =>{
       const username = await AsyncStorage.getItem('@user');
+      const pollen = await AsyncStorage.getItem('@user_pollen');
       setUser( username );
+      setUserPollen( pollen );
     }
     getUser();
     return(
@@ -27,7 +30,7 @@ export default function HomeScreen( { navigation }){
                 <View style={ style.itemBox }>
                     <Image style={ style.boxIcon } source={require('../assets/half_pollen.png')} resizeMode='contain'/>
                     <Text style={ style.boxText }>Total Pollen Count</Text>
-                    <Text style={ style.userPollen }>0</Text>
+                    <Text style={ style.userPollen }>{userPollen}</Text>
                 </View>
                 <TouchableOpacity style={style.itemBox} onPress={() => navigation.navigate('Atrium') }>
                       <Image style={ style.boxIcon } source={require('../assets/jar_button.png')} resizeMode='contain'/>

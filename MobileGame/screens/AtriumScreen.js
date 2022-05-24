@@ -1,7 +1,30 @@
-import React from 'react'
+import React , { useState } from 'react'
 import { View , ImageBackground , StyleSheet , Text , Image } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { increaseUserPollenCount } from '../network/apiCalls';
 
 export default function AtriumScreen(){
+  //Set the user butterfly counts for all atrium
+  const [ b0 , setB0 ] = React.useState( 0 );
+  const [ b1 , setB1 ] = React.useState( 0 );
+  const [ b2 , setB2 ] = React.useState( 0 );
+  const [ b3 , setB3 ] = React.useState( 0 );
+  const [ b4 , setB4 ] = React.useState( 0 );
+  const getUserButterflies = async () => {
+    //gather the user butterfly amount from storage
+    const butterflyZero = await AsyncStorage.getItem( '@user_b0_count' );
+    const butterflyOne = await AsyncStorage.getItem( '@user_b1_count' );
+    const butterflyTwo = await AsyncStorage.getItem( '@user_b2_count' );
+    const butterflyThree = await AsyncStorage.getItem( '@user_b3_count' );
+    const butterflyFour = await AsyncStorage.getItem( '@user_b4_count' );
+    //update state
+    setB0( butterflyZero );
+    setB1( butterflyOne );
+    setB2( butterflyTwo );
+    setB3( butterflyThree );
+    setB4( butterflyFour );
+  }
+  getUserButterflies();
     return(
       <View style={ style.main }>
           <ImageBackground source={require('../assets/atrium_background.jpg')} style={ style.backgroundImage } resizeMode="cover">

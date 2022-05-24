@@ -1,3 +1,5 @@
+import { AspectRatio } from '@material-ui/icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React,{useState} from 'react';
 import { Alert, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { loginAPI } from '../network/apiCalls'
@@ -44,6 +46,7 @@ function LoginScreen ({ navigation }) {
               onPress={() => loginAPI( user.username, user.password, navigation )}>
                 
                 <Text style={styles.loginText}>LOGIN</Text>
+                
               </TouchableOpacity>
             </View>
             </KeyboardAvoidingView>

@@ -9,21 +9,27 @@ const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
 
 //When internet connection is detected upload to database
 
-
-//TODO: Find a way to get user pollen
-//const getUserApiIp = 'http://104.248.178.78:8000/userinfo/1';
-/*
-export async function getUser(){
-  await fetch( getUserApiIp )
+export async function storeUserData(){
+  //get current user id and fetch the user data
+  let userId = await AsyncStorage.getItem( '@userId' );
+  await fetch( 'http://104.248.178.78:8000/userinfo/' + userId )
     .then(response => {
       return response.json();
     }).then( data => {
-     console.log(data)
+      //Add values to the async storage for later use
+      AsyncStorage.setItem( '@user_pollen' , JSON.stringify( data.user_pollen ));
+      AsyncStorage.setItem( '@user_b0_count' , JSON.stringify( data.user_b0_count ));
+      AsyncStorage.setItem( '@user_b1_count' , JSON.stringify( data.user_b1_count ));
+      AsyncStorage.setItem( '@user_b2_count' , JSON.stringify( data.user_b2_count ));
+      AsyncStorage.setItem( '@user_b3_count' , JSON.stringify( data.user_b3_count ));
+      AsyncStorage.setItem( '@user_b4_count' , JSON.stringify( data.user_b4_count ));
+      AsyncStorage.setItem( '@current_butterfly' , JSON.stringify( data.user_current_butterfly ));
+      AsyncStorage.setItem( '@user_current_mood"' , JSON.stringify( data.user_current_mood ));
+      AsyncStorage.setItem( '@user_current_mood_updated' , JSON.stringify( data.user_current_mood_updated ));
     }).catch( error => {
       console.error(error)
     })
 }
-*/
 
 export async function loginAPI( user, pass, navigation )
 {
@@ -41,7 +47,6 @@ export async function loginAPI( user, pass, navigation )
     "password": pass
   })
   })
-
   .then( response => {
     return response.json()
   })
@@ -59,12 +64,15 @@ export async function loginAPI( user, pass, navigation )
     // FROM HERE: store data in async to be used throughout the app
     const storeData = async () => {
         await AsyncStorage.setItem( '@user' , user );
+        //Possibly for auto login
+        await AsyncStorage.setItem( '@password' , pass );
         await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
         //Might not need
         await AsyncStorage.setItem( '@userToken' , token );
     }
     //Store local data
     storeData();
+    storeUserData();
 
     // go to wellness check
     navigation.navigate("Wellness")
@@ -80,7 +88,6 @@ export async function loginAPI( user, pass, navigation )
   }
 }
 
-
 export async function moodReportAPI( moodType , stressType , navigation ){
     await fetch( moodFormApiIp, {
         method: 'POST',
@@ -90,13 +97,13 @@ export async function moodReportAPI( moodType , stressType , navigation ){
         },
         //TODO: See what values to use here. These are place holders
         body: JSON.stringify({
-          "user_id": 2,
-          "mood_type": moodType,
-          "user_text": stressType
+          "user_id": 5,
+          "mood_type": 2,
+          "user_text": 2
         })
         })
         .then(response => {
-          return response.json()
+          return response.json();
         })
         .catch((error) => {
             console.error('Error:', error);
