@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { StyleSheet , View ,Image , Text } from 'react-native';
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loginAPI } from '../network/apiCalls';
 
 export default function SplashScreen({ navigation }){
   let [isLoaded, setIsLoaded] = React.useState(false);
@@ -58,10 +60,21 @@ export default function SplashScreen({ navigation }){
     return <AppLoading />
   }
 
-  setTimeout(() => {
-      navigation.navigate("Login");
-  }, 2000);  
-  
+  const userStoredInLocal = async () => {
+    const user = await AsyncStorage.getItem( '@user' );
+    const pass = await AsyncStorage.getItem( '@password' );
+    const stayLoggedIn = await AsyncStorage.getItem( '@autoLogin' )
+    console.log( stayLoggedIn );
+    if( user != null && pass != null && stayLoggedIn === "true" ){
+      loginAPI( user, pass, navigation )
+    }
+    else{
+      setTimeout(() => {
+        navigation.navigate("Login");
+      }, 2000);
+    } 
+  }
+  userStoredInLocal();
     return(
       <View style={ style.main }>
         <Image style={style.launchIcon } source={require('../assets/ic_launcher_round.png')} resizeMode="contain"></Image>

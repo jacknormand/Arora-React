@@ -8,6 +8,44 @@ const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
 
 
 //When internet connection is detected upload to database
+/*
+async function updateDatabase(){
+  let userId = await AsyncStorage.getItem( '@userId' );
+  let userPollen = await AsyncStorage.getItem( '@user_pollen' );
+  let b0 = await AsyncStorage.getItem( '@user_b0_count' );
+  let b1 = await AsyncStorage.getItem( '@user_b1_count' );
+  let b2 = await AsyncStorage.getItem( '@user_b2_count' );
+  let b3 = await AsyncStorage.getItem( '@user_b3_count' );
+  let b4 = await AsyncStorage.getItem( '@user_b4_count' );
+  let currentButterfly = await AsyncStorage.getItem( '@current_butterfly' );
+  let userMood = await AsyncStorage.getItem( '@user_current_mood' );
+  let userMoodUpdate = await AsyncStorage.getItem( '@user_current_mood_updated' );
+  await fetch('http://104.248.178.78:8000/userinfo/' + userId, {
+    method: 'PUT',
+    headers:{
+    'Content-Type':'application/json'
+    },
+    body: JSON.stringify({
+      "user_current_mood":3,
+      "user_current_mood_updated": "2019-02-23T09:38:42.925706Z",
+      "user_name_of_strength": "strength",
+      "user_current_location_lat": 100.1,
+      "user_current_location_long": 100.2,
+      "user_current_location_updated":"2019-02-23T09:38:42.925706Z",
+      "user_current_butterfly": 1,
+      "user_pollen": 2,
+      "user_points": 3
+    })
+  })
+  
+   .then( response => {
+     return response.json();
+   })
+   .catch(error => {
+     console.error( error );
+   })
+}
+*/
 
 export async function storeUserData(){
   //get current user id and fetch the user data
@@ -16,7 +54,7 @@ export async function storeUserData(){
     .then(response => {
       return response.json();
     }).then( data => {
-      //Add values to the async storage for later use
+      //Load values from database to the async storage for later use
       AsyncStorage.setItem( '@user_pollen' , JSON.stringify( data.user_pollen ));
       AsyncStorage.setItem( '@user_b0_count' , JSON.stringify( data.user_b0_count ));
       AsyncStorage.setItem( '@user_b1_count' , JSON.stringify( data.user_b1_count ));
@@ -35,7 +73,8 @@ export async function loginAPI( user, pass, navigation )
 {
   var userID;
   var token;
-
+  
+  //Fetch the login API 
   await fetch( loginApiIp, {
   method: 'POST',
   headers: {
@@ -61,7 +100,7 @@ export async function loginAPI( user, pass, navigation )
   // USER EXISTS and correct credentials
   // If info entered isnt correct, userID wont be passed back and wont exist
   if ( userID ){
-    // FROM HERE: store data in async to be used throughout the app
+    // Store user data into storage
     const storeData = async () => {
         await AsyncStorage.setItem( '@user' , user );
         //Possibly for auto login
@@ -70,12 +109,22 @@ export async function loginAPI( user, pass, navigation )
         //Might not need
         await AsyncStorage.setItem( '@userToken' , token );
     }
-    //Store local data
+    //Save data to local 
     storeData();
     storeUserData();
 
-    // go to wellness check
-    navigation.navigate("Wellness")
+    const autoSignIn = await AsyncStorage.getItem( '@autoLogin' );
+
+    //If user wants auto login then we still need a screen timer
+    if( autoSignIn === "true" ){
+      setTimeout(() => {
+        navigation.navigate("Wellness");
+      }, 2000);
+    }
+    else{
+      // go to wellness check
+      navigation.navigate("Wellness")
+    }  
   }
   else {
     Alert.alert(
@@ -89,6 +138,7 @@ export async function loginAPI( user, pass, navigation )
 }
 
 export async function moodReportAPI( moodType , stressType , navigation ){
+    let userId = await AsyncStorage.getItem( '@userId' );
     await fetch( moodFormApiIp, {
         method: 'POST',
         headers: {
@@ -97,9 +147,9 @@ export async function moodReportAPI( moodType , stressType , navigation ){
         },
         //TODO: See what values to use here. These are place holders
         body: JSON.stringify({
-          "user_id": 5,
-          "mood_type": 2,
-          "user_text": 2
+          "user_id": userId,
+          "mood_type": moodType,
+          "user_text": stressType
         })
         })
         .then(response => {

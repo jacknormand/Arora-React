@@ -18,7 +18,6 @@ export default function HomeScreen( { navigation }){
     return(
         <View style={ style.main }>
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>
-            
               <View style={ style.userInfo }>
                 <Text style={ style.userText }>{ user }</Text>
                 <Image style={ style.userIcon } source={require('../assets/home/profile_filled_button.png')} resizeMode='contain'/>

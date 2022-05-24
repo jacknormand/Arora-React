@@ -10,7 +10,13 @@ function LoginScreen ({ navigation }) {
     username: '',
     password: '',
   });
- 
+  const [ stayLoggedinBtn , setStayLoggedinBtn ] = React.useState( false );
+
+  const setLoggedIn = async () => {
+    setStayLoggedinBtn( true );
+    await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( stayLoggedinBtn ));
+  }
+  
     return (
           <View style={styles.container}>
           <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
@@ -46,6 +52,12 @@ function LoginScreen ({ navigation }) {
               onPress={() => loginAPI( user.username, user.password, navigation )}>
                 
                 <Text style={styles.loginText}>LOGIN</Text>
+                
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.loginBtn} 
+              onPress={() => setLoggedIn()}>
+                
+                <Text style={styles.loginText}>Stay Logged In </Text>
                 
               </TouchableOpacity>
             </View>
