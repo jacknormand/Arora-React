@@ -1,8 +1,10 @@
 import React , { useState } from 'react'
 import { View , ImageBackground , StyleSheet , Text , Image } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { increaseUserPollenCount } from '../network/apiCalls';
 
+/*
+  TODO: Use the corresponding butterfly values for the amount of specific butterflies
+*/
 export default function AtriumScreen(){
   //Set the user butterfly counts for all atrium
   const [ b0 , setB0 ] = React.useState( 0 );
@@ -10,6 +12,7 @@ export default function AtriumScreen(){
   const [ b2 , setB2 ] = React.useState( 0 );
   const [ b3 , setB3 ] = React.useState( 0 );
   const [ b4 , setB4 ] = React.useState( 0 );
+  
   const getUserButterflies = async () => {
     //gather the user butterfly amount from storage
     const butterflyZero = await AsyncStorage.getItem( '@user_b0_count' );

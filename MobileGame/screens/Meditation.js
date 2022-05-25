@@ -9,6 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
   =============================================
 */
 
+//SEE WHAT TO CLEAR IN ASYNC, WE DONT WANT TO LOSE USER DATA IF NO INTERNET, BUT ALSO DONT
+//WANT TO GET DATA FROM A DIFFERENT USER ON THE SAME DEVICE
 export default function Meditation({navigation}){
     const logout = async () => {
      await AsyncStorage.removeItem('@autoLogin');

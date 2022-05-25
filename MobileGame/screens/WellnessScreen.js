@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import { StyleSheet, View , TouchableOpacity , Text , ImageBackground , Image } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { moodReportAPI } from '../network/apiCalls'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function WellnessScreen ({ navigation }) {
   const [range,setRange] = useState(0)
@@ -67,7 +68,12 @@ function WellnessScreen ({ navigation }) {
       imgPathTwo = require('../assets/surveryScreen/2.png')
       break;
       }
-
+  //Store wellness survey questions in async in case of offline
+  const updateReport = async () => {
+    await AsyncStorage.setItem( '@mood_type' , JSON.stringify( moodType ));
+    await AsyncStorage.setItem( '@stress_type' , JSON.stringify( stressType ));
+  }
+  updateReport();
     
   return (
     <View style={styles.container}>
@@ -112,7 +118,7 @@ function WellnessScreen ({ navigation }) {
        <TouchableOpacity style={ styles.button } onPress={() => navigation.navigate('Home')}>
         <Text style={ styles.buttonText }> SKIP </Text>
        </TouchableOpacity>
-       <TouchableOpacity style={ styles.submitButton } onPress={() => moodReportAPI( moodType , stressType , navigation )}>
+       <TouchableOpacity style={ styles.submitButton } onPress={() => moodReportAPI( navigation )}>
         <Text style={ styles.buttonText }>SUBMIT</Text>
        </TouchableOpacity>
       </View>

@@ -4,6 +4,9 @@ import React,{useState} from 'react';
 import { Alert, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { loginAPI } from '../network/apiCalls'
 
+/*
+  GOOD IDEA: FIND OUT HOW TO MAKE THE AUTOMATIC LOGIN BUTTON INTO CHECK BOX
+*/
 
 function LoginScreen ({ navigation }) {
   const [user, setUser] = useState({
@@ -12,6 +15,7 @@ function LoginScreen ({ navigation }) {
   });
   const [ stayLoggedinBtn , setStayLoggedinBtn ] = React.useState( false );
 
+  //Set auto log in state to true
   const setLoggedIn = async () => {
     setStayLoggedinBtn( true );
     await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( stayLoggedinBtn ));

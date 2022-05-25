@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
-
+import { useNetInfo } from '@react-native-community/netinfo'; 
+import { updateDatabase } from '../network/apiCalls'
 
 export default function HomeScreen( { navigation }){
+  //hooks to set varible from async storage
     const [ user , setUser ] = React.useState('');
     const [ userPollen , setUserPollen ] = React.useState( 0 );
+    //Get user data from async storage
     const getUser = async () =>{
       const username = await AsyncStorage.getItem('@user');
       const pollen = await AsyncStorage.getItem('@user_pollen');
@@ -15,6 +17,22 @@ export default function HomeScreen( { navigation }){
       setUserPollen( pollen );
     }
     getUser();
+    
+    //Gather network info 
+    const network = useNetInfo();
+    const connectivity = network.isConnected;
+
+    //Set to check network in an interval to update the online database
+    function testNetwork(){
+      let run = setInterval(function() {
+        if( connectivity ){
+          updateDatabase(); // This function will consuct api calls update the online database
+        }
+      }, 1000000); // Temp interval 
+    }
+
+    testNetwork();
+
     return(
         <View style={ style.main }>
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>
