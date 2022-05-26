@@ -11,7 +11,6 @@ export default function SplashScreen({ navigation }){
   // i have no idea how this code works but it caches images
   // add images here to cache them
   // TODO: find a way to cache whole assets folder
-  //Issues caching superfly and catch butterfly png's
   let cacheResources = async () => {
     const images = [
     require("../assets/dusk_background.jpg"), 
@@ -38,7 +37,14 @@ export default function SplashScreen({ navigation }){
     require('../assets/learnScreen/ic_action_name.png'),
     require('../assets/learnScreen/breath_button.png'),
     require('../assets/learnScreen/mindfullness_meditation_icon.png'),
-    require('../assets/learnScreen/location_button.png')
+    require('../assets/learnScreen/location_button.png'),
+    require('../assets/breathing/b_frame1.png'),
+    require('../assets/breathing/b_frame2.png'),
+    require('../assets/breathing/b_frame3.png'),
+    require('../assets/breathing/b_frame4.png'),
+    require('../assets/breathing/b_frame5.png'),
+    require('../assets/breathing/b_frame6.png'),
+    require('../assets/breathing/b_frame7.png')
     ];
     const cacheImages = images.map(image => {
       return Asset.fromModule(image).downloadAsync();
@@ -60,10 +66,11 @@ export default function SplashScreen({ navigation }){
   }
 
   const userStoredInLocal = async () => {
+    //Gather the user info( dont want a user with no creditials to log )
     const user = await AsyncStorage.getItem( '@user' );
     const pass = await AsyncStorage.getItem( '@password' );
     const stayLoggedIn = await AsyncStorage.getItem( '@autoLogin' )
-    console.log( stayLoggedIn );
+    //Check that the user and password is not null and the autologin is on
     if( user != null && pass != null && stayLoggedIn === "true" ){
       loginAPI( user, pass, navigation )
     }

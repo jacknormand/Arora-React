@@ -22,13 +22,13 @@ export default function HomeScreen( { navigation }){
     const network = useNetInfo();
     const connectivity = network.isConnected;
 
-    //Set to check network in an interval to update the online database
+    //Set to check network every minute in an interval to update the online database
     function testNetwork(){
-      let run = setInterval(function() {
+      let run = setInterval( function() {
         if( connectivity ){
           updateDatabase(); // This function will consuct api calls update the online database
         }
-      }, 1000000); // Temp interval 
+      }, 60000); // Temp interval 
     }
 
     testNetwork();

@@ -9,6 +9,13 @@ const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
 
 //When internet connection is detected upload to database
 //Function to upload the user data when network is detected
+/*
+  ==============================================
+
+  FIGURE OUT HOW TO UPDATE THE USER DATA( Throwing a bad request ) 
+  ASK ABOUT THE USER UPDATE
+  ==============================================
+*/
 export async function updateDatabase(){
   console.log('Updated Database')
   /*
@@ -112,6 +119,7 @@ export async function loginAPI( user, pass, navigation )
         //Might not need
         await AsyncStorage.setItem( '@userToken' , token );
     }
+    
     //Save data to local 
     storeData();
     storeUserData();
@@ -152,7 +160,7 @@ export async function moodReportAPI( navigation ){
           Accept: 'application/json',
           'Content-Type': 'application/json'
         },
-        //TODO: Values arnt updating in the input types in the database( I need to fix this )
+        //TODO: Mood and Stress values arnt updating in the input types in the database( I need to fix this )
         body: JSON.stringify({
           "user_id": userId,
           "mood_type": moodType,
