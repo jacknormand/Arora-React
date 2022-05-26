@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   loginView: {
     backgroundColor: 'rgba(163, 163, 163, 0.8)',
-    height: '75%',
+    height: '90%',
     marginBottom: 10,
     alignSelf: 'center',
     width: "95%",
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     alignSelf: 'center',
     width: "85%",
-    height: "10%",
-    marginVertical: 10,
+    height: "15%",
+    marginVertical: 5,
     color: 'black',
   },
   title: {
