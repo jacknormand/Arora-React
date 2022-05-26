@@ -47,14 +47,14 @@ export default function PracticeScreen({ navigation }){
               Practice
             </Text>
             <TouchableOpacity style={ style.gameCard } onPress={() => Platform.OS != 'ios' ? requestCameraPermissionAndroid() : requestCameraPermissionIos() }>
-              <Image style={ style.boxIcon } source={require('../assets/catch_butterfly.png')} resizeMode="center"></Image>
+              <Image style={ style.boxIcon } source={require('../assets/catch_butterfly.png')}></Image>
               <Text style={ style.boxText }>AR Game - Catch {'\n'}Butterfly</Text>
-              <Image style={ style.arrow } source={require('../assets/learnScreen/ic_action_name.png')} resizeMode="center"></Image>
+              <Image style={ style.arrow } source={require('../assets/learnScreen/ic_action_name.png')} ></Image>
             </TouchableOpacity>
             <TouchableOpacity style={ style.gameCard }>
-              <Image style={ style.boxIconTwo } resizeMode="center" source={require('../assets/superfly.png')}></Image>
+              <Image style={ style.boxIconTwo } source={require('../assets/superfly.png')}></Image>
               <Text style={style.boxText}>Superfly</Text>
-              <Image style={ style.arrow } source={require('../assets/learnScreen/ic_action_name.png')} resizeMode="center"></Image>
+              <Image style={ style.arrow } source={require('../assets/learnScreen/ic_action_name.png')} ></Image>
             </TouchableOpacity>
            <Footer />
          </ImageBackground>

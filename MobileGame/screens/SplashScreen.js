@@ -33,13 +33,12 @@ export default function SplashScreen({ navigation }){
     require('../assets/surveryScreen/2.png'),
     require('../assets/jar_button.png'),
     require('../assets/half_pollen.png'),
-    //Item caching messing up these images
-    //require('../assets/superfly.png'),
-    //require('../assets/catch_butterfly.png'),
-    //require('../assets/learnScreen/ic_action_name.png'),
-    //require('../assets/learnScreen/breath_button.png'),
-    //require('../assets/learnScreen/mindfullness_meditation_icon.png'),
-    //require('../assets/learnScreen/location_button.png')
+    require('../assets/superfly.png'),
+    require('../assets/catch_butterfly.png'),
+    require('../assets/learnScreen/ic_action_name.png'),
+    require('../assets/learnScreen/breath_button.png'),
+    require('../assets/learnScreen/mindfullness_meditation_icon.png'),
+    require('../assets/learnScreen/location_button.png')
     ];
     const cacheImages = images.map(image => {
       return Asset.fromModule(image).downloadAsync();

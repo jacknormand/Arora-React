@@ -26,7 +26,6 @@ export default function LearnScreen({ navigation }){
                 <Image
               style = {style.iconsArrow}
               source = {require('../assets/learnScreen/ic_action_name.png')}
-              resizeMode="center"
 
               />
        </TouchableOpacity>
@@ -41,7 +40,6 @@ export default function LearnScreen({ navigation }){
                 <Image
               style = {style.iconsArrow}
               source = {require('../assets/learnScreen/ic_action_name.png')}
-              resizeMode="center"
               />
        </TouchableOpacity>
        <TouchableOpacity style={style.box} 
@@ -55,7 +53,6 @@ export default function LearnScreen({ navigation }){
                 <Image
               style = {style.iconsArrow}
               source = {require('../assets/learnScreen/ic_action_name.png')}
-              resizeMode="center"
               />
        </TouchableOpacity>
        < Footer />

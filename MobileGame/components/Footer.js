@@ -1,7 +1,6 @@
 import React from 'react';
 import { TouchableOpacity , Text , Image , StyleSheet , View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { BottomNavigation } from 'react-native-paper';
 
 export default function Footer(){
     const navigation = useNavigation();
