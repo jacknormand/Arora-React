@@ -13,6 +13,8 @@ import SplashScreen from './screens/SplashScreen';
 import Walking from './screens/MindfullWalking';
 import Breathing from './screens/MindfullBreathing';
 import Meditation from './screens/Meditation';
+import WalkingInstructions from './screens/WalkingInstructions';
+import BreathingInstructions from './screens/BreathingInstructions';
 import { useNetInfo } from '@react-native-community/netinfo'; 
 import { updateDatabase } from './network/apiCalls'
 
@@ -56,6 +58,8 @@ export default function App() {
           <Stack.Screen name="Breathing" component={ Breathing } />
           <Stack.Screen name="Meditation" component={ Meditation } />
           <Stack.Screen name="Splash" component={ SplashScreen } />
+          <Stack.Screen name="BreathingInstructions" component={ BreathingInstructions } />
+          <Stack.Screen name="WalkingInstructions" component={ WalkingInstructions } />
         </Stack.Navigator>
     </NavigationContainer>
     </ImageBackground>

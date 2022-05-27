@@ -11,13 +11,11 @@ const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
 //Function to upload the user data when network is detected
 /*
   ==============================================
-
-  FIGURE OUT HOW TO UPDATE THE USER DATA( Throwing a bad request ) 
   ASK ABOUT THE USER UPDATE
   ==============================================
 */
+ 
 export async function updateDatabase(){
-  console.log('Updated Database')
    let userId = await AsyncStorage.getItem( '@userId' );
    let userPollen = await AsyncStorage.getItem( '@user_pollen' );
    //let b0 = await AsyncStorage.getItem( '@user_b0_count' );
@@ -34,15 +32,14 @@ export async function updateDatabase(){
     'Content-Type':'application/json'
     },
     body: JSON.stringify({
-      	"user_current_mood": userMood,
-	      "user_current_mood_updated": timeSubmmited,
-	      "user_name_of_strength": "strength",
-	      "user_current_location_lat": 100.1,
-	      "user_current_location_long": 100.2,
-	      "user_current_location_updated":"2019-02-23T09:38:42.925706Z",
-	      "user_current_butterfly": 1,
-	      "user_pollen": userPollen,
-	      "user_points": 3
+	   "user_current_mood": userMood,
+	   "user_current_mood_updated": "2019-02-23T09:38:42.925706Z",
+	   "user_current_location_updated":"2019-02-23T09:38:42.925706Z",
+	   "user_current_butterfly": 1,
+	   "user_current_location_lat": 0.7,
+	   "user_current_location_long": 0.2,
+	   "user_pollen": userPollen,
+	   "user_points": 3
     })
    }).then( response => {
      return response.json();
@@ -50,7 +47,6 @@ export async function updateDatabase(){
    .catch(error => {
      console.error( error );
    })
-
 }
 
 
@@ -155,13 +151,12 @@ export async function moodReportAPI( navigation ){
     let stressType = await AsyncStorage.getItem( '@stress_type' );
     //Get date and time and format it
     var currentdate = new Date(); 
-    let timeSubmmited = currentdate.getDate() + "/"
-                       + (currentdate.getMonth()+1)  + "/" 
-                       + currentdate.getFullYear() + " @ "  
+    let timeSubmmited = currentdate.getFullYear() + "-"
+                       + (currentdate.getMonth()+1)  + "-" 
+                       + currentdate.getDate() + "@"
                        + currentdate.getHours() + ":"  
                        + currentdate.getMinutes() + ":" 
                        + currentdate.getSeconds()
-    console.log( timeSubmmited );
     AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( timeSubmmited) );
     await fetch( moodFormApiIp, {
         method: 'POST',

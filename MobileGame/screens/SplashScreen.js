@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet , View ,Image , Text } from 'react-native';
+import { StyleSheet , View ,Image , Text , Platform } from 'react-native';
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,8 @@ import { loginAPI } from '../network/apiCalls';
 
 export default function SplashScreen({ navigation }){
   let [isLoaded, setIsLoaded] = React.useState(false);
+  //Disable android autologin for now
+  const platfrom = Platform.OS;
 
   // i have no idea how this code works but it caches images
   // add images here to cache them
@@ -70,8 +72,9 @@ export default function SplashScreen({ navigation }){
     const user = await AsyncStorage.getItem( '@user' );
     const pass = await AsyncStorage.getItem( '@password' );
     const stayLoggedIn = await AsyncStorage.getItem( '@autoLogin' )
+    
     //Check that the user and password is not null and the autologin is on
-    if( user != null && pass != null && stayLoggedIn === "true" ){
+    if( user != null && pass != null && stayLoggedIn === "true" && platfrom != 'android' ){
       loginAPI( user, pass, navigation )
     }
     else{
