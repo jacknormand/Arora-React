@@ -26,7 +26,9 @@ export async function updateDatabase(){
    //let b4 = await AsyncStorage.getItem( '@user_b4_count' );
    let currentButterfly = await AsyncStorage.getItem( '@current_butterfly' );
    let userMood = await AsyncStorage.getItem( '@user_current_mood' );
-   let timeSubmmited = await AsyncStorage.getItem( '@user_current_mood_updated' );
+   //let timeSubmmited = await AsyncStorage.getItem( '@user_current_mood_updated' );
+   //parse to JSON object
+   //timeSubmmited = JSON.parse( timeSubmmited );
    await fetch('http://104.248.178.78:8000/userinfo/' + userId , {
     method: 'PATCH',
     headers:{
@@ -34,11 +36,11 @@ export async function updateDatabase(){
     },
     body: JSON.stringify({ // NEED TO CHECK IF WE STILL NEED THESE VALUES FOR UPDATE
 	   "user_current_mood": userMood,
-	   "user_current_mood_updated": "2019-02-23T09:38:42.925706Z", //See if we still need to update location data
+	   "user_current_mood_updated": "2019-02-23T09:38:42.925706Z", // See if we still need to update location data
 	   "user_current_location_updated":"2019-02-23T09:38:42.925706Z",
-	   "user_current_butterfly": currentButterfly,
-	   "user_current_location_lat": 0.7, //Temp
-	   "user_current_location_long": 0.2, //Temp 
+	   "user_current_butterfly": currentButterfly, // What is this
+	   "user_current_location_lat": 0.7, // Temp
+	   "user_current_location_long": 0.2, // Temp 
 	   "user_pollen": userPollen,
 	   "user_points": 3 // What is this
     })
@@ -204,8 +206,8 @@ export async function moodReportAPI( navigation ){
                        + currentdate.getHours() + ":"  
                        + currentdate.getMinutes() + ":" 
                        + currentdate.getSeconds() + "."
-                       +currentdate.getMilliseconds()
-    console.log( timeSubmmited );
+                       + currentdate.getMilliseconds();
+
     AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( timeSubmmited) );
     await fetch( moodFormApiIp, {
         method: 'POST',
