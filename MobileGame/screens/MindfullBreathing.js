@@ -1,13 +1,15 @@
+import { StyleRounded } from '@material-ui/icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React , {useState} from 'react';
 import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity , Alert} from 'react-native'
-
+import { Overlay } from 'react-native-elements';
 /*
   =================================================
   -FIND OUT WHEN THE USER STOPS HOLDING BUTTON
   -ANIMATION MUST BE SMOOTHER
   -IMPLEMENT THE SCREENS BEFORE AND AFTER THE ACTIVITY
   -EDIT THIS SCREEN TO LOOK LIKE THE ANDROID ONE
+  -NEED OVERLAY
   ================================================= 
 
 */
@@ -18,6 +20,7 @@ export default function Breathing(){
     const [ holdSeconds , setHoldSeconds ] = React.useState( 0 );
     const [ shutDown , setShutDown ] = React.useState( true );
     const [ breathCount , setBreathCount ] = React.useState( 5 );
+    const [ overlayVisable , setOverlayVisable ] = React.useState( true );
 
     //For changing text 
     const [ threshold , setThreshold ] = React.useState( false );
@@ -47,7 +50,7 @@ export default function Breathing(){
               setHoldSeconds( 0 );
 
           }
-        }, 500); // Run every second  
+        }, 500);
     }
   
    //Get active animation ( THIS IS BRUTE FORCE )
@@ -105,10 +108,22 @@ export default function Breathing(){
         updateSeconds();
     }
 
+    const setOverlay = () => {
+        setOverlayVisable( false );
+    }
+
     return(
      <View style={style.main}>
          <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode='cover' style={style.background}>
-           <Text style={ style.breathCount }>Total amount of breaths: { breathCount }</Text>
+         <Overlay style={ style.overlay } isVisible={ overlayVisable } overlayStyle={{width: '90%',height: '90%', backgroundColor:'rgba(0, 245, 196, 0.30)'}}>
+            <Text style={ style.title }>HOW TO PLAY</Text>
+                <Image style={ style.snapshot } source={ require("../assets/breathing/breathing_game_snapshot.png")} resizeMode="contain"></Image>
+                <Text style={style.overlayText}>Press and hold green button - when you breath in. Release the button when breathing out.</Text>
+                <TouchableOpacity style={ style.button } onPress={ setOverlay }>
+                    <Text style={ style.buttonText }>CONTINUE</Text>
+                </TouchableOpacity>
+         </Overlay>
+           <Text style={ style.breathCount }>{ breathCount } Breaths</Text>
            <Image source={currentAnimation} style={style.butterfly} resizeMode="contain"></Image>
            <Text style={style.text}>{ threshold ? exhaulText : displayText }</Text>
            <TouchableOpacity onLongPress={() => setShutDown( false )} style={ style.holdBtn }>
@@ -130,8 +145,8 @@ const style = StyleSheet.create({
     butterfly:{
         marginTop: '20%',
         marginBottom: '10%',
-        height: '40%',
-        width: '50%'
+        height: '50%',
+        width: '75%'
       },
     holdBtn:{
         height: '10%',
@@ -147,5 +162,36 @@ const style = StyleSheet.create({
         marginTop: 50,
         fontSize: 30,
         color: 'white',
+    },
+    overlay:{
+        width: '80%',
+        height: '90%',
+        backgroundColor: 'rgba(0, 245, 196, 0.10)'
+    },
+    button:{
+        height: 75,
+        width: 200,
+        backgroundColor: 'black',
+        justifyContent: 'center',
+        alignSelf: 'center'
+    },
+    buttonText:{
+        color: 'white',
+        alignSelf: 'center',
+    },
+    snapshot:{
+        alignSelf: 'center',
+        height: 600,
+        width: 300,
+    },
+    title:{
+        alignSelf: 'center',
+        color: 'white',
+        fontSize: 30,
+        fontWeight: 'bold'
+    },
+    overlayText:{
+        color: 'white',
+        fontSize: 20,
     }
 })

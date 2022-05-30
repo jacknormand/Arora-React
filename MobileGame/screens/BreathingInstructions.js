@@ -4,7 +4,6 @@ import { View , StyleSheet , Text , ImageBackground , Image , TouchableOpacity }
 /*
  JUST A BASE TEMPLATE
  TODO: FINISH STYLES AND ANIMATION, NOT RIGHT IMAGE BUT DONT WANT TO LOOK RIGHT NOW
- FIND PLAY BUTTON 
 */
 
 export default function BreathingInstructions( { navigation } ){
@@ -15,9 +14,14 @@ export default function BreathingInstructions( { navigation } ){
               <Text style={ style.header }>Mindfulness Breathing</Text>
               <Image style={ style.image } source={require('../assets/learnScreen/breath_button.png')} resizeMode="contain"></Image>
               <View style={ style.textbox }>
+                  <Text style={ style.title }>INSTRUCTIONS</Text>
+                  <Text style={ style.boxText }>Focus on your breath to regain your calm</Text>
+                  <Text style={ style.boxText }>Lets exercise 5 breaths</Text>
+                  <Text style={ style.boxText }>Press the button below to start</Text>
+                  <Text style={ style.boxText }>Hold the button when you breath in Release the button when you breath out</Text>
               </View>
               <TouchableOpacity onPress={() => navigation.navigate("Breathing")}>
-                <Image source={ require('../assets/play_button.png') }></Image>
+                <Image style={ style.play } source={ require('../assets/play_button.png') }></Image>
               </TouchableOpacity>
             </ImageBackground>
         </View>
@@ -39,17 +43,36 @@ const style = StyleSheet.create({
         fontWeight: 'bold',
     },
     image:{
-        marginTop: 20,
+        marginTop: 40,
         marginBottom: 20,
         height: 100,
         width: 100,
         alignSelf: 'center',
     },
     textbox:{
-        height: '50%',
+        height: '45%',
         width: '90%',
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        borderRadius: 5,
+        marginTop: 30,
+        borderRadius: 15,
         alignSelf: 'center'
+    },
+    title:{
+        color: 'white',
+        fontSize: 30,
+        alignSelf: 'center',
+    },
+    boxText:{
+        fontSize: 20,
+        color: 'white',
+        justifyContent: 'space-evenly',
+        marginTop: 30,
+        marginLeft: 10,
+    },
+    play:{
+        alignSelf: 'center',
+        height: 100,
+        width: 100,
+        marginTop: 80,
     }
 })
