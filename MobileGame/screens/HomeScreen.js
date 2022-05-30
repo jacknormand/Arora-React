@@ -26,7 +26,7 @@ export default function HomeScreen( { navigation }){
               </View>
 
               <View style={ style.butterflyboxes }>
-                <Image style={ style.butterfly } source={require('../assets/loginScreen/orange_butterfly_image.png')} resizeMode='contain'/>
+                <Image style={ style.butterfly } source={require('../assets/loginScreen/orange_butterfly_image.png')} />
                 <View style={ style.boxes }>
                 <View style={ style.itemBox }>
                     <Image style={ style.boxIcon } source={require('../assets/half_pollen.png')} resizeMode='contain'/>
