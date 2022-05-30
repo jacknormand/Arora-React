@@ -17,7 +17,7 @@ export default function BreathingInstructions( { navigation } ){
               <View style={ style.textbox }>
               </View>
               <TouchableOpacity onPress={() => navigation.navigate("Breathing")}>
-                  <Text>GO TO GAME</Text>
+                <Image source={ require('../assets/play_button.png') }></Image>
               </TouchableOpacity>
             </ImageBackground>
         </View>

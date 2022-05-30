@@ -15,7 +15,7 @@ export default function WalkingInstructions( { navigation } ){
                  <Text style={ style.infotext }>Take a walk to clear your mind and regain your calm mind.</Text>
                  <Text style={ style.infotext }>Walk and listen with headphones to the audio</Text>
                  <TouchableOpacity onPress={() => navigation.navigate('Walking')}>
-                     <Text> GO TO WALK SCREEN</Text>
+                     <Image source={ require('../assets/play_button.png') }></Image>
                  </TouchableOpacity>
             </ImageBackground>
         </View>

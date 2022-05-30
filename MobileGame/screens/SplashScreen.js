@@ -8,7 +8,7 @@ import { loginAPI } from '../network/apiCalls';
 export default function SplashScreen({ navigation }){
   let [isLoaded, setIsLoaded] = React.useState(false);
   //Disable android autologin for now
-  const platfrom = Platform.OS;
+  const platform = Platform.OS;
 
   // i have no idea how this code works but it caches images
   // add images here to cache them
@@ -46,7 +46,9 @@ export default function SplashScreen({ navigation }){
     require('../assets/breathing/b_frame4.png'),
     require('../assets/breathing/b_frame5.png'),
     require('../assets/breathing/b_frame6.png'),
-    require('../assets/breathing/b_frame7.png')
+    require('../assets/breathing/b_frame7.png'),
+    require('../assets/orange_mountain_background.png'),
+    require('../assets/play_button.png')
     ];
     const cacheImages = images.map(image => {
       return Asset.fromModule(image).downloadAsync();
@@ -74,7 +76,7 @@ export default function SplashScreen({ navigation }){
     const stayLoggedIn = await AsyncStorage.getItem( '@autoLogin' )
     
     //Check that the user and password is not null and the autologin is on
-    if( user != null && pass != null && stayLoggedIn === "true" && platfrom != 'android' ){
+    if( user != null && pass != null && stayLoggedIn === "true" && platform != 'android' ){
       loginAPI( user, pass, navigation )
     }
     else{
