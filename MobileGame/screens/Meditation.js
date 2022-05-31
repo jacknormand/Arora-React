@@ -58,6 +58,7 @@ const style = StyleSheet.create({
     fontSize: 15,
     marginLeft: 10,
     marginTop: 15,
+    textAlign: 'center',
     },
 
     boxTextBold:{

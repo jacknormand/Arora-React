@@ -10,7 +10,7 @@ import PracticeScreen from './screens/PracticeScreen';
 import LearnScreen from './screens/LearnScreen';
 import AtriumScreen from './screens/AtriumScreen';
 import SplashScreen from './screens/SplashScreen';
-import Walking from './screens/MindfullWalking';
+import Walking from './screens/MindfulWalking';
 import Breathing from './screens/MindfullBreathing';
 import Meditation from './screens/Meditation';
 import WalkingInstructions from './screens/WalkingInstructions';
@@ -47,7 +47,7 @@ export default function App() {
           /*animation: 'none',*/
         }} 
         mode="modal"
-        initialRouteName="Splash">
+        initialRouteName="Walking">
           <Stack.Screen options={{gestureEnabled: false}} name="Login" component={LoginScreen} />
           <Stack.Screen name="Wellness" component={WellnessScreen} />
           <Stack.Screen name="Home" component={ HomeScreen } />
