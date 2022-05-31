@@ -43,8 +43,7 @@ const style = StyleSheet.create({
         fontWeight: 'bold',
     },
     image:{
-        marginTop: 40,
-        marginBottom: 20,
+        marginTop: 20,
         height: 100,
         width: 100,
         alignSelf: 'center',
@@ -53,7 +52,7 @@ const style = StyleSheet.create({
         height: '45%',
         width: '90%',
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        marginTop: 30,
+        marginTop: 20,
         borderRadius: 15,
         alignSelf: 'center'
     },
@@ -73,6 +72,6 @@ const style = StyleSheet.create({
         alignSelf: 'center',
         height: 100,
         width: 100,
-        marginTop: 80,
+        marginTop: 20,
     }
 })

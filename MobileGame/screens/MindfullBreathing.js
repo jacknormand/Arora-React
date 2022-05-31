@@ -115,7 +115,7 @@ export default function Breathing(){
     return(
      <View style={style.main}>
          <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode='cover' style={style.background}>
-         <Overlay style={ style.overlay } isVisible={ overlayVisable } overlayStyle={{width: '90%',height: '90%', backgroundColor:'rgba(0, 245, 196, 0.30)'}}>
+         <Overlay style={ style.overlay } isVisible={ overlayVisable } overlayStyle={{width: '90%',height: '90%', backgroundColor:'rgba(0, 245, 196, .50)'}}>
             <Text style={ style.title }>HOW TO PLAY</Text>
                 <Image style={ style.snapshot } source={ require("../assets/breathing/breathing_game_snapshot.png")} resizeMode="contain"></Image>
                 <Text style={style.overlayText}>Press and hold green button - when you breath in. Release the button when breathing out.</Text>
@@ -166,14 +166,15 @@ const style = StyleSheet.create({
     overlay:{
         width: '80%',
         height: '90%',
-        backgroundColor: 'rgba(0, 245, 196, 0.10)'
+        backgroundColor: 'rgba(0, 245, 196, 0.1)'
     },
     button:{
         height: 75,
         width: 200,
         backgroundColor: 'black',
         justifyContent: 'center',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        borderRadius: 25,
     },
     buttonText:{
         color: 'white',
@@ -193,5 +194,6 @@ const style = StyleSheet.create({
     overlayText:{
         color: 'white',
         fontSize: 20,
+        textAlign: 'center',
     }
 })
