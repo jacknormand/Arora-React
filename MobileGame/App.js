@@ -16,7 +16,8 @@ import Meditation from './screens/Meditation';
 import WalkingInstructions from './screens/WalkingInstructions';
 import BreathingInstructions from './screens/BreathingInstructions';
 import { useNetInfo } from '@react-native-community/netinfo'; 
-import { updateDatabase } from './network/apiCalls'
+import { updateDatabase } from './network/apiCalls';
+import BreathingReward from './screens/breathingReward';
 
 const Stack = createNativeStackNavigator()
 
@@ -60,6 +61,7 @@ export default function App() {
           <Stack.Screen name="Splash" component={ SplashScreen } />
           <Stack.Screen name="BreathingInstructions" component={ BreathingInstructions } />
           <Stack.Screen name="WalkingInstructions" component={ WalkingInstructions } />
+          <Stack.Screen name="BreathingReward" component={ BreathingReward } />
         </Stack.Navigator>
     </NavigationContainer>
     </ImageBackground>
