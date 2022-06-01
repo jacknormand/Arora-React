@@ -1,34 +1,62 @@
 import React, { useState } from 'react';
-import { Animated, View , Text , ImageBackground , StyleSheet, TouchableOpacity } from 'react-native'
+import { Switch, View , Text , ImageBackground , StyleSheet, TouchableOpacity } from 'react-native'
 import { Audio } from 'expo-av';
 //TODO: FIND AUDIO FILE
 
 export default function Walking(){
     const [sound, setSound] = React.useState();
+    const [ isPlaying , setisplaying ] = React.useState( false );
+    const [ hasStarted, setstart ] = React.useState( false );
 
+    // play sound and pause function all in one for switch
     async function playSound() {
-        const { sound } = await Audio.Sound.createAsync(
-           require('../assets/walkingscreen/mindfulnesswalking.mp3')
-        );
-        setSound(sound);
+        // start audio if it hasnt started
+        if (!hasStarted){
+            const { sound } = await Audio.Sound.createAsync(
+                require('../assets/walkingscreen/mindfulnesswalking.mp3')
+             );
+             setSound(sound);
 
-        await sound.playAsync(); 
+             setisplaying( true );
+             setstart( true );
+     
+             await sound.playAsync(); 
+        }
+        // if not started, load and start
+        else if (!isPlaying){
+            setisplaying( true );
+     
+            await sound.playAsync(); 
+        }
+        // otherwise pause
+        else{
+            await sound.pauseAsync();
+            setisplaying( false );
+        }
+        
     }
-    
-      React.useEffect(() => {
-        return sound
-          ? () => {
-              console.log('Unloading Sound');
-              sound.unloadAsync(); }
-          : undefined;
-      }, [sound]);
-    
+    // KEEP THIS HERE IN CASE WE NEED IT LATER
+    // unloads sound to prevent memory leak
+    //   React.useEffect(() => {
+    //     return sound
+    //       ? () => {
+    //           sound.unloadAsync(); }
+    //       : undefined;
+    //   }, [sound]);
+
     return(
      <View style={ style.main }>
          <ImageBackground source={require('../assets/walkingscreen/walking_background.png')}style={ style.background } resizeMode="cover">
-         <TouchableOpacity style={ style.button } onPressIn={ playSound } onPress={ playSound }>
-            <Text style={ style.buttonText }>Begin</Text>
-        </TouchableOpacity>
+        <Text style={ style.buttonText }>Play/Pause</Text>
+
+        <Switch
+        style={style.switchOne}
+        trackColor={{ false: "#767577", true: "rgba(35, 151, 216, 0.7)" }}
+        thumbColor={isPlaying ? "#64d2b7" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={playSound}
+        value={isPlaying}
+        />
 
          </ImageBackground>
      </View>
@@ -47,17 +75,19 @@ const style = StyleSheet.create({
         flex: 1,
     },
 
-    button:{
-    borderRadius: 15,
-    backgroundColor: 'rgba(140, 200, 250, .7)',
-    height: 50,
-    width: 200,
-    justifyContent: 'center', bottom: 30,
+    buttonText:{
+        alignSelf: 'center',
+        fontSize: 30,
+        justifyContent: 'center', bottom: 100,
+        position: 'absolute',
+        fontWeight: 'bold',
+        color: 'white',
+    },
+
+    switchOne:{
+        justifyContent: 'center', bottom: 50,
     position: 'absolute',
     alignSelf: 'center',
     },
 
-    buttonText:{
-        textAlign: 'center',
-    }
 })

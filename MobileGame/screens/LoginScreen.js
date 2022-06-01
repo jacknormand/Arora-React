@@ -1,7 +1,6 @@
-import { AspectRatio } from '@material-ui/icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React,{useState} from 'react';
-import { ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { Switch, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { loginAPI } from '../network/apiCalls'
 
 /*
@@ -17,8 +16,15 @@ function LoginScreen ({ navigation }) {
 
   //Set auto log in state to true
   const setLoggedIn = async () => {
-    setStayLoggedinBtn( true );
+    if (!stayLoggedinBtn){
+      setStayLoggedinBtn( true );
     await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( stayLoggedinBtn ));
+    }
+    else{
+      setStayLoggedinBtn( false );
+    await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( stayLoggedinBtn ));
+    }
+    
   }
   
     return (
@@ -58,12 +64,17 @@ function LoginScreen ({ navigation }) {
                 <Text style={styles.loginText}>LOGIN</Text>
                 
               </TouchableOpacity>
-              <TouchableOpacity style={styles.loginBtn} 
-              onPress={() => setLoggedIn()}>
-                
-                <Text style={styles.loginText}>Stay Logged In </Text>
-                
-              </TouchableOpacity>
+
+        <View style={styles.switcher}>
+          <Text style={styles.stayloggedTXT}>Stay Logged In:</Text>
+              <Switch
+        trackColor={{ false: "#767577", true: "rgba(124, 167, 214, 0.7)" }}
+        thumbColor={stayLoggedinBtn ? "#f96cbe" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={setLoggedIn}
+        value={stayLoggedinBtn}
+      />
+      </View>
             </View>
             </KeyboardAvoidingView>
           </ImageBackground>
@@ -80,6 +91,18 @@ const styles = StyleSheet.create({
 
   keyboardPush: {
     flex: 1,
+  },
+
+  switcher: {
+    alignSelf: 'center',
+    flexDirection:'row',
+  },
+
+  stayloggedTXT: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 20,
+    marginRight: 10,
   },
 
   butterflyView: {
@@ -129,7 +152,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 10,
     backgroundColor: 'rgba(140, 200, 250, 0.7)',
-    flex: 1,
+    flex: .6,
   },
 
   loginText: {
