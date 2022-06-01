@@ -48,7 +48,8 @@ export default function SplashScreen({ navigation }){
     require('../assets/breathing/b_frame6.png'),
     require('../assets/breathing/b_frame7.png'),
     require('../assets/orange_mountain_background.png'),
-    require('../assets/play_button.png')
+    require('../assets/play_button.png'),
+    require("../assets/breathing/breathing_game_snapshot.png")
     ];
     const cacheImages = images.map(image => {
       return Asset.fromModule(image).downloadAsync();

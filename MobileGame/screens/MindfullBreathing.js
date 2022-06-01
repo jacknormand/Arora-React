@@ -1,5 +1,3 @@
-import { StyleRounded } from '@material-ui/icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React , {useState} from 'react';
 import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity , Alert} from 'react-native'
 import { Overlay } from 'react-native-elements';
@@ -15,7 +13,7 @@ import { Overlay } from 'react-native-elements';
 */
 
 
-export default function Breathing(){
+export default function Breathing({ navigation }){
 
     const [ holdSeconds , setHoldSeconds ] = React.useState( 0 );
     const [ shutDown , setShutDown ] = React.useState( true );
@@ -108,8 +106,17 @@ export default function Breathing(){
         updateSeconds();
     }
 
+    const restartCount = () => {
+        setShutDown( false )
+    }
+
     const setOverlay = () => {
         setOverlayVisable( false );
+    }
+
+    //TEMP: SET TO 0 when ready
+    if( breathCount === 4 ){
+        navigation.navigate("BreathingReward");
     }
 
     return(
