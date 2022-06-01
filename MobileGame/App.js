@@ -50,8 +50,8 @@ export default function App() {
         mode="modal"
         initialRouteName="Splash">
           <Stack.Screen options={{gestureEnabled: false}} name="Login" component={LoginScreen} />
-          <Stack.Screen name="Wellness" component={WellnessScreen} />
-          <Stack.Screen name="Home" component={ HomeScreen } />
+          <Stack.Screen options={{gestureEnabled: false}} name="Wellness" component={WellnessScreen} />
+          <Stack.Screen options={{gestureEnabled: false}} name="Home" component={ HomeScreen } />
           <Stack.Screen options={{animation: 'none'}} name="Practice" component={ PracticeScreen } />
           <Stack.Screen options={{animation: 'none'}} name="Learn" component={ LearnScreen } />
           <Stack.Screen name="Atrium" component={ AtriumScreen } />
