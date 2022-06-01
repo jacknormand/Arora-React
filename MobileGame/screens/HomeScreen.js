@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from "react";
-import { TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
+import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -16,14 +16,31 @@ export default function HomeScreen( { navigation }){
       setUserPollen( pollen );
     }
     getUser();
+
+    function logoutCheck(){
+      Alert.alert(
+        "Incorrect Credentials",
+        "Try again",
+        [
+          { text: "Cancel" },
+          { text: "Ok",
+            onPress: () => logout(),}
+        ]
+      );
+    }
+
+    async function logout(){
+      await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ));
+      navigation.navigate('Login')
+    }
      
     return(
         <View style={ style.main }>
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>
-              <View style={ style.userInfo }>
+              <TouchableOpacity style={ style.userInfo } onPress={() => logoutCheck()}>
                 <Text style={ style.userText }>{ user }</Text>
                 <Image style={ style.userIcon } source={require('../assets/home/profile_filled_button.png')} resizeMode='contain'/>
-              </View>
+              </TouchableOpacity>
 
               <View style={ style.butterflyboxes }>
                 <Image style={ style.butterfly } source={require('../assets/loginScreen/orange_butterfly_image.png')} />
@@ -58,7 +75,6 @@ const style = StyleSheet.create({
       fontWeight: 'bold',
      },
 
-
     userIcon:{
       height: 50,
       width: 50,
@@ -73,6 +89,7 @@ const style = StyleSheet.create({
      fontWeight: 'bold',
      flexDirection: 'row',
      alignItems: 'center',
+     zIndex: 1,
      },
 
      butterflyboxes:{

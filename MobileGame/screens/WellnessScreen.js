@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 25,
   },
   
   cardTwo:{
@@ -203,6 +204,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 25,
   },
 
 });
