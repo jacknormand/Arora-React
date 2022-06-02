@@ -1,12 +1,15 @@
 import React,{useState} from 'react';
 import { StyleSheet, View , TouchableOpacity , Text , ImageBackground , Image } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { moodReportAPI } from '../network/apiCalls'
+import { moodReportAPI } from '../network/apiCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNetInfo } from '@react-native-community/netinfo'; 
 
 function WellnessScreen ({ navigation }) {
   const [range,setRange] = useState(0)
   const [rangeTwo,setRangeTwo] = useState(0)
+  const network = useNetInfo();
+  const connectivity = network.isConnected;
   var out1
   var out2
   let moodType
@@ -74,6 +77,12 @@ function WellnessScreen ({ navigation }) {
     await AsyncStorage.setItem( '@stress_type' , JSON.stringify( stressType ));
   }
   updateReport();
+
+  function checkNetworkAndUpdate( navigation ){
+    if( connectivity ){
+     moodReportAPI( navigation )
+    }
+  }
     
   return (
     <View style={styles.container}>
@@ -118,7 +127,7 @@ function WellnessScreen ({ navigation }) {
        <TouchableOpacity style={ styles.button } onPress={() => navigation.navigate('Home')}>
         <Text style={ styles.buttonText }> SKIP </Text>
        </TouchableOpacity>
-       <TouchableOpacity style={ styles.submitButton } onPress={() => moodReportAPI( navigation )}>
+       <TouchableOpacity style={ styles.submitButton } onPress={() => checkNetworkAndUpdate( navigation )}>
         <Text style={ styles.buttonText }>SUBMIT</Text>
        </TouchableOpacity>
       </View>

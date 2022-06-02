@@ -15,27 +15,11 @@ import Breathing from './screens/MindfullBreathing';
 import Meditation from './screens/Meditation';
 import WalkingInstructions from './screens/WalkingInstructions';
 import BreathingInstructions from './screens/BreathingInstructions';
-import { useNetInfo } from '@react-native-community/netinfo'; 
-import { updateDatabase } from './network/apiCalls';
 import BreathingReward from './screens/breathingReward';
 
 const Stack = createNativeStackNavigator()
 
 export default function App() {
-  const network = useNetInfo();
-  const connectivity = network.isConnected;
-
-  //Set to check network every minute in an interval to update the online database
-  function testNetwork(){
-    let run = setInterval( function() {
-      if( connectivity ){
-        updateDatabase(); // This function will consuct api calls update the online database
-      }
-    }, 60000); // Temp interval 
-  }
-
-  testNetwork();
-
   return (
     <View style={{ flex: 1,}}>
     <PaperProvider>

@@ -1,48 +1,77 @@
 import React , { useState } from 'react'
 import { View , StyleSheet , ImageBackground , TouchableOpacity , Image , Text } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { updateDatabase , storeUserData } from '../network/apiCalls';
 
+/*
+  TODO: FINSISH ANIMATION( 100 or so frames )
+        FIGURE OUT HOW TO INSTA UPDATE POLLEN FOR HOMESCREEN 
+        FINISH STYLING AND SUCH
+*/
 
 export default function BreathingReward(){
     const [ seconds , setSeconds ] = useState( 0 );
     const [ shutDown , setShutDown ] = useState( true );
-    const [ outText , setOutText ] = useState("Click on the pollen pouch");
-    const [ pollenEarned , setPollenEarned ] = useState("");
-    const [ pollenAdded , setPollenAdded ] = useState("");
-    const [ totalPollen , setTotalPollen ] = useState("");
-    const [ userPollen , setUserPollen ] = useState(0);
-    const [ newCount , setNewCount ] = useState("");
-    
-    //Pollen count returns NULL this needs to be fixed 
-    const getPollen = async () => {
-     const pollen = await AsyncStorage.getItem('@user_pollen');
-     setUserPollen( pollen );
+    const [ outText , setOutText ] = useState( "Click on the pollen pouch" );
+    const [ pollenEarned , setPollenEarned ] = useState( "" );
+    const [ pollen , setPollen ] = useState( 0 );
+    const [ pollenAdded , setPollenAdded ] = useState( "" );
+    const [ totalPollen , setTotalPollen ] = useState( "" );
+    const [ newCount , setNewCount ] = useState( "" );
+    const network = useNetInfo();
+    const connectivity = network.isConnected;
+
+    //const userPointsValue = AsyncStorage.getItem( '@user_points' );
+    const getUserItems = async () => {
+        const pollen = await AsyncStorage.getItem( "@user_pollen" );
+        let integerPollen = parseInt( pollen )
+        setPollen( integerPollen );
     }
 
-    getPollen();
+    getUserItems();
+
+    //Check for a connection
+    function checkNetworkAndUpdate(){
+        if( connectivity ){
+            //Update the online database
+            updateDatabase();
+            
+            //Get the new data from database, quick update for home screen 
+            storeUserData();
+        }
+    }
     
     //Update seconds
     function updateSeconds(){
         let interval = setInterval( function() {
             setSeconds( seconds + 1 );
             clearInterval(interval);
-            if( seconds === 9 ){
+            if( seconds === 10 ){
+                let newPollenCount = pollen + 10;
                 updatePollen();
                 setOutText("Well Done!");
                 setPollenEarned("Pollen Earned:");
                 setPollenAdded("10");
                 setTotalPollen("Total pollen:");
-                setNewCount( "25" );
+                setNewCount( String( newPollenCount ) );
                 setShutDown( true );
+                checkNetworkAndUpdate();
             }
         }, 500);
     }
 
     //Give user 10 pollen upon activity completion 
-    const updatePollen = async ( userPollenCount ) => {
-      let newPollenCount = parseInt( userPollenCount );
-      newPollenCount = newPollenCount + 10;
+    const updatePollen = async () => {
+      let newPollenCount = pollen + 10;
+      //Store the user new pollen count 
       await AsyncStorage.setItem( '@user_pollen' , JSON.stringify( newPollenCount ) );
+
+      //Award user_points
+      //const pointsAwarded = 1;
+      //let newUserPoints = parseInt( userPointsValue );
+      //let newPoints = newUserPoints + pointsAwarded;
+      //await AsyncStorage.setItem( '@user_points' , JSON.stringify( newPoints ) );
     }
     
     var background;
@@ -78,6 +107,9 @@ export default function BreathingReward(){
           break;
       case 9:
           background = require('../assets/breathing/pollen2_00091.png');
+          break;
+      case 10:
+          background = require("../assets/breathing/pollen_pouch.png");
           break;
     }
 

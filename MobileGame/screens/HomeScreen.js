@@ -16,7 +16,38 @@ export default function HomeScreen( { navigation }){
       setUserPollen( pollen );
     }
     getUser();
+    
+    /*
+    const noPermission = async () => {
+      await AsyncStorage.setItem( '@location_permission' , JSON.stringify( false ) );
+    }
 
+    const permission = async () => {
+      await AsyncStorage.setItem( '@location_permission' , JSON.stringify( true ) );
+    }
+
+    //Get the user location permissions one time and store decision into async storage
+    async function getLocationPermissions(){
+      let alreadyAsked = await AsyncStorage.getItem( '@alreadyAsked' );
+
+      //check if we already asked or never asked for user location permissions 
+      if( alreadyAsked === 'false' || alreadyAsked === null ){
+        Alert.alert(
+          "Enable location",
+          "Arora needs to collect locational data",
+          [
+            { text: 'No' , onPress: () => noPermission() },
+            { text: 'Yes' , onPress: () => permission() }
+          ]
+        );
+      }
+      //indicate that we asked for permissions
+      await AsyncStorage.setItem( '@alreadyAsked' , JSON.stringify( true ) );
+    }
+
+    getLocationPermissions();
+   */
+  
     function logoutCheck(){
       Alert.alert(
         "Incorrect Credentials",

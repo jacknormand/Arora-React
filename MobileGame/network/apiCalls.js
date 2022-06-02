@@ -1,12 +1,13 @@
 import React, { useState , useEffect } from 'react';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNetInfo } from '@react-native-community/netinfo';
+//import Geolocation from '@react-native-community/geolocation';
 
 //Api ip routes
 const regIp = 'http://104.248.178.78:8000/';
 const loginApiIp = 'http://104.248.178.78:8000/api-token-auth';
 const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
-
 
 //When internet connection is detected upload to database
 //Function to upload the user data when network is detected
@@ -15,17 +16,28 @@ const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
   ASK ABOUT THE USER UPDATE
   ==============================================
 */
- 
+
+/*
+export async function getUserLocation(){
+
+  let locationPermission = await AsyncStorage.getItem( "@location_permission" );
+
+  if( locationPermission === "true" ){
+    Geolocation.getCurrentPosition(info => console.log(info));
+    //await AsyncStorage.setItem( '@longitude' , JSON.stringify( longitude ) );
+    //await AsyncStorage.setItem( '@latitude' , JSON.stringify( latitude ) );
+  }
+}
+*/
+
 export async function updateDatabase(){
+   //getUserLocation();
    let userId = await AsyncStorage.getItem( '@userId' );
    let userPollen = await AsyncStorage.getItem( '@user_pollen' );
-   //let b0 = await AsyncStorage.getItem( '@user_b0_count' );
-   //let b1 = await AsyncStorage.getItem( '@user_b1_count' );
-   //let b2 = await AsyncStorage.getItem( '@user_b2_count' );
-   //let b3 = await AsyncStorage.getItem( '@user_b3_count' );
-   //let b4 = await AsyncStorage.getItem( '@user_b4_count' );
    let currentButterfly = await AsyncStorage.getItem( '@current_butterfly' );
    let userMood = await AsyncStorage.getItem( '@user_current_mood' );
+   //let longitude = await AsyncStorage.getItem( '@longitude' );
+   //let latitude = await AsyncStorage.getItem( '@latitude' );
    //let timeSubmmited = await AsyncStorage.getItem( '@user_current_mood_updated' );
    //parse to JSON object
    //timeSubmmited = JSON.parse( timeSubmmited );
@@ -159,7 +171,11 @@ export async function loginAPI( user, pass, navigation )
         //Possibly for auto login
         await AsyncStorage.setItem( '@password' , pass );
         await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
-        
+
+        //set temp user locations, in case user doesnt grant location permissions
+        //await AsyncStorage.setItem( '@longitude' , JSON.stringify( .2 ) );
+        //await AsyncStorage.setItem( '@latitude' , JSON.stringify( .7 ) );
+
         //Might not need
         await AsyncStorage.setItem( '@userToken' , token );
     }
@@ -194,10 +210,11 @@ export async function loginAPI( user, pass, navigation )
 }
 
 export async function moodReportAPI( navigation ){
-  //Obtain mood api data from storage
+    //Obtain mood api data from storage
     let userId = await AsyncStorage.getItem( '@userId' );
     let moodType = await AsyncStorage.getItem( '@mood_type' );
     let stressType = await AsyncStorage.getItem( '@stress_type' );
+    
     //Get date and time and format it
     var currentdate = new Date(); 
     let timeSubmmited = currentdate.getFullYear() + "-"
@@ -209,7 +226,8 @@ export async function moodReportAPI( navigation ){
                        + currentdate.getMilliseconds();
 
     AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( timeSubmmited) );
-    await fetch( moodFormApiIp, {
+
+     await fetch( moodFormApiIp, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -228,6 +246,6 @@ export async function moodReportAPI( navigation ){
         .catch((error) => {
             console.error('Error:', error);
         });
-        
+
         navigation.navigate('Home')
 }
