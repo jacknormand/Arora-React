@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Switch, View , Text , ImageBackground , StyleSheet, TouchableOpacity } from 'react-native'
+import { Switch, View , Text , ImageBackground , StyleSheet } from 'react-native'
 import { Audio } from 'expo-av';
 //TODO: FIND AUDIO FILE
 
 export default function Walking(){
-    const [sound, setSound] = React.useState();
-    const [ isPlaying , setisplaying ] = React.useState( false );
-    const [ hasStarted, setstart ] = React.useState( false );
+    const [sound, setSound] = useState();
+    const [ isPlaying , setisplaying ] = useState( false );
+    const [ hasStarted, setstart ] = useState( false );
 
     // play sound and pause function all in one for switch
     async function playSound() {

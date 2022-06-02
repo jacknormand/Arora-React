@@ -38,12 +38,12 @@ const style = StyleSheet.create({
     header:{
         fontSize: 30,
         color: 'white',
-        marginTop: 70,
+        marginTop: 50,
         textAlign: 'center',
         fontWeight: 'bold',
     },
     image:{
-        marginTop: 20,
+        marginTop: 10,
         height: 100,
         width: 100,
         alignSelf: 'center',
@@ -52,7 +52,7 @@ const style = StyleSheet.create({
         height: '45%',
         width: '90%',
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        marginTop: 20,
+        marginTop: 10,
         borderRadius: 15,
         alignSelf: 'center'
     },
@@ -62,7 +62,7 @@ const style = StyleSheet.create({
         alignSelf: 'center',
     },
     boxText:{
-        fontSize: 20,
+        fontSize: 15,
         color: 'white',
         justifyContent: 'space-evenly',
         marginTop: 30,
@@ -72,6 +72,6 @@ const style = StyleSheet.create({
         alignSelf: 'center',
         height: 100,
         width: 100,
-        marginTop: 20,
+        marginTop: 10,
     }
 })

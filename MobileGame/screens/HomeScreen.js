@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState } from "react";
 import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -6,8 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function HomeScreen( { navigation }){
   //hooks to set varible from async storage
-    const [ user , setUser ] = React.useState('');
-    const [ userPollen , setUserPollen ] = React.useState( 0 );
+    const [ user , setUser ] = useState('');
+    const [ userPollen , setUserPollen ] = useState( 0 );
     //Get user data from async storage
     const getUser = async () =>{
       const username = await AsyncStorage.getItem('@user');
@@ -48,13 +48,13 @@ export default function HomeScreen( { navigation }){
     getLocationPermissions();
    */
   
-    function logoutCheck(){
+    function logoutCheck(user){
       Alert.alert(
-        "Incorrect Credentials",
-        "Try again",
+        user+"'s Profile",
+        "What would you like to do?",
         [
           { text: "Cancel" },
-          { text: "Ok",
+          { text: "Log Out",
             onPress: () => logout(),}
         ]
       );
@@ -68,7 +68,7 @@ export default function HomeScreen( { navigation }){
     return(
         <View style={ style.main }>
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>
-              <TouchableOpacity style={ style.userInfo } onPress={() => logoutCheck()}>
+              <TouchableOpacity style={ style.userInfo } onPress={() => logoutCheck(user)}>
                 <Text style={ style.userText }>{ user }</Text>
                 <Image style={ style.userIcon } source={require('../assets/home/profile_filled_button.png')} resizeMode='contain'/>
               </TouchableOpacity>

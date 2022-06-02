@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React,{useState} from 'react';
 import { Switch, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { loginAPI } from '../network/apiCalls'
@@ -12,17 +11,15 @@ function LoginScreen ({ navigation }) {
     username: '',
     password: '',
   });
-  const [ stayLoggedinBtn , setStayLoggedinBtn ] = React.useState( false );
 
+  const [ stayLoggedinBtn , setStayLoggedinBtn ] = useState( false );
   //Set auto log in state to true
   const setLoggedIn = async () => {
     if (!stayLoggedinBtn){
-      setStayLoggedinBtn( true );
-    await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( stayLoggedinBtn ));
+    setStayLoggedinBtn( true );
     }
     else{
       setStayLoggedinBtn( false );
-    await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( stayLoggedinBtn ));
     }
     
   }
@@ -38,7 +35,7 @@ function LoginScreen ({ navigation }) {
               <Text style={styles.title}>Arora</Text>
             </View>
 
-            {/* MIGHT BE A PROBLEM ON ANDROID */}
+            {/* MIGHT BE A PROBLEM ON ANDROID ( dont think so tho)*/}
             <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.keyboardPush}
@@ -58,23 +55,29 @@ function LoginScreen ({ navigation }) {
                 value={user.password}
                 onChangeText={text => setUser({ username: user.username, password: text })}
               />
+
+              <View style={styles.bottomhalf}>
+
               <TouchableOpacity style={styles.loginBtn} 
-              onPress={() => loginAPI( user.username, user.password, navigation )}>
+              onPress={() => loginAPI( user.username, user.password, navigation, stayLoggedinBtn )}>
                 
                 <Text style={styles.loginText}>LOGIN</Text>
                 
               </TouchableOpacity>
 
-        <View style={styles.switcher}>
-          <Text style={styles.stayloggedTXT}>Stay Logged In:</Text>
-              <Switch
-        trackColor={{ false: "#767577", true: "rgba(124, 167, 214, 0.7)" }}
-        thumbColor={stayLoggedinBtn ? "#f96cbe" : "#f4f3f4"}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={setLoggedIn}
-        value={stayLoggedinBtn}
-      />
-      </View>
+              <View style={styles.switcher}>
+                <Text style={styles.stayloggedTXT}>Stay Logged In:</Text>
+                    <Switch
+                      trackColor={{ false: "#767577", true: "rgba(124, 167, 214, 0.7)" }}
+                      thumbColor={stayLoggedinBtn ? "#f96cbe" : "#f4f3f4"}
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={setLoggedIn}
+                      value={stayLoggedinBtn}
+                      />
+              </View>
+
+              </View>
+
             </View>
             </KeyboardAvoidingView>
           </ImageBackground>
@@ -87,6 +90,10 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
+  },
+  bottomhalf:{
+    flex: 1,
+    justifyContent: 'center',
   },
 
   keyboardPush: {
@@ -129,11 +136,11 @@ const styles = StyleSheet.create({
   },
   textIn: {
     borderBottomColor: '#7a1133',
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     alignSelf: 'center',
     width: "85%",
     height: "15%",
-    marginVertical: 5,
+    marginVertical: 2,
     color: 'black',
   },
   title: {

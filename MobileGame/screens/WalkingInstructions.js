@@ -48,14 +48,13 @@ const style = StyleSheet.create({
     },
 
     gameCard:{
-    height: "30%",
+    height: "40%",
     width: "90%",
     marginTop: 30,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     borderRadius: 15,
     alignSelf: 'center',
     alignItems: 'center',
-    overflow: 'hidden',
     },
 
     icons:{
@@ -66,8 +65,8 @@ const style = StyleSheet.create({
     icon:{
     marginTop: 20,
     alignSelf:'center',
-    width: 90,
-    height: 90,
+    width: 70,
+    height: 70,
         },
 
     greenIcon:{

@@ -133,7 +133,7 @@ export async function storeUserData(){
     })
 }
 
-export async function loginAPI( user, pass, navigation )
+export async function loginAPI( user, pass, navigation, value )
 {
   var userID;
   var token;
@@ -164,6 +164,17 @@ export async function loginAPI( user, pass, navigation )
   // USER EXISTS and correct credentials
   // If info entered isnt correct, userID wont be passed back and wont exist
   if ( userID ){
+
+    // if bool val undefined, then we are autlogin so set it to true
+    if (value == undefined){
+      value = true;
+    }
+
+    // update auto login here. the reason for this is because previously, you could just click 
+    // "keep me logged in" and not actually sign in, and when you restarted the app it would bypass
+    // the login. putting this here instead of the login screen prevents that from happening
+    await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( value ));
+
     // Store user data into storage
     const storeData = async () => {
         await AsyncStorage.setItem( '@user' , user );
@@ -186,6 +197,7 @@ export async function loginAPI( user, pass, navigation )
     
     //Get user stored setting 
     const autoSignIn = await AsyncStorage.getItem( '@autoLogin' );
+
 
     //If user wants auto login then we still need a screen timer
     if( autoSignIn === "true" ){
