@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
   cardText:{
     color: 'white',
     fontSize: 25,
-    fontWeight: 'bold',
   },
   
   backgroundImage:{
@@ -191,10 +190,11 @@ const styles = StyleSheet.create({
   buttonText:{
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   
   card: {
-    backgroundColor: 'rgba(163, 163, 163, 0.2)',
+    backgroundColor: 'rgba(163, 163, 163, 0.5)',
     marginBottom: 5,
     marginTop: 60,
     width: '85%',
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   
   cardTwo:{
-    backgroundColor: 'rgba(163, 163, 163, 0.2)',
+    backgroundColor: 'rgba(163, 163, 163, 0.5)',
     marginBottom: 5,
     width: '85%',
     height: '40%',  

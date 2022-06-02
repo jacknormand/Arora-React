@@ -68,8 +68,8 @@ function LoginScreen ({ navigation }) {
               <View style={styles.switcher}>
                 <Text style={styles.stayloggedTXT}>Stay Logged In:</Text>
                     <Switch
-                      trackColor={{ false: "#767577", true: "rgba(124, 167, 214, 0.7)" }}
-                      thumbColor={stayLoggedinBtn ? "#f96cbe" : "#f4f3f4"}
+                      trackColor={{ false: "#767577", true: "rgba(150, 181, 217, 1)" }}
+                      thumbColor={stayLoggedinBtn ? "#650427" : "#f4f3f4"}
                       ios_backgroundColor="#3e3e3e"
                       onValueChange={setLoggedIn}
                       value={stayLoggedinBtn}
@@ -103,10 +103,10 @@ const styles = StyleSheet.create({
   switcher: {
     alignSelf: 'center',
     flexDirection:'row',
+    alignItems: 'center',
   },
 
   stayloggedTXT: {
-    fontWeight: 'bold',
     color: 'white',
     fontSize: 20,
     marginRight: 10,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   
   image: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   butterfly: {
     width: 250,

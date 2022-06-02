@@ -4,6 +4,7 @@ import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginAPI } from '../network/apiCalls';
+import { color } from 'react-native-elements/dist/helpers';
 
 export default function SplashScreen({ navigation }){
   let [isLoaded, setIsLoaded] = React.useState(false);
@@ -99,17 +100,17 @@ const style = StyleSheet.create({
     main:{
         flex: 1,
         alignItems: 'center',
+        justifyContent: 'center',
     },
 
     launchIcon:{
-       marginTop: '50%',
-       marginBottom: '50%',
-       height: '40%',
-       width: '50%'
+       height: 150,
+       width: 150
     },
 
    loading:{
-     fontSize: 30,
-     fontWeight: 'bold'
+    justifyContent: 'center', bottom: 50,
+    position: 'absolute',
+    alignSelf: 'center',
    }
 });
