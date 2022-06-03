@@ -28,7 +28,8 @@ export default function Meditation({ navigation }){
         
           <Button icon="arrow-left" mode="contained" style={style.backButton} 
           onPress={() => navigation.goBack()}
-          color='rgba(0, 0, 0, 0.3)'>Back</Button>
+          color='rgba(0, 0, 0, 0.3)'>Back
+          </Button>
          </ImageBackground>
         </View>
     );
