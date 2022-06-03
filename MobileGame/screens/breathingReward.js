@@ -61,7 +61,7 @@ export default function BreathingReward({navigation}){
                 setShutDown( true );
                 checkNetworkAndUpdate();
             }
-        }, 500);
+        }, 150);
     }
 
     //Give user 10 pollen upon activity completion 
@@ -150,8 +150,12 @@ const style = StyleSheet.create({
     title:{
         color: 'white',
         fontSize: 30,
-        marginTop: 30,
+        marginTop: 50,
         alignSelf: 'center',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        textShadowColor: 'black',
+        textShadowRadius: 5,
     },
     background:{
         flex: 1,

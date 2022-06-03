@@ -32,7 +32,7 @@ export default function App() {
           /*animation: 'none',*/
         }} 
         mode="modal"
-        initialRouteName="Splash">
+        initialRouteName="BreathingReward">
           <Stack.Screen options={{gestureEnabled: false}} name="Login" component={LoginScreen} />
           <Stack.Screen options={{gestureEnabled: false}} name="Wellness" component={WellnessScreen} />
           <Stack.Screen options={{gestureEnabled: false}} name="Home" component={ HomeScreen } />

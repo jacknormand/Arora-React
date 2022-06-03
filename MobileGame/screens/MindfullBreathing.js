@@ -130,8 +130,8 @@ export default function Breathing({ navigation }){
     }
 
     //Text for the screen based on seconds
-    let displayText = 'Press and hold as you breath in';
-    let exhaulText = 'Unhold the button and exhaul';
+    let displayText = 'Press and hold \nas you breathe in';
+    let exhaulText = 'Release the button and exhale';
 
     //Detect if the overlay should be visable
     const setOverlay = () => {
@@ -150,6 +150,7 @@ export default function Breathing({ navigation }){
     return(
      <View style={style.main}>
          <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode='cover' style={style.background}>
+         
          <Overlay style={ style.overlay } isVisible={ overlayVisable } overlayStyle={{width: '90%',height: '90%', backgroundColor:'rgba(0, 245, 196, .50)'}}>
             <Text style={ style.title }>HOW TO PLAY</Text>
                 <Image style={ style.snapshot } source={ require("../assets/breathing/breathing_game_snapshot.png")} resizeMode="contain"></Image>
@@ -158,12 +159,15 @@ export default function Breathing({ navigation }){
                     <Text style={ style.buttonText }>CONTINUE</Text>
                 </TouchableOpacity>
          </Overlay>
+         <View style={style.allitems}>
            <Text style={ style.breathCount }>{ breathCount } Breaths</Text>
            <Image source={currentAnimation} style={style.butterfly} resizeMode="contain"></Image>
            <Text style={style.text}>{ threshold ? exhaulText : displayText }</Text>
            <TouchableOpacity onLongPress={() => startAnimation() } onPressOut={() => restartAnimation( ) }>
                <Image source={ require("../assets/breathing/breathing_button.png")} style={ style.breathbutton }></Image>
            </TouchableOpacity>
+
+           </View>
          </ImageBackground>
      </View>
     );
@@ -175,13 +179,19 @@ const style = StyleSheet.create({
        },
     background:{
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
       },
     butterfly:{
-        marginTop: '20%',
-        marginBottom: '10%',
         height: '50%',
         width: '75%'
+      },
+
+      allitems:{
+        flex: 1,
+        width: "100%",
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        alignItems:'center',
+        justifyContent:'space-evenly',
       },
     holdBtn:{
         height: '10%',
@@ -192,11 +202,18 @@ const style = StyleSheet.create({
     text:{
         color: 'white',
         fontSize: 30,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        textShadowColor: 'black',
+        textShadowRadius: 5,
     },
     breathCount:{
         marginTop: 50,
         fontSize: 30,
         color: 'white',
+        fontWeight: 'bold',
+        textShadowColor: 'black',
+        textShadowRadius: 5,
     },
     overlay:{
         width: '80%',
@@ -218,6 +235,10 @@ const style = StyleSheet.create({
     breathbutton:{
       height: 200,
       width: 200,
+      justifyContent: 'center',
+      position: 'relative',
+      alignSelf: 'center',
+
     },
     snapshot:{
         alignSelf: 'center',
