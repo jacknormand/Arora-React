@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet , View ,Image , Text , Platform } from 'react-native';
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginAPI } from '../network/apiCalls';
-import { color } from 'react-native-elements/dist/helpers';
+import { ActivityIndicator } from 'react-native-paper';
+
 
 export default function SplashScreen({ navigation }){
   let [isLoaded, setIsLoaded] = React.useState(false);
@@ -84,14 +85,14 @@ export default function SplashScreen({ navigation }){
     else{
       setTimeout(() => {
         navigation.navigate("Login");
-      }, 2000);
+      }, 2200);
     } 
   }
   userStoredInLocal();
     return(
       <View style={ style.main }>
         <Image style={style.launchIcon } source={require('../assets/ic_launcher_round.png')} resizeMode="contain"></Image>
-        <Text style={ style.loading }>Loading...</Text>
+        <ActivityIndicator style={style.loading}size='large' animating={true} color='#47be83' />
       </View>
   );
 };
@@ -109,7 +110,7 @@ const style = StyleSheet.create({
     },
 
    loading:{
-    justifyContent: 'center', bottom: 50,
+    justifyContent: 'center', bottom: 100,
     position: 'absolute',
     alignSelf: 'center',
    }

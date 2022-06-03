@@ -119,6 +119,7 @@ function WellnessScreen ({ navigation }) {
         thumbTintColor='pink'
         onValueChange={(value) => setRangeTwo(value)}
       />
+
       <Text style={styles.bottomText}>
           {out2}
         </Text>
