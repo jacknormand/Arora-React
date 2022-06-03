@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
-import { Switch, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { Switch, ImageBackground,StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { loginAPI } from '../network/apiCalls'
-import { Button } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 
 
 /*
@@ -45,17 +45,25 @@ function LoginScreen ({ navigation }) {
             <View style={styles.loginView}>
               <TextInput 
                 style={styles.textIn}
-                placeholder= "Username"
                 autoCapitalize="none"
                 value={user.username}
                 onChangeText={text => setUser({ username: text, password: user.password })}
+                activeUnderlineColor={"#7da6d3"}
+                activeOutlineColor={"grey"}
+                selectionColor={"#650427"}
+                mode={'outlined'}
+                label={"Username"}
               />
               <TextInput 
                 style={styles.textIn}
-                placeholder= "Password"
                 secureTextEntry={ true }
                 value={user.password}
                 onChangeText={text => setUser({ username: user.username, password: text })}
+                activeUnderlineColor={"#7da6d3"}
+                activeOutlineColor={"grey"}
+                selectionColor={"#650427"}
+                label={"Password"}
+                mode={'outlined'}
               />
 
               <View style={styles.bottomhalf}>
@@ -74,6 +82,7 @@ function LoginScreen ({ navigation }) {
                       ios_backgroundColor="#3e3e3e"
                       onValueChange={setLoggedIn}
                       value={stayLoggedinBtn}
+
                       />
               </View>
 
@@ -137,11 +146,13 @@ const styles = StyleSheet.create({
   },
   textIn: {
     borderBottomColor: '#7a1133',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderBottomWidth: 2,
     alignSelf: 'center',
     width: "85%",
-    height: "15%",
-    marginVertical: 2,
+    height: 40,
+    marginVertical: 0,
+    marginTop: 10,
     color: 'black',
   },
   title: {
