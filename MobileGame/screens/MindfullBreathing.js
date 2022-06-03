@@ -22,12 +22,30 @@ export default function Breathing({ navigation }){
     const [ restart , setRestart ] = React.useState( false );
     //For changing text 
     const [ threshold , setThreshold ] = React.useState( false );
+    
+    
+    //Restart the animation when the user lets go of the button 
+    const restartAnimation = () => {
+        //User doesn't need to hold the button when butterfly reaches last frame
+        if( holdSeconds <= 6 ){
+         setRestart( true );
+         setShutDown( true );
+         setHoldSeconds( 0 );
+        }
+    }
 
+    //Start up the animation sequence 
+    const startAnimation = () => {
+        setHoldSeconds( 0 );
+        setRestart( false );
+        setShutDown( false );
+    }
 
     //Update the seconds for every second the user holds button 
     function updateSeconds(){
         if( !shutDown ){
          let seconds = setInterval( function() {
+
            //Update second state   
            setHoldSeconds( holdSeconds + 1 );
 
@@ -38,9 +56,15 @@ export default function Breathing({ navigation }){
            if( holdSeconds >= 6 ){
               setThreshold( true );
            }
+           else{
+              setThreshold( false );
+           }
           
            //On last frame restart the seconds and decrease the breath count
            if( holdSeconds === 12 ){
+              //restart to avoid extra frame from switch statement
+              setRestart( true );
+
               //Breath count decrease
               setBreathCount( breathCount - 1 );
               
@@ -53,16 +77,13 @@ export default function Breathing({ navigation }){
          }, 500); // Temp interval
         }
     }
-    
-    const restartAnimation = () => {
-        setShutDown( true );
-        setHoldSeconds( 0 );
-    }
   
    //Get active animation ( THIS IS BRUTE FORCE ), Where are the rest of the frames?
    // Not to be the final animation.
+    
     var currentAnimation;
-    switch( holdSeconds ){
+    if( !restart ){
+     switch( holdSeconds ){
         case 0: 
          currentAnimation = require('../assets/breathing/b_frame1.png');
          break;
@@ -102,6 +123,10 @@ export default function Breathing({ navigation }){
         case 12:
          currentAnimation = require('../assets/breathing/b_frame1.png');
          break;
+      }
+    }
+    else{
+        currentAnimation = currentAnimation = require('../assets/breathing/b_frame1.png');
     }
 
     //Text for the screen based on seconds
@@ -118,9 +143,9 @@ export default function Breathing({ navigation }){
         navigation.navigate("BreathingReward");
     }
 
-    
-    //Update the seconds per onPress event 
+    //Update the seconds per onPress event
     updateSeconds();
+
 
     return(
      <View style={style.main}>
@@ -136,7 +161,7 @@ export default function Breathing({ navigation }){
            <Text style={ style.breathCount }>{ breathCount } Breaths</Text>
            <Image source={currentAnimation} style={style.butterfly} resizeMode="contain"></Image>
            <Text style={style.text}>{ threshold ? exhaulText : displayText }</Text>
-           <TouchableOpacity onLongPress={() => setShutDown( false ) } onPressOut={() => restartAnimation() }>
+           <TouchableOpacity onLongPress={() => startAnimation() } onPressOut={() => restartAnimation( ) }>
                <Image source={ require("../assets/breathing/breathing_button.png")} style={ style.breathbutton }></Image>
            </TouchableOpacity>
          </ImageBackground>
