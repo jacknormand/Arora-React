@@ -2,7 +2,7 @@ import React , { useState } from 'react'
 import { View , StyleSheet , ImageBackground , TouchableOpacity , Image , Text } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { updateDatabase , storeUserData } from '../network/apiCalls';
+import { updateDatabase } from '../network/apiCalls';
 
 /*
   TODO: FINSISH ANIMATION( 100 or so frames )
@@ -10,7 +10,7 @@ import { updateDatabase , storeUserData } from '../network/apiCalls';
         FINISH STYLING AND SUCH
 */
 
-export default function BreathingReward(){
+export default function BreathingReward({navigation}){
     const [ seconds , setSeconds ] = useState( 0 );
     const [ shutDown , setShutDown ] = useState( true );
     const [ outText , setOutText ] = useState( "Click on the pollen pouch" );
@@ -19,6 +19,8 @@ export default function BreathingReward(){
     const [ pollenAdded , setPollenAdded ] = useState( "" );
     const [ totalPollen , setTotalPollen ] = useState( "" );
     const [ newCount , setNewCount ] = useState( "" );
+    const [ imageChange , setImageChange ] = useState( false );
+    const [ returnHomeText , setReturnHome ] = useState('');
     const network = useNetInfo();
     const connectivity = network.isConnected;
 
@@ -27,6 +29,8 @@ export default function BreathingReward(){
         const pollen = await AsyncStorage.getItem( "@user_pollen" );
         let integerPollen = parseInt( pollen )
         setPollen( integerPollen );
+
+        //TODO: Award Points 
     }
 
     getUserItems();
@@ -36,9 +40,6 @@ export default function BreathingReward(){
         if( connectivity ){
             //Update the online database
             updateDatabase();
-            
-            //Get the new data from database, quick update for home screen 
-            storeUserData();
         }
     }
     
@@ -49,12 +50,14 @@ export default function BreathingReward(){
             clearInterval(interval);
             if( seconds === 10 ){
                 let newPollenCount = pollen + 10;
+                setImageChange( true );
                 updatePollen();
                 setOutText("Well Done!");
                 setPollenEarned("Pollen Earned:");
                 setPollenAdded("10");
                 setTotalPollen("Total pollen:");
                 setNewCount( String( newPollenCount ) );
+                setReturnHome("Return Home");
                 setShutDown( true );
                 checkNetworkAndUpdate();
             }
@@ -117,21 +120,23 @@ export default function BreathingReward(){
     if( !shutDown ){
         updateSeconds();
     }
+
+    //On user press, return back to home ( Find out how to refresh home ).
+    const returnHome = () => {
+        navigation.navigate("Home");
+    }
     
     return(
         <View style={ style.main }>
          <ImageBackground style={ style.background } source={ require('../assets/dusk_background.jpg')} resizeMode="cover">
           <Text style={ style.title }>{ outText }</Text>
-          <View style={ style.inline }>
-            <Text style={ style.text }>{ pollenEarned }</Text>
-            <Text style={ style.text }>{ pollenAdded }</Text>
-          </View>
-          <View>
-            <Text style={ style.text }>{ totalPollen }</Text>
-            <Text style={ style.text }>{ newCount }</Text>
-          </View>
+          <Text style={ style.text }>{ pollenEarned } { pollenAdded } </Text>
+          <Text style={ style.text }>{ totalPollen } { newCount }</Text>
           <TouchableOpacity activeOpacity={1} onPress={() => setShutDown( false )}>
-            <Image style={ style.image } source={ background } resizeMode="contain"></Image>
+            <Image style={ !imageChange ? style.image : style.imageAlt } source={ background } resizeMode="contain"></Image>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => returnHome() }>
+              <Text style={ style.text }>{ returnHomeText }</Text>
           </TouchableOpacity>
          </ImageBackground>
         </View>
@@ -152,11 +157,19 @@ const style = StyleSheet.create({
         flex: 1,
     },
     image:{
-        height: "100%",
-        width: "100%",
+        height: '92%',
+        width: '100%',
+    },
+    imageAlt:{
+        height: '75%',
+        width: '50%',
+        alignSelf: 'center',
+        bottom: 0,
     },
     text:{
         color: 'white',
+        marginTop: 20,
         fontSize: 20,
+        alignSelf: 'center'
     },
 })

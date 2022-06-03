@@ -3,7 +3,6 @@ import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , 
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-
 export default function HomeScreen( { navigation }){
   //hooks to set varible from async storage
     const [ user , setUser ] = useState('');
@@ -17,7 +16,6 @@ export default function HomeScreen( { navigation }){
     }
     getUser();
     
-    /*
     const noPermission = async () => {
       await AsyncStorage.setItem( '@location_permission' , JSON.stringify( false ) );
     }
@@ -46,7 +44,6 @@ export default function HomeScreen( { navigation }){
     }
 
     getLocationPermissions();
-   */
   
     function logoutCheck(user){
       Alert.alert(

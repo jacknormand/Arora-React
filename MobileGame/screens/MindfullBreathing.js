@@ -1,5 +1,5 @@
 import React , {useState} from 'react';
-import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity , Alert} from 'react-native'
+import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity } from 'react-native'
 import { Overlay } from 'react-native-elements';
 /*
   =================================================
@@ -14,44 +14,53 @@ import { Overlay } from 'react-native-elements';
 
 
 export default function Breathing({ navigation }){
-
+    //create states 
     const [ holdSeconds , setHoldSeconds ] = React.useState( 0 );
     const [ shutDown , setShutDown ] = React.useState( true );
     const [ breathCount , setBreathCount ] = React.useState( 5 );
     const [ overlayVisable , setOverlayVisable ] = React.useState( true );
-
+    const [ restart , setRestart ] = React.useState( false );
     //For changing text 
     const [ threshold , setThreshold ] = React.useState( false );
 
+
     //Update the seconds for every second the user holds button 
     function updateSeconds(){
-        let seconds = setInterval( function() {
+        if( !shutDown ){
+         let seconds = setInterval( function() {
+           //Update second state   
+           setHoldSeconds( holdSeconds + 1 );
 
-          //Update second state   
-          setHoldSeconds( holdSeconds + 1 );
-          
-          clearInterval( seconds );
+           //clear the interval
+           clearInterval( seconds );
 
-          if( holdSeconds >= 6 ){
+           //Used to detect text change
+           if( holdSeconds >= 6 ){
               setThreshold( true );
-          }
+           }
           
-          //if the seconds hit max give pollen( whatever the android version did )
-          if( holdSeconds === 12 ){
-              
-              setShutDown( true );
-
+           //On last frame restart the seconds and decrease the breath count
+           if( holdSeconds === 12 ){
               //Breath count decrease
               setBreathCount( breathCount - 1 );
               
               //Reset the seconds to get back to the first animation
               setHoldSeconds( 0 );
 
+              //shutDown so animation is not continous
+              setShutDown( true );
           }
-        }, 500);
+         }, 500); // Temp interval
+        }
+    }
+    
+    const restartAnimation = () => {
+        setShutDown( true );
+        setHoldSeconds( 0 );
     }
   
-   //Get active animation ( THIS IS BRUTE FORCE )
+   //Get active animation ( THIS IS BRUTE FORCE ), Where are the rest of the frames?
+   // Not to be the final animation.
     var currentAnimation;
     switch( holdSeconds ){
         case 0: 
@@ -90,34 +99,28 @@ export default function Breathing({ navigation }){
         case 11:
          currentAnimation = require('../assets/breathing/b_frame2.png');
          break;
+        case 12:
+         currentAnimation = require('../assets/breathing/b_frame1.png');
+         break;
     }
-    
+
     //Text for the screen based on seconds
     let displayText = 'Press and hold as you breath in';
     let exhaulText = 'Unhold the button and exhaul';
 
-    //When the breath count hits hit were okay to award 
-    if( breathCount === 0 ){
-        Alert.alert("Congrats you did the activity" , "reroute" [ { text: 'ok'} ] )
-    }
-    
-    //Check for user holding button 
-    if( !shutDown ){
-        updateSeconds();
-    }
-
-    const restartCount = () => {
-        setShutDown( false )
-    }
-
+    //Detect if the overlay should be visable
     const setOverlay = () => {
         setOverlayVisable( false );
     }
-
-    //TEMP: SET TO 0 when ready
-    if( breathCount === 4 ){
+    
+    //When activity is done, award the user
+    if( breathCount === 0 ){
         navigation.navigate("BreathingReward");
     }
+
+    
+    //Update the seconds per onPress event 
+    updateSeconds();
 
     return(
      <View style={style.main}>
@@ -133,8 +136,8 @@ export default function Breathing({ navigation }){
            <Text style={ style.breathCount }>{ breathCount } Breaths</Text>
            <Image source={currentAnimation} style={style.butterfly} resizeMode="contain"></Image>
            <Text style={style.text}>{ threshold ? exhaulText : displayText }</Text>
-           <TouchableOpacity onLongPress={() => setShutDown( false )} style={ style.holdBtn }>
-               <Text style={style.text}>Hold</Text>
+           <TouchableOpacity onLongPress={() => setShutDown( false ) } onPressOut={() => restartAnimation() }>
+               <Image source={ require("../assets/breathing/breathing_button.png")} style={ style.breathbutton }></Image>
            </TouchableOpacity>
          </ImageBackground>
      </View>
@@ -186,6 +189,10 @@ const style = StyleSheet.create({
     buttonText:{
         color: 'white',
         alignSelf: 'center',
+    },
+    breathbutton:{
+      height: 200,
+      width: 200,
     },
     snapshot:{
         alignSelf: 'center',

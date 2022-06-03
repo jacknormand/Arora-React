@@ -1,8 +1,8 @@
 import React, { useState , useEffect } from 'react';
 import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo';
-//import Geolocation from '@react-native-community/geolocation';
+
 
 //Api ip routes
 const regIp = 'http://104.248.178.78:8000/';
@@ -23,10 +23,16 @@ export async function getUserLocation(){
   let locationPermission = await AsyncStorage.getItem( "@location_permission" );
 
   if( locationPermission === "true" ){
-    Geolocation.getCurrentPosition(info => console.log(info));
-    //await AsyncStorage.setItem( '@longitude' , JSON.stringify( longitude ) );
-    //await AsyncStorage.setItem( '@latitude' , JSON.stringify( latitude ) );
-  }
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+      },
+      (error) => {
+        // See error code charts below.
+        console.log(error.code, error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+  )}
 }
 */
 
@@ -36,8 +42,8 @@ export async function updateDatabase(){
    let userPollen = await AsyncStorage.getItem( '@user_pollen' );
    let currentButterfly = await AsyncStorage.getItem( '@current_butterfly' );
    let userMood = await AsyncStorage.getItem( '@user_current_mood' );
-   //let longitude = await AsyncStorage.getItem( '@longitude' );
-   //let latitude = await AsyncStorage.getItem( '@latitude' );
+  // let longitude = await AsyncStorage.getItem( '@longitude' );
+  // let latitude = await AsyncStorage.getItem( '@latitude' );
    //let timeSubmmited = await AsyncStorage.getItem( '@user_current_mood_updated' );
    //parse to JSON object
    //timeSubmmited = JSON.parse( timeSubmmited );
@@ -51,8 +57,8 @@ export async function updateDatabase(){
 	   "user_current_mood_updated": "2019-02-23T09:38:42.925706Z", // See if we still need to update location data
 	   "user_current_location_updated":"2019-02-23T09:38:42.925706Z",
 	   "user_current_butterfly": currentButterfly, // What is this
-	   "user_current_location_lat": 0.7, // Temp
-	   "user_current_location_long": 0.2, // Temp 
+	   "user_current_location_lat": .7, // Temp
+	   "user_current_location_long": .2, // Temp 
 	   "user_pollen": userPollen,
 	   "user_points": 3 // What is this
     })
