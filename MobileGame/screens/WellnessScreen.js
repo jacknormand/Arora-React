@@ -172,8 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(140, 200, 250, .7)',
     height: 50,
     width: 80,
-    marginBottom: 10,
-    marginLeft: 20,
+    position: 'absolute', left: 20,
     justifyContent: 'center',
   },
   

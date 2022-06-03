@@ -1,5 +1,6 @@
 import React from 'react';
 import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-paper';
 export default function Meditation({ navigation }){
     return(
         <View style={ style.main }>
@@ -24,7 +25,10 @@ export default function Meditation({ navigation }){
             </View>
 
         
-
+        
+          <Button icon="arrow-left" mode="contained" style={style.backButton} 
+          onPress={() => navigation.goBack()}
+          color='rgba(0, 0, 0, 0.3)'>Back</Button>
          </ImageBackground>
         </View>
     );
@@ -38,6 +42,15 @@ const style = StyleSheet.create({
     image:{
         flex: 1,
       },
+
+    backButton:{
+      height: 50,
+      width: 100,
+      justifyContent: 'center',
+      position: 'absolute', left: "5%", bottom: 50,
+      borderRadius: 15,
+      },
+
 
     boxText:{
     color: 'white',
@@ -55,6 +68,7 @@ const style = StyleSheet.create({
     borderRadius: 15,
     alignSelf: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     },
 
     icons:{

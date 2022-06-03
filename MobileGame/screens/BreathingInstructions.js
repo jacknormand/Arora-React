@@ -1,5 +1,6 @@
 import React from 'react'
 import { View , StyleSheet , Text , ImageBackground , Image , TouchableOpacity } from 'react-native'
+import { Button } from 'react-native-paper';
 
 /*
  JUST A BASE TEMPLATE
@@ -23,6 +24,12 @@ export default function BreathingInstructions( { navigation } ){
               <TouchableOpacity onPress={() => navigation.navigate("Breathing")}>
                 <Image style={ style.play } source={ require('../assets/play_button.png') }></Image>
               </TouchableOpacity>
+
+
+              <Button icon="arrow-left" mode="contained" style={style.backButton} 
+          onPress={() => navigation.goBack()}
+          color='rgba(0, 0, 0, 0.3)'>Back
+          </Button>
             </ImageBackground>
         </View>
     )
@@ -54,7 +61,8 @@ const style = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
         marginTop: 10,
         borderRadius: 15,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        justifyContent: 'center',
     },
     title:{
         color: 'white',
@@ -73,5 +81,13 @@ const style = StyleSheet.create({
         height: 100,
         width: 100,
         marginTop: 10,
-    }
+    },
+
+    backButton:{
+        height: 50,
+        width: 100,
+        justifyContent: 'center',
+        position: 'absolute', left: "5%", bottom: 50,
+        borderRadius: 15,
+        }
 })

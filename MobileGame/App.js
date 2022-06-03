@@ -36,8 +36,10 @@ export default function App() {
           <Stack.Screen options={{gestureEnabled: false}} name="Login" component={LoginScreen} />
           <Stack.Screen options={{gestureEnabled: false}} name="Wellness" component={WellnessScreen} />
           <Stack.Screen options={{gestureEnabled: false}} name="Home" component={ HomeScreen } />
-          <Stack.Screen options={{animation: 'none'}} name="Practice" component={ PracticeScreen } />
-          <Stack.Screen options={{animation: 'none'}} name="Learn" component={ LearnScreen } />
+          <Stack.Screen options={{animation: 'none',
+                                  gestureEnabled: false}} name="Practice" component={ PracticeScreen } />
+          <Stack.Screen options={{animation: 'none',
+                                  gestureEnabled: false}} name="Learn" component={ LearnScreen } />
           <Stack.Screen name="Atrium" component={ AtriumScreen } />
           <Stack.Screen name="Walking" component={ Walking } />
           <Stack.Screen name="Breathing" component={ Breathing } />

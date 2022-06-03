@@ -3,6 +3,8 @@ import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity }
 import Carousel from 'react-native-snap-carousel'
 import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from '../CarouselCardItem'
 import data from '../data'
+import { Button } from 'react-native-paper';
+
 export default function Meditation({ navigation }){
 const isCarousel = React.useRef(null)
     return(
@@ -39,6 +41,11 @@ const isCarousel = React.useRef(null)
         <Image style={ style.icon } source={require('../assets/play_button.png')}></Image>
         </TouchableOpacity>
 
+        <Button icon="arrow-left" mode="contained" style={style.backButton} 
+          onPress={() => navigation.goBack()}
+          color='rgba(0, 0, 0, 0.3)'>Back
+          </Button>
+
          </ImageBackground>
         </View>
     );
@@ -61,6 +68,14 @@ const style = StyleSheet.create({
     textAlign: 'center',
     },
 
+    backButton:{
+      height: 50,
+      width: 100,
+      justifyContent: 'center',
+      position: 'absolute', left: "5%", bottom: 50,
+      borderRadius: 15,
+      },
+
     boxTextBold:{
         color: 'white',
         fontSize: 15,
@@ -79,6 +94,7 @@ const style = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     overflow: 'hidden',
+    justifyContent: 'center',
     },
 
     icons:{

@@ -1,6 +1,8 @@
 import React,{useState} from 'react';
 import { Switch, ImageBackground,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { loginAPI } from '../network/apiCalls'
+import { Button } from 'react-native-paper';
+
 
 /*
   GOOD IDEA: FIND OUT HOW TO MAKE THE AUTOMATIC LOGIN BUTTON INTO CHECK BOX
@@ -64,7 +66,6 @@ function LoginScreen ({ navigation }) {
                 <Text style={styles.loginText}>LOGIN</Text>
                 
               </TouchableOpacity>
-
               <View style={styles.switcher}>
                 <Text style={styles.stayloggedTXT}>Stay Logged In:</Text>
                     <Switch
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    width: "80%",
+    width: "75%",
     borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   loginText: {
     fontWeight: 'bold',
     color: 'white',
-    fontSize: 15,
+    fontSize: 20,
     
   },
 

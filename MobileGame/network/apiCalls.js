@@ -1,8 +1,9 @@
-import React, { useState , useEffect } from 'react';
-import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNetInfo } from '@react-native-community/netinfo';
 
+//import React from 'react';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+//import { useNetInfo } from '@react-native-community/netinfo';
+//import Geolocation from '@react-native-community/geolocation';
 
 //Api ip routes
 const regIp = 'http://104.248.178.78:8000/';
