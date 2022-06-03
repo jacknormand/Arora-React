@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { View , StyleSheet , Text , ImageBackground , Image , TouchableOpacity } from 'react-native'
 import { Button } from 'react-native-paper';
@@ -13,7 +14,10 @@ export default function BreathingInstructions( { navigation } ){
         <View style={ style.main }>
             <ImageBackground style={ style.background } source={require('../assets/dusk_background.jpg')} resizeMode='cover'>
               <Text style={ style.header }>Mindfulness Breathing</Text>
-              <Image style={ style.image } source={require('../assets/learnScreen/breath_button.png')} resizeMode="contain"></Image>
+              <View>
+               <Image style={ style.image } source={ require("../assets/breathing/breathing_button.png") } resizeMode="contain"></Image>
+               <Image resizeMode='contain' style={ style.backDrop } source={ require("../assets/breathing/background_breathing.png") } />
+              </View>
               <View style={ style.textbox }>
                   <Text style={ style.title }>INSTRUCTIONS</Text>
                   <Text style={ style.boxText }>Focus on your breath to regain your calm</Text>
@@ -49,10 +53,16 @@ const style = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
     },
+    backDrop:{
+     height: 500,
+     width: 500,
+     position: 'absolute',
+     alignSelf: 'center',
+    },
     image:{
         marginTop: 10,
-        height: 100,
-        width: 100,
+        height: 200,
+        width: 200,
         alignSelf: 'center',
     },
     textbox:{
@@ -89,5 +99,5 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         position: 'absolute', left: "5%", bottom: 50,
         borderRadius: 15,
-        }
+    }
 })

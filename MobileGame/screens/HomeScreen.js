@@ -3,10 +3,12 @@ import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , 
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+
 export default function HomeScreen( { navigation }){
   //hooks to set varible from async storage
     const [ user , setUser ] = useState('');
     const [ userPollen , setUserPollen ] = useState( 0 );
+    
     //Get user data from async storage
     const getUser = async () =>{
       const username = await AsyncStorage.getItem('@user');
@@ -14,7 +16,18 @@ export default function HomeScreen( { navigation }){
       setUser( username );
       setUserPollen( pollen );
     }
+    
     getUser();
+
+    //Constanltly get user data for insta update to pollen count
+    function getUserContinous(){
+      let userUpdate = setInterval( function () {
+        getUser();
+      }, 60000)
+    }
+    
+    getUserContinous();
+    
     
     const noPermission = async () => {
       await AsyncStorage.setItem( '@location_permission' , JSON.stringify( false ) );
@@ -39,6 +52,7 @@ export default function HomeScreen( { navigation }){
           ]
         );
       }
+      
       //indicate that we asked for permissions
       await AsyncStorage.setItem( '@alreadyAsked' , JSON.stringify( true ) );
     }

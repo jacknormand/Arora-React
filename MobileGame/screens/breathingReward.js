@@ -30,7 +30,7 @@ export default function BreathingReward({navigation}){
         let integerPollen = parseInt( pollen )
         setPollen( integerPollen );
 
-        //TODO: Award Points 
+        //TODO: Award Points( not in async storage yet )
     }
 
     getUserItems();
