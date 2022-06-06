@@ -145,6 +145,12 @@ export async function loginAPI( user, pass, navigation, value )
   var userID;
   var token;
   
+  //For future in case of no internet connection, check if the user id is not null if not then the user is still logged in. 
+  // let tempId = await AsyncStorage.getItem( "@user_id" ); We now if the user has ever been logged in on the device 
+  // let tempAutoLogin = await AsyncStorage.getItem( "@autoLogin" );
+  //if( tempId != null && autoLogin === "true" )
+  //        ( Used to bypass the api call so if theres no internet the user can still log in )
+
   //Fetch the login API 
   await fetch( loginApiIp, {
   method: 'POST',
