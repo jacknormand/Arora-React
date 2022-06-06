@@ -1,6 +1,8 @@
 import React , {useState} from 'react';
-import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity } from 'react-native'
+import { Easing, Animated, View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity } from 'react-native'
 import { Overlay } from 'react-native-elements';
+import  LottieView  from 'lottie-react-native';
+
 /*
   =================================================
   -FIND OUT WHEN THE USER STOPS HOLDING BUTTON
@@ -150,14 +152,17 @@ export default function Breathing({ navigation }){
     return(
      <View style={style.main}>
          <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode='cover' style={style.background}>
+             <LottieView source={require('../assets/breathing/river.json')} loop autoPlay style={style.river}></LottieView>
          
-         <Overlay style={ style.overlay } isVisible={ overlayVisable } overlayStyle={{width: '90%',height: '90%', backgroundColor:'rgba(0, 245, 196, .50)'}}>
+         <Overlay style={ style.overlay } isVisible={ overlayVisable } overlayStyle={{width: '90%',height: '90%', backgroundColor:'rgba(0, 245, 196, .7)'}}>
+             <View style={style.overlay}>
             <Text style={ style.title }>HOW TO PLAY</Text>
                 <Image style={ style.snapshot } source={ require("../assets/breathing/breathing_game_snapshot.png")} resizeMode="contain"></Image>
                 <Text style={style.overlayText}>Press and hold green button - when you breath in. Release the button when breathing out.</Text>
                 <TouchableOpacity style={ style.button } onPress={ setOverlay }>
                     <Text style={ style.buttonText }>CONTINUE</Text>
                 </TouchableOpacity>
+                </View> 
          </Overlay>
          <View style={style.allitems}>
            <Text style={ style.breathCount }>{ breathCount } Breaths</Text>
@@ -168,6 +173,7 @@ export default function Breathing({ navigation }){
            </TouchableOpacity>
 
            </View>
+
          </ImageBackground>
      </View>
     );
@@ -180,10 +186,17 @@ const style = StyleSheet.create({
     background:{
         flex: 1,
         alignItems: 'center',
+        justifyContent: 'center',
       },
     butterfly:{
         height: '50%',
         width: '75%'
+      },
+
+      river:{
+          width: "110%",
+          position: "absolute",
+          height: "110%",
       },
 
       allitems:{
@@ -218,7 +231,9 @@ const style = StyleSheet.create({
     overlay:{
         width: '80%',
         height: '90%',
-        backgroundColor: 'rgba(0, 245, 196, 0.1)'
+        flex: 1,
+        justifyContent: 'center',
+        alignSelf: 'center',
     },
     button:{
         height: 75,
@@ -242,18 +257,21 @@ const style = StyleSheet.create({
     },
     snapshot:{
         alignSelf: 'center',
-        height: 600,
-        width: 300,
+        height: "60%",
     },
     title:{
         alignSelf: 'center',
         color: 'white',
         fontSize: 30,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textShadowColor: 'black',
+        textShadowRadius: 5,
     },
     overlayText:{
         color: 'white',
         fontSize: 20,
         textAlign: 'center',
+        textShadowColor: 'black',
+        textShadowRadius: 5,
     }
 })

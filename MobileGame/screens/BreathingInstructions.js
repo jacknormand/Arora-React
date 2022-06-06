@@ -14,9 +14,9 @@ export default function BreathingInstructions( { navigation } ){
         <View style={ style.main }>
             <ImageBackground style={ style.background } source={require('../assets/dusk_background.jpg')} resizeMode='cover'>
               <Text style={ style.header }>Mindfulness Breathing</Text>
-              <View>
-               <Image style={ style.image } source={ require("../assets/breathing/breathing_button.png") } resizeMode="contain"></Image>
-               <Image resizeMode='contain' style={ style.backDrop } source={ require("../assets/breathing/background_breathing.png") } />
+              <View style={style.icons}>
+              <Image style={ style.greenIconTwo } source={ require("../assets/breathing/breathing_button.png") } />
+               <Image style={ style.greenIcon } source={ require("../assets/breathing/breathing_button.png") } ></Image>
               </View>
               <View style={ style.textbox }>
                   <Text style={ style.title }>INSTRUCTIONS</Text>
@@ -46,6 +46,29 @@ const style = StyleSheet.create({
     background:{
         flex: 1,
     },
+
+    icons:{
+        justifyContent: 'center',
+          },
+
+    greenIconTwo:{
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+    alignSelf:'center',
+    position: 'absolute',
+    tintColor: 'rgba(255, 255, 255, 0.3)',
+    
+        },
+
+    greenIcon:{
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+
+        },
+
     header:{
         fontSize: 30,
         color: 'white',
@@ -69,7 +92,6 @@ const style = StyleSheet.create({
         height: '45%',
         width: '90%',
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        marginTop: 10,
         borderRadius: 15,
         alignSelf: 'center',
         justifyContent: 'center',
@@ -88,8 +110,8 @@ const style = StyleSheet.create({
     },
     play:{
         alignSelf: 'center',
-        height: 100,
-        width: 100,
+        height: 75,
+        width: 75,
         marginTop: 10,
     },
 

@@ -3,6 +3,7 @@ import { View , StyleSheet , ImageBackground , TouchableOpacity , Image , Text }
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { updateDatabase } from '../network/apiCalls';
+import { Button } from 'react-native-paper';
 
 /*
   TODO: FINSISH ANIMATION( 100 or so frames )
@@ -57,7 +58,7 @@ export default function BreathingReward({navigation}){
                 setPollenAdded("10");
                 setTotalPollen("Total pollen:");
                 setNewCount( String( newPollenCount ) );
-                setReturnHome("Return Home");
+                setReturnHome("Home");
                 setShutDown( true );
                 checkNetworkAndUpdate();
             }
@@ -132,12 +133,16 @@ export default function BreathingReward({navigation}){
           <Text style={ style.title }>{ outText }</Text>
           <Text style={ style.text }>{ pollenEarned } { pollenAdded } </Text>
           <Text style={ style.text }>{ totalPollen } { newCount }</Text>
+
+          <Button icon="home-outline" mode="contained" style={style.backButton} 
+          onPress={() => returnHome()}
+          color='rgba(0, 0, 0, 0.3)'>{returnHomeText}
+          </Button>
           <TouchableOpacity activeOpacity={1} onPress={() => setShutDown( false )}>
             <Image style={ !imageChange ? style.image : style.imageAlt } source={ background } resizeMode="contain"></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => returnHome() }>
-              <Text style={ style.text }>{ returnHomeText }</Text>
-          </TouchableOpacity>
+
+
          </ImageBackground>
         </View>
     )
@@ -176,4 +181,12 @@ const style = StyleSheet.create({
         fontSize: 20,
         alignSelf: 'center'
     },
+    backButton:{
+        height: 50,
+        width: 100,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        position: 'absolute', bottom: 10,
+        borderRadius: 15,
+        },
 })

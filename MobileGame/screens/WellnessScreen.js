@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   
   cardText:{
     color: 'white',
-    fontSize: 25,
+    fontSize: 20,
   },
   
   backgroundImage:{
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: 'rgba(163, 163, 163, 0.5)',
     marginBottom: 5,
-    marginTop: 60,
+    marginTop: 50,
     width: '85%',
     height: '40%',
     alignSelf: 'center',
