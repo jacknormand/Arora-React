@@ -54,7 +54,7 @@ const createUserLocationReport = async () => {
   })
 }
 
-createUserLocationReport();
+//createUserLocationReport();
 
 export async function updateDatabase(){
    createUserLocationReport();
