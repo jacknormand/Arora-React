@@ -5,11 +5,8 @@ import  LottieView  from 'lottie-react-native';
 
 /*
   =================================================
-  -FIND OUT WHEN THE USER STOPS HOLDING BUTTON
   -ANIMATION MUST BE SMOOTHER
-  -IMPLEMENT THE SCREENS BEFORE AND AFTER THE ACTIVITY
-  -EDIT THIS SCREEN TO LOOK LIKE THE ANDROID ONE
-  -NEED OVERLAY
+  -Warning on completion is fine, if not we can fix later
   ================================================= 
 
 */
@@ -73,6 +70,9 @@ export default function Breathing({ navigation }){
               //Reset the seconds to get back to the first animation
               setHoldSeconds( 0 );
 
+              //clear the interval
+              clearInterval( seconds );
+
               //shutDown so animation is not continous
               setShutDown( true );
           }
@@ -128,7 +128,7 @@ export default function Breathing({ navigation }){
       }
     }
     else{
-        currentAnimation = currentAnimation = require('../assets/breathing/b_frame1.png');
+        currentAnimation = require('../assets/breathing/b_frame1.png');
     }
 
     //Text for the screen based on seconds
@@ -141,9 +141,14 @@ export default function Breathing({ navigation }){
     }
     
     //When activity is done, award the user
-    if( breathCount === 0 ){
+    const navigate = () => {
+      if( breathCount === 0 ){
         navigation.navigate("BreathingReward");
+      }
     }
+    
+    //navigate to the reward screen
+    navigate();
 
     //Update the seconds per onPress event
     updateSeconds();

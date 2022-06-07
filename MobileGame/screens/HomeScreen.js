@@ -23,7 +23,7 @@ export default function HomeScreen( { navigation }){
     function getUserContinous(){
       let userUpdate = setInterval( function () {
         getUser();
-      }, 60000)
+      }, 10000)
     }
     
     getUserContinous();

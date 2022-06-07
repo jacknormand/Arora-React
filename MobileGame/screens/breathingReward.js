@@ -59,6 +59,7 @@ export default function BreathingReward({navigation}){
                 setTotalPollen("Total pollen:");
                 setNewCount( String( newPollenCount ) );
                 setReturnHome("Home");
+                clearInterval( interval );
                 setShutDown( true );
                 checkNetworkAndUpdate();
             }

@@ -1,9 +1,8 @@
-
-//import React from 'react';
+import React from 'react';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 //import { useNetInfo } from '@react-native-community/netinfo';
-//import Geolocation from '@react-native-community/geolocation';
+import * as Location from 'expo-location';
 
 //Api ip routes
 const regIp = 'http://104.248.178.78:8000/';
@@ -18,33 +17,53 @@ const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
   ==============================================
 */
 
-/*
+
 export async function getUserLocation(){
-
-  let locationPermission = await AsyncStorage.getItem( "@location_permission" );
-
-  if( locationPermission === "true" ){
-    Geolocation.getCurrentPosition(
-      (position) => {
-        console.log(position);
-      },
-      (error) => {
-        // See error code charts below.
-        console.log(error.code, error.message);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-  )}
+  let { status }  = await Location.requestForegroundPermissionsAsync()
+  console.log( status );
+  if( status === 'granted' ){
+   let location = await Location.getCurrentPositionAsync({});
+   console.log( location.coords.longitude );
+   console.log( location.coords.latitude );
+   await AsyncStorage.setItem( '@longitude' , JSON.stringify( location.coords.longitude ) );
+   await AsyncStorage.setItem( '@latitude' , JSON.stringify( location.coords.latitude ) );
+  }
 }
-*/
+
+const createUserLocationReport = async () => {
+  getUserLocation();
+  let userId = await AsyncStorage.getItem( '@userId' );
+  let longitude = await AsyncStorage.getItem( '@longitude' );
+  let latitude = await AsyncStorage.getItem( '@latitude' );
+
+  await fetch( regIp + 'locationreport' , {
+    method: 'POST',
+    headers:{
+    'Content-Type':'application/json'
+    },
+    body: JSON.stringify({
+      "location_report_lat": latitude,
+      "location_report_long": longitude,
+      "user_id": userId
+    })
+  }).then( response => {
+    return response.json();
+  })
+  .catch(error => {
+    console.error( error );
+  })
+}
+
+createUserLocationReport();
 
 export async function updateDatabase(){
-   //getUserLocation();
+   createUserLocationReport();
    let userId = await AsyncStorage.getItem( '@userId' );
    let userPollen = await AsyncStorage.getItem( '@user_pollen' );
    let currentButterfly = await AsyncStorage.getItem( '@current_butterfly' );
    let userMood = await AsyncStorage.getItem( '@user_current_mood' );
-  // let longitude = await AsyncStorage.getItem( '@longitude' );
-  // let latitude = await AsyncStorage.getItem( '@latitude' );
+   let longitude = await AsyncStorage.getItem( '@longitude' );
+   let latitude = await AsyncStorage.getItem( '@latitude' );
    //let timeSubmmited = await AsyncStorage.getItem( '@user_current_mood_updated' );
    //parse to JSON object
    //timeSubmmited = JSON.parse( timeSubmmited );
@@ -58,8 +77,8 @@ export async function updateDatabase(){
 	   "user_current_mood_updated": "2019-02-23T09:38:42.925706Z", // See if we still need to update location data
 	   "user_current_location_updated":"2019-02-23T09:38:42.925706Z",
 	   "user_current_butterfly": currentButterfly, // What is this
-	   "user_current_location_lat": .7, // Temp
-	   "user_current_location_long": .2, // Temp 
+	   "user_current_location_lat": latitude, // Temp
+	   "user_current_location_long": longitude, // Temp 
 	   "user_pollen": userPollen,
 	   "user_points": 3 // What is this
     })
@@ -146,7 +165,7 @@ export async function loginAPI( user, pass, navigation, value )
   var token;
   
   //For future in case of no internet connection, check if the user id is not null if not then the user is still logged in. 
-  // let tempId = await AsyncStorage.getItem( "@user_id" ); We now if the user has ever been logged in on the device 
+  // let tempId = await AsyncStorage.getItem( "@user_id" ); We know if the user has ever been logged in on the device 
   // let tempAutoLogin = await AsyncStorage.getItem( "@autoLogin" );
   //if( tempId != null && autoLogin === "true" )
   //        ( Used to bypass the api call so if theres no internet the user can still log in )
@@ -197,8 +216,8 @@ export async function loginAPI( user, pass, navigation, value )
         await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
 
         //set temp user locations, in case user doesnt grant location permissions
-        //await AsyncStorage.setItem( '@longitude' , JSON.stringify( .2 ) );
-        //await AsyncStorage.setItem( '@latitude' , JSON.stringify( .7 ) );
+        await AsyncStorage.setItem( '@longitude' , JSON.stringify( .2 ) );
+        await AsyncStorage.setItem( '@latitude' , JSON.stringify( .7 ) );
 
         //Might not need
         await AsyncStorage.setItem( '@userToken' , token );
@@ -207,6 +226,7 @@ export async function loginAPI( user, pass, navigation, value )
     //Save data to local 
     storeData();
     storeUserData();
+
     
     //Get user stored setting 
     const autoSignIn = await AsyncStorage.getItem( '@autoLogin' );

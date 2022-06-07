@@ -12,7 +12,6 @@ export default function AtriumScreen(){
   const [ b2 , setB2 ] = React.useState( 0 );
   const [ b3 , setB3 ] = React.useState( 0 );
   const [ b4 , setB4 ] = React.useState( 0 );
-  const [ userTime , setUserTime ] = React.useState( 0 );
   const [ firstTimeLogin , setFirstTimeLogin ] = React.useState( false );
   const blueCircle = require('../assets/atrium/blue_circle.png');
   
@@ -32,46 +31,28 @@ export default function AtriumScreen(){
   }
   getUserButterflies();
 
-  /*
-    TODO: Award the user random amount of butterflies every 24 hours.
-  */
-
-  /*
-  //Grant random butterfly count for user 
-  const b0Random = Math.floor( Math.random() * 5 );
-  const b1Random = Math.floor( Math.random() * 5 );
-  const b2Random = Math.floor( Math.random() * 5 );
-  const b3Random = Math.floor( Math.random() * 5 );
-  const b4Random = Math.floor( Math.random() * 5 );
-  
-  
-  //add butterfly count to existing count
-  const newB0 = b0 + b0Random;
-  const newB1 = b1 + b1Random;
-  const newB2 = b2 + b2Random;
-  const newB3 = b0 + b3Random;
-  const newB4 = b4 + b4Random;
-
   const grantUserRandNumButterflies = async () => {
-   // Set in async storage 
-   await AsyncStorage.setItem( '@user_b0_count' , JSON.stringify( newB0 ) );
-   await AsyncStorage.setItem( '@user_b1_count' , JSON.stringify( newB1 ) );
-   await AsyncStorage.setItem( '@user_b2_count' , JSON.stringify( newB2 ) );
-   await AsyncStorage.setItem( '@user_b3_count' , JSON.stringify( newB3 ) );
-   await AsyncStorage.setItem( '@user_b4_count' , JSON.stringify( newB4 ) );
-  }
-  grantUserRandNumButterflies()
-  getUserButterflies();
+    //Generate the random butterfly counts
+    const b0Random = Math.floor( Math.random() * 5 );
+    const b1Random = Math.floor( Math.random() * 5 );
+    const b2Random = Math.floor( Math.random() * 5 );
+    const b3Random = Math.floor( Math.random() * 5 );
+    const b4Random = Math.floor( Math.random() * 5 );
+    
+    //add existing butterflies to the random 
+    const newB0 = b0 + b0Random;
+    const newB1 = b1 + b1Random;
+    const newB2 = b2 + b2Random;
+    const newB3 = b0 + b3Random;
+    const newB4 = b4 + b4Random;
 
-  /*
-
-  //Set the user to recive the butterflies every 24 hours
-  const getLastLoginTime = async () => {
-    const getLastLoginData = await AsyncStorage.getItem( '@last_hour_login' );
-    let parsedInt = parseInt( getLastLoginData );
-    setUserTime( parsedInt );
+    //Set new random butterfly count in async
+    await AsyncStorage.setItem( '@user_b0_count' , JSON.stringify( newB0 ) );
+    await AsyncStorage.setItem( '@user_b1_count' , JSON.stringify( newB1 ) );
+    await AsyncStorage.setItem( '@user_b2_count' , JSON.stringify( newB2 ) );
+    await AsyncStorage.setItem( '@user_b3_count' , JSON.stringify( newB3 ) );
+    await AsyncStorage.setItem( '@user_b4_count' , JSON.stringify( newB4 ) );
   }
-  getLastLoginTime();
 
   // Check for users first login 
   const getLoginInfo = async () => {
@@ -79,24 +60,26 @@ export default function AtriumScreen(){
     setFirstTimeLogin( firstTimeLogin );
   }
   getLoginInfo();
+  console.log( firstTimeLogin );
 
-
-  //get the current time 
-  var currentTime = new Date();
-  let hour = currentTime.getHours();
-  const parsedHour = parseInt( hour );
-
-  //Check for 24 hours or first login ever
+  //Check for first login ever
   const checkForGrant = async () => {
-    if( firstTimeLogin === "null" ){
+    if( firstTimeLogin === null ){
       grantUserRandNumButterflies();
+      Alert.alert(
+        'Congrats',
+        'You have been awarded some butterflies for first time login!',
+        [
+         { text: 'Awesome'}
+        ]
+      )
     }
 
     await AsyncStorage.setItem( '@first_time_login' , JSON.stringify( false ) );
   }
 
-  //checkForGrant();
-  */
+  checkForGrant(); 
+
     return(
       <View style={ style.main }>
           <ImageBackground source={require('../assets/atrium_background.jpg')} style={ style.backgroundImage } resizeMode="cover">
