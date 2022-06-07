@@ -1,5 +1,5 @@
-import React , {useState} from 'react';
-import { Easing, Animated, View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity } from 'react-native'
+import React , {useState, useRef } from 'react';
+import { Animated, View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity } from 'react-native'
 import { Overlay } from 'react-native-elements';
 import  LottieView  from 'lottie-react-native';
 
@@ -14,123 +14,13 @@ import  LottieView  from 'lottie-react-native';
 
 export default function Breathing({ navigation }){
     //create states 
-    const [ holdSeconds , setHoldSeconds ] = React.useState( 0 );
-    const [ shutDown , setShutDown ] = React.useState( true );
-    const [ breathCount , setBreathCount ] = React.useState( 5 );
-    const [ overlayVisable , setOverlayVisable ] = React.useState( true );
-    const [ restart , setRestart ] = React.useState( false );
-    //For changing text 
-    const [ threshold , setThreshold ] = React.useState( false );
+    const [ breathCount , setBreathCount ] = useState( 5 );
+    const [ overlayVisable , setOverlayVisable ] = useState( true );
+    //For changing text  and anim
+    const [ threshold , setThreshold ] = useState( false );
+    const translation = useRef(new Animated.Value(1)).current;
+    const [ needreward , setneedreward ] = useState( true );
     
-    
-    //Restart the animation when the user lets go of the button 
-    const restartAnimation = () => {
-        //User doesn't need to hold the button when butterfly reaches last frame
-        if( holdSeconds <= 6 ){
-         setRestart( true );
-         setShutDown( true );
-         setHoldSeconds( 0 );
-        }
-    }
-
-    //Start up the animation sequence 
-    const startAnimation = () => {
-        setHoldSeconds( 0 );
-        setRestart( false );
-        setShutDown( false );
-    }
-
-    //Update the seconds for every second the user holds button 
-    function updateSeconds(){
-        if( !shutDown ){
-         let seconds = setInterval( function() {
-
-           //Update second state   
-           setHoldSeconds( holdSeconds + 1 );
-
-           //clear the interval
-           clearInterval( seconds );
-
-           //Used to detect text change
-           if( holdSeconds >= 6 ){
-              setThreshold( true );
-           }
-           else{
-              setThreshold( false );
-           }
-          
-           //On last frame restart the seconds and decrease the breath count
-           if( holdSeconds === 12 ){
-              //restart to avoid extra frame from switch statement
-              setRestart( true );
-
-              //Breath count decrease
-              setBreathCount( breathCount - 1 );
-              
-              //Reset the seconds to get back to the first animation
-              setHoldSeconds( 0 );
-
-              //clear the interval
-              clearInterval( seconds );
-
-              //shutDown so animation is not continous
-              setShutDown( true );
-          }
-         }, 500); // Temp interval
-        }
-    }
-  
-   //Get active animation ( THIS IS BRUTE FORCE ), Where are the rest of the frames?
-   // Not to be the final animation.
-    
-    var currentAnimation;
-    if( !restart ){
-     switch( holdSeconds ){
-        case 0: 
-         currentAnimation = require('../assets/breathing/b_frame1.png');
-         break;
-        case 1:
-         currentAnimation = require('../assets/breathing/b_frame2.png');
-         break;
-        case 2:
-         currentAnimation = require('../assets/breathing/b_frame3.png');
-         break;
-        case 3:
-         currentAnimation = require('../assets/breathing/b_frame4.png');
-         break;
-        case 4:
-         currentAnimation = require('../assets/breathing/b_frame5.png');
-         break;
-        case 5:
-         currentAnimation = require('../assets/breathing/b_frame6.png');
-         break;
-        case 6:
-         currentAnimation = require('../assets/breathing/b_frame7.png');
-         break;
-        case 7: 
-         currentAnimation = require('../assets/breathing/b_frame6.png');
-         break;
-        case 8:
-         currentAnimation = require('../assets/breathing/b_frame5.png');
-         break;
-        case 9:
-         currentAnimation = require('../assets/breathing/b_frame4.png');
-         break;
-        case 10:
-         currentAnimation = require('../assets/breathing/b_frame3.png');
-         break;
-        case 11:
-         currentAnimation = require('../assets/breathing/b_frame2.png');
-         break;
-        case 12:
-         currentAnimation = require('../assets/breathing/b_frame1.png');
-         break;
-      }
-    }
-    else{
-        currentAnimation = require('../assets/breathing/b_frame1.png');
-    }
-
     //Text for the screen based on seconds
     let displayText = 'Press and hold \nas you breathe in';
     let exhaulText = 'Release the button and exhale';
@@ -150,9 +40,40 @@ export default function Breathing({ navigation }){
     //navigate to the reward screen
     navigate();
 
-    //Update the seconds per onPress event
-    updateSeconds();
+    translation.addListener(({value}) =>{
+        if(needreward === true && value<=.25){
+          setBreathCount( breathCount - 1);
+          setneedreward(false);
+        }
+      });
 
+    function completedBreath(){
+        //setBreathCount( breathCount - 1);
+        setThreshold(true);
+    }
+
+    const pressed = () => {
+        setThreshold(false);
+        Animated.timing(translation, {
+            duration: 3500,
+            toValue: .25,
+            useNativeDriver: true,
+        }
+        ).start(() => {setThreshold(true)});
+    };
+
+    const released = () => {
+        Animated.timing(translation, {
+            duration: 2000,
+            toValue: 1,
+            useNativeDriver: true,
+        }).start(() => {setThreshold(false)});
+    };
+
+
+
+    //onPressOut={() => restartAnimation( ) } this goes in touchable opacity
+    // on long press start animation
 
     return(
      <View style={style.main}>
@@ -171,9 +92,16 @@ export default function Breathing({ navigation }){
          </Overlay>
          <View style={style.allitems}>
            <Text style={ style.breathCount }>{ breathCount } Breaths</Text>
-           <Image source={currentAnimation} style={style.butterfly} resizeMode="contain"></Image>
+
+           {/* <Image source={currentAnimation} style={style.butterfly} resizeMode="contain"></Image> */}
+           <Animated.Image source={ require("../assets/breathing/b_frame1.png")} resizeMode="contain"
+           style={{
+            height: '25%',
+            transform: [{ scaleX: translation }],
+          }}></Animated.Image>
+
            <Text style={style.text}>{ threshold ? exhaulText : displayText }</Text>
-           <TouchableOpacity onLongPress={() => startAnimation() } onPressOut={() => restartAnimation( ) }>
+           <TouchableOpacity onPressIn={ pressed } onPressOut={ released }>
                <Image source={ require("../assets/breathing/breathing_button.png")} style={ style.breathbutton }></Image>
            </TouchableOpacity>
 
@@ -195,7 +123,7 @@ const style = StyleSheet.create({
       },
     butterfly:{
         height: '50%',
-        width: '75%'
+        width: '75%',
       },
 
       river:{
