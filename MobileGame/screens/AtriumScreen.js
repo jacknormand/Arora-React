@@ -12,7 +12,7 @@ export default function AtriumScreen(){
   const [ b2 , setB2 ] = React.useState( 0 );
   const [ b3 , setB3 ] = React.useState( 0 );
   const [ b4 , setB4 ] = React.useState( 0 );
-  const [ firstTimeLogin , setFirstTimeLogin ] = React.useState( false );
+  const [ firstTimeLogin , setFirstTimeLogin ] = React.useState( null );
   const blueCircle = require('../assets/atrium/blue_circle.png');
   
   const getUserButterflies = async () => {
@@ -54,16 +54,10 @@ export default function AtriumScreen(){
     await AsyncStorage.setItem( '@user_b4_count' , JSON.stringify( newB4 ) );
   }
 
-  // Check for users first login 
-  const getLoginInfo = async () => {
-    const firstTimeLogin = await AsyncStorage.getItem( '@first_time_login' );
-    setFirstTimeLogin( firstTimeLogin );
-  }
-  getLoginInfo();
-  console.log( firstTimeLogin );
-
   //Check for first login ever
   const checkForGrant = async () => {
+    const firstTimeLogin = await AsyncStorage.getItem( '@first_time_login' );
+    setFirstTimeLogin( firstTimeLogin );
     if( firstTimeLogin === null ){
       grantUserRandNumButterflies();
       Alert.alert(
@@ -74,11 +68,11 @@ export default function AtriumScreen(){
         ]
       )
     }
-
     await AsyncStorage.setItem( '@first_time_login' , JSON.stringify( false ) );
   }
 
-  checkForGrant(); 
+  checkForGrant();
+  getUserButterflies(); 
 
     return(
       <View style={ style.main }>

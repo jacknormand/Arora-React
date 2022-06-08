@@ -35,6 +35,9 @@ const createUserLocationReport = async () => {
   let userId = await AsyncStorage.getItem( '@userId' );
   let longitude = await AsyncStorage.getItem( '@longitude' );
   let latitude = await AsyncStorage.getItem( '@latitude' );
+  latitude = parseFloat( latitude );
+  longitude = parseFloat( longitude );
+
 
   //Api call to make location report 
   await fetch( regIp + 'locationreport' , {
@@ -43,8 +46,8 @@ const createUserLocationReport = async () => {
     'Content-Type':'application/json'
     },
     body: JSON.stringify({
-      "location_report_lat" :   Number( latitude ), // Only works with hard coded nums
-      "location_report_long":   Number( longitude ),
+      "location_report_lat" :   Number( Math.round( latitude * 100 ) / 100 ),
+      "location_report_long":   Number( Math.round( longitude * 100 ) / 100),
       "user_id": userId
     })
   }).then( response => {
@@ -54,8 +57,6 @@ const createUserLocationReport = async () => {
     console.error( error );
   })
 }
-
-//createUserLocationReport();
 
 export async function updateDatabase(){
    createUserLocationReport();
@@ -260,9 +261,11 @@ export async function moodReportAPI( navigation ){
     let userId = await AsyncStorage.getItem( '@userId' );
     let moodType = await AsyncStorage.getItem( '@mood_type' );
     let stressType = await AsyncStorage.getItem( '@stress_type' );
+    moodType = moodType.toString;
+    stressType = stressType.toString;
     
     //Get date and time and format it
-    var currentdate = new Date(); 
+    var currentdate = new Date();
     let timeSubmmited = currentdate.getFullYear() + "-"
                        + (currentdate.getMonth()+1)  + "-" 
                        + currentdate.getDate() + "TO"
@@ -270,9 +273,10 @@ export async function moodReportAPI( navigation ){
                        + currentdate.getMinutes() + ":" 
                        + currentdate.getSeconds() + "."
                        + currentdate.getMilliseconds();
-
+                       + "Z"
+  
     AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( timeSubmmited) );
-
+    
      await fetch( moodFormApiIp, {
         method: 'POST',
         headers: {
@@ -283,7 +287,7 @@ export async function moodReportAPI( navigation ){
         body: JSON.stringify({
           "user_id": userId,
           "mood_type": moodType,
-          "user_text": stressType
+          "user_text": stressType 
         })
         })
         .then(response => {
