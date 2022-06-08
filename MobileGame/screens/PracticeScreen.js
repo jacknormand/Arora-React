@@ -10,6 +10,7 @@ import { View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity ,
 import Footer from '../components/Footer'
 
 export default function PracticeScreen({ navigation }){
+  const [messages, setMessages] = useState([]);
 
     const requestCameraPermissionIos = async () => {
        Alert.alert("You need to allow for camera permissions" , "AR gaming requires camera acess" ,
