@@ -17,33 +17,34 @@ const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
   ==============================================
 */
 
-
-export async function getUserLocation(){
+const createUserLocationReport = async () => {
+  //get the permission from user and get values accordingly
   let { status }  = await Location.requestForegroundPermissionsAsync()
-  console.log( status );
   if( status === 'granted' ){
    let location = await Location.getCurrentPositionAsync({});
-   console.log( location.coords.longitude );
-   console.log( location.coords.latitude );
-   await AsyncStorage.setItem( '@longitude' , JSON.stringify( location.coords.longitude ) );
-   await AsyncStorage.setItem( '@latitude' , JSON.stringify( location.coords.latitude ) );
+    await AsyncStorage.setItem( '@longitude' , JSON.stringify( location.coords.longitude ) );
+    await AsyncStorage.setItem( '@latitude' , JSON.stringify( location.coords.latitude ) );
   }
-}
-
-const createUserLocationReport = async () => {
-  getUserLocation();
+  else{
+    //Temp location values for permission denied 
+    await AsyncStorage.setItem( '@longitude' , JSON.stringify( .2 ) );
+    await AsyncStorage.setItem( '@latitude' , JSON.stringify( .7 ) );  
+  }
+  
+  //Get values out of storage
   let userId = await AsyncStorage.getItem( '@userId' );
   let longitude = await AsyncStorage.getItem( '@longitude' );
   let latitude = await AsyncStorage.getItem( '@latitude' );
 
+  //Api call to make location report 
   await fetch( regIp + 'locationreport' , {
     method: 'POST',
     headers:{
     'Content-Type':'application/json'
     },
     body: JSON.stringify({
-      "location_report_lat": latitude,
-      "location_report_long": longitude,
+      "location_report_lat" :   Number( latitude ), // Only works with hard coded nums
+      "location_report_long":   Number( longitude ),
       "user_id": userId
     })
   }).then( response => {
@@ -80,7 +81,7 @@ export async function updateDatabase(){
 	   "user_current_location_lat": latitude, // Temp
 	   "user_current_location_long": longitude, // Temp 
 	   "user_pollen": userPollen,
-	   "user_points": 3 // What is this
+	   "user_points": 3 
     })
    }).then( response => {
      return response.json();

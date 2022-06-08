@@ -42,15 +42,18 @@ export default function Breathing({ navigation }){
 
     translation.addListener(({value}) =>{
         if(needreward === true && value<=.25){
-          setBreathCount( breathCount - 1);
+          //setBreathCount( breathCount - 1 ); 
           setneedreward(false);
         }
       });
 
-    function completedBreath(){
-        //setBreathCount( breathCount - 1);
-        setThreshold(true);
+    const subtractBreath = () => {
+     setTimeout(() => {
+        setBreathCount( breathCount - 1 );
+        setThreshold( false );
+     }, 2000)
     }
+
 
     const pressed = () => {
         setThreshold(false);
@@ -68,6 +71,10 @@ export default function Breathing({ navigation }){
             toValue: 1,
             useNativeDriver: true,
         }).start(() => {setThreshold(false)});
+
+        if( threshold ){
+            subtractBreath();
+        }
     };
 
 
