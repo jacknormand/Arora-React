@@ -17,6 +17,7 @@ import WalkingInstructions from './screens/WalkingInstructions';
 import BreathingInstructions from './screens/BreathingInstructions';
 import BreathingReward from './screens/breathingReward';
 import ChatScreen from './screens/chatScreen';
+import ChatChannels from './screens/chatChannels';
 
 const Stack = createNativeStackNavigator()
 
@@ -50,6 +51,7 @@ export default function App() {
           <Stack.Screen name="WalkingInstructions" component={ WalkingInstructions } />
           <Stack.Screen name="BreathingReward" component={ BreathingReward } />
           <Stack.Screen name="Chat" component={ ChatScreen } />
+          <Stack.Screen name="Channels" component={ ChatChannels } />
         </Stack.Navigator>
     </NavigationContainer>
     </ImageBackground>
