@@ -1,7 +1,8 @@
 import React , { useEffect , useCallback , useLayoutEffect} from 'react'
 import { GiftedChat , Avatar } from 'react-native-gifted-chat'
-import { Alert , StyleSheet , View , TouchableOpacity } from 'react-native';
+import { ImageBackground, Alert , StyleSheet , View , TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-paper';
 
 export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );
@@ -65,25 +66,63 @@ export default function ChatScreen({navigation}){
     }, [] )
     
     return(
-       <GiftedChat
-        messages={ messages }
-        isTyping={ true }
-        renderUsernameOnMessage={ true }
-        onSend={ messages => onSend( messages ) }
-        alwaysShowSend={ true }
-        messagesContainerStyle={ style.messageBox }
-        showAvatarForEveryMessage={ true }
-        user={{
-         _id: 1,
-         name: username,
-         avatar: '../assets/home/profile_filled_button.png'
-       }} 
-       />
+    <View style={style.main}>
+        <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode='cover' style={style.background}>
+            <View style={style.header}>
+            <Button icon="arrow-left" mode="contained" style={style.backButton} 
+                    onPress={() => navigation.goBack()}
+                    color='rgba(0, 0, 0, 0.0)'>Back
+            </Button>
+            </View>
+            <GiftedChat
+                messages={ messages }
+                isTyping={ true }
+                renderUsernameOnMessage={ true }
+                onSend={ messages => onSend( messages ) }
+                alwaysShowSend={ true }
+                messagesContainerStyle={ style.messageBox }
+                showAvatarForEveryMessage={ false }
+                user={{
+                _id: 1,
+                name: username,
+                avatar: '../assets/home/profile_filled_button.png'
+            }} 
+            />
+
+
+        </ImageBackground>
+    </View>
+
+
     )
 }
 
 const style = StyleSheet.create({
+    main:{
+        flex:1,
+       },
+    background:{
+        flex: 1,
+      },
   messageBox:{
-    backgroundColor: 'rgba(0, 0, 0, .5)',
-  }
+    backgroundColor: 'rgba(0, 0, 0, .4)',
+  },
+
+  header:{
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, .5)',
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: '12%',
+        zIndex: 1,
+  },
+
+  backButton:{
+    height: 50,
+    width: 100,
+    position: 'absolute', left: 0, bottom: 0,
+    borderRadius: 15,
+    },
 })
