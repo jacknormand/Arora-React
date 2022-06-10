@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import { Switch, ImageBackground,StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { loginAPI } from '../network/apiCalls'
-import { TextInput } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
 
 
 /*
@@ -25,6 +25,8 @@ function LoginScreen ({ navigation }) {
     }
     
   }
+
+  const keyboardVerticalOffset = Platform.OS === 'ios' ? 20 : 0
   
     return (
           <View style={styles.container}>
@@ -41,8 +43,16 @@ function LoginScreen ({ navigation }) {
             <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.keyboardPush}
+      keyboardVerticalOffset={keyboardVerticalOffset}
     >
+      <View style={styles.createView}>
+      <Button icon="account-plus-outline" mode="contained" style={styles.backButton} 
+          onPress={() => navigation.navigate('Create')}
+          color='rgba(0, 0, 0, 0.3)'>Create New User
+          </Button>
+      </View>
             <View style={styles.loginView}>
+
               <TextInput 
                 style={styles.textIn}
                 autoCapitalize="none"
@@ -110,6 +120,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  backButton: {
+    width: "95%",
+    alignSelf: 'center',
+    borderRadius: 20,
+  },
+
   switcher: {
     alignSelf: 'center',
     flexDirection:'row',
@@ -123,7 +139,7 @@ const styles = StyleSheet.create({
   },
 
   butterflyView: {
-    flex: 1,
+    flex: .75,
     alignItems: 'center',
   },
   loginView: {
@@ -170,12 +186,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 0,
     marginBottom: 10,
-    backgroundColor: 'rgba(140, 200, 250, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     flex: .6,
   },
 
   loginText: {
-    fontWeight: 'bold',
     color: 'white',
     fontSize: 20,
     

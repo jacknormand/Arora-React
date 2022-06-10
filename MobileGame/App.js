@@ -18,6 +18,7 @@ import BreathingInstructions from './screens/BreathingInstructions';
 import BreathingReward from './screens/breathingReward';
 import ChatScreen from './screens/chatScreen';
 import ChatChannels from './screens/chatChannels';
+import CreateUser from './screens/CreateUser';
 
 const Stack = createNativeStackNavigator()
 
@@ -36,8 +37,9 @@ export default function App() {
         mode="modal"
         initialRouteName="Splash">
           <Stack.Screen options={{gestureEnabled: false}} name="Login" component={LoginScreen} />
+          <Stack.Screen name="Create" component={ CreateUser } />
           <Stack.Screen options={{gestureEnabled: false}} name="Wellness" component={WellnessScreen} />
-          <Stack.Screen options={{gestureEnabled: false}} name="Home" component={ HomeScreen } />
+          <Stack.Screen options={{animation: 'none',gestureEnabled: false}} name="Home" component={ HomeScreen } />
           <Stack.Screen options={{animation: 'none',
                                   gestureEnabled: false}} name="Practice" component={ PracticeScreen } />
           <Stack.Screen options={{animation: 'none',

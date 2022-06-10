@@ -4,10 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 //import { useNetInfo } from '@react-native-community/netinfo';
 import * as Location from 'expo-location';
 
+// TODO add a IP variable and a port variable to put in the strings below
+
 //Api ip routes
 const regIp = 'http://104.248.178.78:8000/';
 const loginApiIp = 'http://104.248.178.78:8000/api-token-auth';
 const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
+const registerApiIp = 'http://104.248.178.78:8000/userinfo';
 
 //When internet connection is detected upload to database
 //Function to upload the user data when network is detected
@@ -159,6 +162,59 @@ export async function storeUserData(){
     }).catch( error => {
       console.error(error)
     })
+}
+
+export async function registerAPI( user, pass, email, navigation )
+{
+  var userID;
+
+  await fetch( registerApiIp, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "username": user,
+      "email": email,
+      "password": pass
+    })
+    })
+    .then( response => {
+      return response.json()
+    })
+    .then( data => {
+      userID = data.user_id;
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+
+    // creation success
+    if ( userID ){
+
+      // navigate back to login
+      // go to wellness check
+      navigation.navigate("Login")
+
+
+    }
+    // FIX THIS TO ACCOUNT FOR DIFFERENT ERRORS
+    else{
+      Alert.alert(
+        "Taken Credentials",
+        "Try again",
+        [
+          { text: "Ok" }
+        ]
+      );
+
+    }
+
+
+  
+  
+
 }
 
 export async function loginAPI( user, pass, navigation, value )
