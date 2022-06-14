@@ -4,13 +4,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 //import { useNetInfo } from '@react-native-community/netinfo';
 import * as Location from 'expo-location';
 
-// TODO add a IP variable and a port variable to put in the strings below
+// Variables to insert for port and IP
+const port = '8000'
+const IP = '104.248.178.78'
 
 //Api ip routes
-const regIp = 'http://104.248.178.78:8000/';
-const loginApiIp = 'http://104.248.178.78:8000/api-token-auth';
-const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
-const registerApiIp = 'http://104.248.178.78:8000/userinfo';
+//const regIp = 'http://104.248.178.78:8000/';
+const regIp = 'http://' + IP + ':' + port + '/';
+//const loginApiIp = 'http://104.248.178.78:8000/api-token-auth';
+const loginApiIp = 'http://' + IP + ':' + port + '/' + 'api-token-auth';
+//const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
+const moodFormApiIp = 'http://' + IP + ':' + port + '/' + 'moodreport';
+//const registerApiIp = 'http://104.248.178.78:8000/userinfo';
+const registerApiIp = 'http://' + IP + ':' + port + '/' + 'userinfo';
 
 //When internet connection is detected upload to database
 //Function to upload the user data when network is detected
@@ -202,7 +208,7 @@ export async function registerAPI( user, pass, email, navigation )
     // FIX THIS TO ACCOUNT FOR DIFFERENT ERRORS
     else{
       Alert.alert(
-        "Taken Credentials",
+        "Credential Error",
         "Try again",
         [
           { text: "Ok" }
