@@ -73,6 +73,8 @@ export default function HomeScreen( { navigation }){
 
     async function logout(){
       await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ));
+      let dataToBeRemoved = ['@user' , '@password' , '@userId' , '@pollen']
+      await AsyncStorage.multiRemove( dataToBeRemoved )
       navigation.navigate('Login')
     }
      
