@@ -148,10 +148,9 @@ export async function createAttrium(){
 ===================================================================
 */
 
-export async function storeUserData(){
+export async function storeUserData( userID ){
   //get current user id and fetch the user data
-  let userId = await AsyncStorage.getItem( '@userId' );
-  await fetch( 'http://104.248.178.78:8000/userinfo/' + userId )
+  await fetch( 'http://104.248.178.78:8000/userinfo/' + userID )
     .then( response => {
       return response.json();
     }).then( data => {
@@ -291,7 +290,7 @@ export async function loginAPI( user, pass, navigation, value )
     
     //Save data to local 
     storeData();
-    storeUserData();
+    storeUserData( userID );
 
     
     //Get user stored setting 
