@@ -238,7 +238,7 @@ export async function loginAPI( user, pass, navigation, value )
   await fetch( loginApiIp, {
   method: 'POST',
   headers: {
-    Accept: 'application/json',
+    'Accept': 'application/json',
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
@@ -247,7 +247,9 @@ export async function loginAPI( user, pass, navigation, value )
   })
   })
   .then( response => {
+    //return response.json()
     return response.json()
+    // OR RESPONSE.text might fix error, but then we have to get data out of string
   })
   .then( data => {
     userID = data.user_id;

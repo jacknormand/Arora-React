@@ -139,8 +139,9 @@ const styles = StyleSheet.create({
   },
 
   butterflyView: {
-    flex: .75,
+    flex: .8,
     alignItems: 'center',
+
   },
   loginView: {
     backgroundColor: 'rgba(163, 163, 163, 0.8)',

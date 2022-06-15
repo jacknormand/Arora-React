@@ -68,7 +68,7 @@ export default function ChatScreen({navigation}){
     return(
     <View style={style.main}>
         <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode='cover' style={style.background}>
-            <View style={style.header}>
+        <View style={style.header}>
             <Button icon="arrow-left" mode="contained" style={style.backButton} 
                     onPress={() => navigation.goBack()}
                     color='rgba(0, 0, 0, 0.0)'>Back
@@ -105,18 +105,15 @@ const style = StyleSheet.create({
         flex: 1,
       },
   messageBox:{
-    backgroundColor: 'rgba(0, 0, 0, .4)',
+    backgroundColor: 'rgba(0, 0, 0, .3)',
   },
 
   header:{
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, .5)',
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
+        backgroundColor: 'rgba(0, 0, 0, .4)',
         height: '12%',
         zIndex: 1,
+        position: 'absolute',
   },
 
   backButton:{

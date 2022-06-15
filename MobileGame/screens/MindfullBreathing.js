@@ -136,7 +136,8 @@ const style = StyleSheet.create({
       river:{
           width: "100%",
           position: "absolute",
-          height: "110%",
+          height: "105%",
+          resizeMode: 'cover',
       },
 
       allitems:{
