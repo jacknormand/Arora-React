@@ -1,25 +1,16 @@
-import React , {useState, useRef } from 'react';
+import React , {useState, useRef , useEffect } from 'react';
 import { Animated, View , Text , ImageBackground , StyleSheet , Image , TouchableOpacity } from 'react-native'
 import { Overlay } from 'react-native-elements';
 import  LottieView  from 'lottie-react-native';
-
-/*
-  =================================================
-  -ANIMATION MUST BE SMOOTHER
-  -Warning on completion is fine, if not we can fix later
-  ================================================= 
-
-*/
-
 
 export default function Breathing({ navigation }){
     //create states 
     const [ breathCount , setBreathCount ] = useState( 5 );
     const [ overlayVisable , setOverlayVisable ] = useState( true );
-    //For changing text  and anim
+    
+    //For changing text and anim
     const [ threshold , setThreshold ] = useState( false );
     const translation = useRef(new Animated.Value(1)).current;
-    const [ needreward , setneedreward ] = useState( true );
     
     //Text for the screen based on seconds
     let displayText = 'Press and hold \nas you breathe in';
@@ -29,23 +20,6 @@ export default function Breathing({ navigation }){
     const setOverlay = () => {
         setOverlayVisable( false );
     }
-    
-    //When activity is done, award the user
-    const navigate = () => {
-      if( breathCount === 0 ){
-        navigation.navigate("BreathingReward");
-      }
-    }
-    
-    //navigate to the reward screen
-    navigate();
-
-    translation.addListener(({value}) =>{
-        if(needreward === true && value<=.25){
-          //setBreathCount( breathCount - 1 ); 
-          setneedreward(false);
-        }
-      });
 
     const subtractBreath = () => {
      setTimeout(() => {
@@ -54,9 +28,7 @@ export default function Breathing({ navigation }){
      }, 2000)
     }
 
-
     const pressed = () => {
-        setThreshold(false);
         Animated.timing(translation, {
             duration: 3500,
             toValue: .25,
@@ -77,7 +49,13 @@ export default function Breathing({ navigation }){
         }
     };
 
+    const navigate = () => {
+        if( breathCount === 0 ){
+            navigation.navigate("BreathingReward");
+          }
+    }
 
+    navigate();
 
     //onPressOut={() => restartAnimation( ) } this goes in touchable opacity
     // on long press start animation

@@ -26,7 +26,14 @@ export default function HomeScreen( { navigation }){
       }, 10000)
     }
     
-    getUserContinous();
+    const checkUser = async () => {
+      let userLoggedIn = await AsyncStorage.getItem('@is_logged_in');
+      if( userLoggedIn === 'true' ){
+       getUserContinous();
+      }
+    }
+
+    checkUser()
     
     
     const noPermission = async () => {
@@ -72,8 +79,25 @@ export default function HomeScreen( { navigation }){
     }
 
     async function logout(){
+      await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( false ) );
       await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ));
-      let dataToBeRemoved = ['@user' , '@password' , '@userId' , '@pollen']
+      let dataToBeRemoved = [
+      '@user',
+      '@password',
+      '@userId',
+      '@user_pollen',
+      '@userToken',
+      '@user_b0_count',
+      '@user_b1_count',
+      '@user_b2_count',
+      '@user_b3_count',
+      '@user_b4_count',
+      '@current_butterfly',
+      '@user_current_mood',
+      '@user_current_mood_updated',
+      '@mood_type',
+      '@stress_type'
+     ]
       await AsyncStorage.multiRemove( dataToBeRemoved )
       navigation.navigate('Login')
     }

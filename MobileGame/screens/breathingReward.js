@@ -7,7 +7,6 @@ import { Button } from 'react-native-paper';
 
 /*
   TODO: FINSISH ANIMATION( 100 or so frames )
-        FIGURE OUT HOW TO INSTA UPDATE POLLEN FOR HOMESCREEN 
         FINISH STYLING AND SUCH
 */
 
@@ -78,6 +77,28 @@ export default function BreathingReward({navigation}){
       //let newPoints = newUserPoints + pointsAwarded;
       //await AsyncStorage.setItem( '@user_points' , JSON.stringify( newPoints ) );
     }
+
+    //when all images are imorted this function will generate the image file path 
+    const getImage = ( seconds ) => {
+        let totalFrames = 108;
+        let frameImg = '../assets/breathing/pollen2_'
+        for( count = 0; count < totalFrames; count++ ){
+            if( frame < 10 ){
+                let currentFrame = frameImg + '0000' + seconds.toString
+            }
+            else if( frame > 9 && frame < 100 ){
+                let currentFrame = frameImg + '000' + seconds.toString
+            }
+            else{
+                let currentFrame = frameImg + '00' + seconds.toString
+            }
+            frame++;
+        }
+        return currentFrame;
+    }
+
+    //let background = getImage( seconds ); 
+    
     
     var background;
 
@@ -123,7 +144,7 @@ export default function BreathingReward({navigation}){
         updateSeconds();
     }
 
-    //On user press, return back to home ( Find out how to refresh home ).
+    //On user press, return back to home
     const returnHome = () => {
         navigation.navigate("Home");
     }

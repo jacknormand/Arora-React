@@ -202,7 +202,6 @@ export async function registerAPI( user, pass, email, navigation )
       // go to wellness check
       navigation.navigate("Login")
 
-
     }
     // FIX THIS TO ACCOUNT FOR DIFFERENT ERRORS
     else{
@@ -283,6 +282,8 @@ export async function loginAPI( user, pass, navigation, value )
         //set temp user locations, in case user doesnt grant location permissions
         await AsyncStorage.setItem( '@longitude' , JSON.stringify( .2 ) );
         await AsyncStorage.setItem( '@latitude' , JSON.stringify( .7 ) );
+
+        await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( true ) );
 
         //Might not need
         await AsyncStorage.setItem( '@userToken' , token );
