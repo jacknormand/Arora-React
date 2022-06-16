@@ -18,6 +18,8 @@ const moodFormApiIp = 'http://' + IP + ':' + port + '/' + 'moodreport';
 //const registerApiIp = 'http://104.248.178.78:8000/userinfo';
 const registerApiIp = 'http://' + IP + ':' + port + '/' + 'userinfo';
 
+const locationApiIp = 'http://' + IP + ':' + port + '/' + 'locationreport'; 
+
 //When internet connection is detected upload to database
 //Function to upload the user data when network is detected
 /*
@@ -49,7 +51,7 @@ const createUserLocationReport = async () => {
 
 
   //Api call to make location report 
-  await fetch( regIp + 'locationreport' , {
+  await fetch( locationApiIp , {
     method: 'POST',
     headers:{
     'Content-Type':'application/json'
@@ -72,7 +74,8 @@ export async function updateDatabase(){
    let userId = await AsyncStorage.getItem( '@userId' );
    let userPollen = await AsyncStorage.getItem( '@user_pollen' );
    let currentButterfly = await AsyncStorage.getItem( '@current_butterfly' );
-   let userMood = await AsyncStorage.getItem( '@user_current_mood' );
+   let userMood = await AsyncStorage.getItem( '@mood_type' );
+   let userStress = await AsyncStorage.getItem( '@stress_type' );
    let longitude = await AsyncStorage.getItem( '@longitude' );
    let latitude = await AsyncStorage.getItem( '@latitude' );
    //let timeSubmmited = await AsyncStorage.getItem( '@user_current_mood_updated' );
@@ -83,13 +86,14 @@ export async function updateDatabase(){
     headers:{
     'Content-Type':'application/json'
     },
-    body: JSON.stringify({ // NEED TO CHECK IF WE STILL NEED THESE VALUES FOR UPDATE
-	   "user_current_mood": userMood,
-	   "user_current_mood_updated": "2019-02-23T09:38:42.925706Z", // See if we still need to update location data
+    body: JSON.stringify({ 
+	   "user_current_mood": Number( userMood ),
+     "user_current_stress": Number( userStress ),
+	   "user_current_mood_updated": "2019-02-23T09:38:42.925706Z", 
 	   "user_current_location_updated":"2019-02-23T09:38:42.925706Z",
-	   "user_current_butterfly": currentButterfly, // What is this
-	   "user_current_location_lat": latitude, // Temp
-	   "user_current_location_long": longitude, // Temp 
+	   "user_current_butterfly": currentButterfly,
+	   "user_current_location_lat": latitude, 
+	   "user_current_location_long": longitude, 
 	   "user_pollen": userPollen,
 	   "user_points": 3 
     })
@@ -272,16 +276,12 @@ export async function loginAPI( user, pass, navigation, value )
     await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( value ));
 
     // Store user data into storage
-    const storeData = async () => {
+    const storeData = async ( userID ) => {
         await AsyncStorage.setItem( '@user' , user );
         
         //Possibly for auto login
         await AsyncStorage.setItem( '@password' , pass );
         await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
-
-        //set temp user locations, in case user doesnt grant location permissions
-        await AsyncStorage.setItem( '@longitude' , JSON.stringify( .2 ) );
-        await AsyncStorage.setItem( '@latitude' , JSON.stringify( .7 ) );
 
         await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( true ) );
 
@@ -290,7 +290,7 @@ export async function loginAPI( user, pass, navigation, value )
     }
     
     //Save data to local 
-    storeData();
+    storeData( userID );
     storeUserData( userID );
 
     
@@ -323,6 +323,7 @@ export async function loginAPI( user, pass, navigation, value )
 export async function moodReportAPI( navigation ){
     //Obtain mood api data from storage
     let userId = await AsyncStorage.getItem( '@userId' );
+    console.log( userId );
     let moodType = await AsyncStorage.getItem( '@mood_type' );
     let stressType = await AsyncStorage.getItem( '@stress_type' );
     moodType = moodType.toString;

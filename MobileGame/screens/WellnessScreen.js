@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import { StyleSheet, View , TouchableOpacity , Text , ImageBackground , Image } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { moodReportAPI } from '../network/apiCalls';
+import { moodReportAPI, updateDatabase } from '../network/apiCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo'; 
 
@@ -81,6 +81,7 @@ function WellnessScreen ({ navigation }) {
   function checkNetworkAndUpdate( navigation ){
     if( connectivity ){
      moodReportAPI( navigation )
+     updateDatabase();
     }
   }
     

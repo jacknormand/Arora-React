@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as Location from 'expo-location';
 
 
 export default function HomeScreen( { navigation }){
@@ -35,36 +36,6 @@ export default function HomeScreen( { navigation }){
 
     checkUser()
     
-    
-    const noPermission = async () => {
-      await AsyncStorage.setItem( '@location_permission' , JSON.stringify( false ) );
-    }
-
-    const permission = async () => {
-      await AsyncStorage.setItem( '@location_permission' , JSON.stringify( true ) );
-    }
-
-    //Get the user location permissions one time and store decision into async storage
-    async function getLocationPermissions(){
-      let alreadyAsked = await AsyncStorage.getItem( '@alreadyAsked' );
-
-      //check if we already asked or never asked for user location permissions 
-      if( alreadyAsked === 'false' || alreadyAsked === null ){
-        Alert.alert(
-          "Enable location",
-          "Arora needs to collect locational data",
-          [
-            { text: 'No' , onPress: () => noPermission() },
-            { text: 'Yes' , onPress: () => permission() }
-          ]
-        );
-      }
-      
-      //indicate that we asked for permissions
-      await AsyncStorage.setItem( '@alreadyAsked' , JSON.stringify( true ) );
-    }
-
-    getLocationPermissions();
   
     function logoutCheck(user){
       Alert.alert(
@@ -73,14 +44,16 @@ export default function HomeScreen( { navigation }){
         [
           { text: "Cancel" },
           { text: "Log Out",
-            onPress: () => logout(),}
+            onPress: () => logout()}
         ]
       );
     }
-
+    //on log out destruct async values
     async function logout(){
+      //Set the user as logged out
       await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( false ) );
       await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ));
+      // Create a list of values to be removed
       let dataToBeRemoved = [
       '@user',
       '@password',
