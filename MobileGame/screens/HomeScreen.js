@@ -1,32 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import * as Location from 'expo-location';
-
 
 export default function HomeScreen( { navigation }){
-  //hooks to set varible from async storage
+    //hooks to set varible from async storage
     const [ user , setUser ] = useState('');
     const [ userPollen , setUserPollen ] = useState( 0 );
+    const [ logoutUser , setLogoutUser ] = useState( false );
     
     //Get user data from async storage
     const getUser = async () =>{
-      const username = await AsyncStorage.getItem('@user');
-      const pollen = await AsyncStorage.getItem('@user_pollen');
+      const username = await AsyncStorage.getItem( '@user' );
+      const pollen = await AsyncStorage.getItem( '@user_pollen' );
       setUser( username );
       setUserPollen( pollen );
     }
     
-    getUser();
+    //Occure once at each render
+    useEffect(() => {
+      getUser()
+    })
 
     //Constanltly get user data for insta update to pollen count
     function getUserContinous(){
       let userUpdate = setInterval( function () {
+        clearInterval( userUpdate );
         getUser();
-      }, 10000)
+      }, 1000)
     }
     
+    //Check if user is logged in( check if updates need to happen )
     const checkUser = async () => {
       let userLoggedIn = await AsyncStorage.getItem('@is_logged_in');
       if( userLoggedIn === 'true' ){
@@ -34,25 +38,28 @@ export default function HomeScreen( { navigation }){
       }
     }
 
-    checkUser()
-    
-  
-    function logoutCheck(user){
+    //Avoid rendering when user logged out 
+    useEffect(() => {
+      checkUser();
+    })
+
+    function logoutCheck(){
       Alert.alert(
         user+"'s Profile",
         "What would you like to do?",
         [
           { text: "Cancel" },
           { text: "Log Out",
-            onPress: () => logout()}
+            onPress: () => setLogoutUser( true )}
         ]
       );
     }
+
     //on log out destruct async values
-    async function logout(){
-      //Set the user as logged out
+    const logout = async () => {
       await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( false ) );
       await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ));
+      
       // Create a list of values to be removed
       let dataToBeRemoved = [
       '@user',
@@ -70,15 +77,23 @@ export default function HomeScreen( { navigation }){
       '@user_current_mood_updated',
       '@mood_type',
       '@stress_type'
-     ]
-      await AsyncStorage.multiRemove( dataToBeRemoved )
-      navigation.navigate('Login')
+     ];
+
+      await AsyncStorage.multiRemove( dataToBeRemoved );
     }
+
+    if( logoutUser ){
+      logout().then(() => {
+        navigation.navigate('Login')
+      })
+    }
+
+
      
     return(
         <View style={ style.main }>
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>
-              <TouchableOpacity style={ style.userInfo } onPress={() => logoutCheck(user)}>
+              <TouchableOpacity style={ style.userInfo } onPress={() => logoutCheck()}>
                 <Text style={ style.userText }>{ user }</Text>
                 <Image style={ style.userIcon } source={require('../assets/home/profile_filled_button.png')} resizeMode='contain'/>
               </TouchableOpacity>

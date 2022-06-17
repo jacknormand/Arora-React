@@ -80,8 +80,8 @@ function WellnessScreen ({ navigation }) {
 
   function checkNetworkAndUpdate( navigation ){
     if( connectivity ){
-     moodReportAPI( navigation )
      updateDatabase();
+     moodReportAPI( navigation )
     }
   }
     

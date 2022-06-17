@@ -48,7 +48,7 @@ const createUserLocationReport = async () => {
   let latitude = await AsyncStorage.getItem( '@latitude' );
   latitude = parseFloat( latitude );
   longitude = parseFloat( longitude );
-
+  console.log( userId );
 
   //Api call to make location report 
   await fetch( locationApiIp , {
@@ -323,11 +323,8 @@ export async function loginAPI( user, pass, navigation, value )
 export async function moodReportAPI( navigation ){
     //Obtain mood api data from storage
     let userId = await AsyncStorage.getItem( '@userId' );
-    console.log( userId );
     let moodType = await AsyncStorage.getItem( '@mood_type' );
     let stressType = await AsyncStorage.getItem( '@stress_type' );
-    moodType = moodType.toString;
-    stressType = stressType.toString;
     
     //Get date and time and format it
     var currentdate = new Date();
@@ -350,9 +347,9 @@ export async function moodReportAPI( navigation ){
         },
         //TODO: Mood and Stress values arnt updating in the input types in the database( I need to fix this )
         body: JSON.stringify({
-          "user_id": userId,
-          "mood_type": moodType,
-          "user_text": stressType 
+          "user_id":  userId,
+          "mood_type": Number( moodType ),
+          "user_text": Number( stressType ) 
         })
         })
         .then(response => {

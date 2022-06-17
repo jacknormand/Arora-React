@@ -1,4 +1,4 @@
-import React , { useState } from 'react'
+import React , { useState , useEffect } from 'react'
 import { View , StyleSheet , ImageBackground , TouchableOpacity , Image , Text } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo';
@@ -80,21 +80,19 @@ export default function BreathingReward({navigation}){
 
     //when all images are imorted this function will generate the image file path 
     const getImage = ( seconds ) => {
-        let totalFrames = 108;
         let frameImg = '../assets/breathing/pollen2_'
-        for( count = 0; count < totalFrames; count++ ){
-            if( frame < 10 ){
-                let currentFrame = frameImg + '0000' + seconds.toString
-            }
-            else if( frame > 9 && frame < 100 ){
-                let currentFrame = frameImg + '000' + seconds.toString
-            }
-            else{
-                let currentFrame = frameImg + '00' + seconds.toString
-            }
-            frame++;
+        if( seconds < 10 ){
+            return currentFrame = frameImg + '0000' + seconds.toString
         }
-        return currentFrame;
+        else if( seconds > 9 && seconds < 100 ){
+            return currentFrame = frameImg + '000' + seconds.toString
+        }
+        else if( seconds >= 100 ){
+            return frameImg + '00' + seconds.toString
+        }
+        else{
+            //pollen pouch
+        }
     }
 
     //let background = getImage( seconds ); 
@@ -157,7 +155,7 @@ export default function BreathingReward({navigation}){
           <Text style={ style.text }>{ totalPollen } { newCount }</Text>
 
           <Button icon="home-outline" mode="contained" style={style.backButton} 
-          onPress={() => returnHome()}
+          onPress={() => returnHome() }
           color='rgba(0, 0, 0, 0.3)'>{returnHomeText}
           </Button>
           <TouchableOpacity activeOpacity={1} onPress={() => setShutDown( false )}>

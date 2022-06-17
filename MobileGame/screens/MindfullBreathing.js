@@ -55,7 +55,9 @@ export default function Breathing({ navigation }){
           }
     }
 
-    navigate();
+    useEffect(() => {
+        navigate();
+    })
 
     //onPressOut={() => restartAnimation( ) } this goes in touchable opacity
     // on long press start animation
