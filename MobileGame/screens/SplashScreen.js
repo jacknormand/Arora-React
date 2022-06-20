@@ -15,6 +15,7 @@ export default function SplashScreen({ navigation }){
   // i have no idea how this code works but it caches images
   // add images here to cache them
   // TODO: find a way to cache whole assets folder
+
   let cacheResources = async () => {
     const images = [
     require("../assets/dusk_background.jpg"), 
@@ -77,11 +78,11 @@ export default function SplashScreen({ navigation }){
 
   const userStoredInLocal = async () => {
     //Gather the user info( dont want a user with no creditials to log )
-    const user = await AsyncStorage.getItem( '@user' );
-    const pass = await AsyncStorage.getItem( '@password' );
-    const stayLoggedIn = await AsyncStorage.getItem( '@autoLogin' )
+    await AsyncStorage.getItem( '@user' ).then( value => user = value );
+    await AsyncStorage.getItem( '@password' ).then( value => pass = value );
+    await AsyncStorage.getItem( '@autoLogin' ).then( value => stayLoggedIn = value );
     
-    //Check that the user and password is not null and the autologin is on
+    //Check that the user and password is not null and the autologin is on( disabled on adroid till proof it 100% works )
     if( user != null && pass != null && stayLoggedIn === "true" && platform != 'android' ){
       loginAPI( user, pass, navigation )
     }

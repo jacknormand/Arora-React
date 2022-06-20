@@ -26,9 +26,9 @@ export default function BreathingReward({navigation}){
 
     //const userPointsValue = AsyncStorage.getItem( '@user_points' );
     const getUserItems = async () => {
-        const pollen = await AsyncStorage.getItem( "@user_pollen" );
-        let integerPollen = parseInt( pollen )
-        setPollen( integerPollen );
+        await AsyncStorage.getItem( "@user_pollen" ).then(
+            value => value != null ? setPollen( parseInt( value ) ) : setPollen( 0 )
+        );
 
         //TODO: Award Points( not in async storage yet )
     }

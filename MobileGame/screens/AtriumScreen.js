@@ -1,4 +1,4 @@
-import React , { useState } from 'react'
+import React , { useEffect, useState } from 'react'
 import { View , ImageBackground , StyleSheet , Text , Image , Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -17,18 +17,13 @@ export default function AtriumScreen(){
   
   const getUserButterflies = async () => {
     //gather the user butterfly amount from storage
-    const butterflyZero = await AsyncStorage.getItem( '@user_b0_count' );
-    const butterflyOne = await AsyncStorage.getItem( '@user_b1_count' );
-    const butterflyTwo = await AsyncStorage.getItem( '@user_b2_count' );
-    const butterflyThree = await AsyncStorage.getItem( '@user_b3_count' );
-    const butterflyFour = await AsyncStorage.getItem( '@user_b4_count' );
-    //update state
-    setB0( butterflyZero );
-    setB1( butterflyOne );
-    setB2( butterflyTwo );
-    setB3( butterflyThree );
-    setB4( butterflyFour );
+    AsyncStorage.getItem( '@user_b0_count' ).then( value => setB0( value ) );
+    AsyncStorage.getItem( '@user_b1_count' ).then( value => setB1( value ) );
+    AsyncStorage.getItem( '@user_b2_count' ).then( value => setB2( value ) );
+    AsyncStorage.getItem( '@user_b3_count' ).then( value => setB3( value ) );
+    AsyncStorage.getItem( '@user_b4_count' ).then( value => setB4( value ) );
   }
+  
   getUserButterflies();
 
   const grantUserRandNumButterflies = async () => {
@@ -54,10 +49,12 @@ export default function AtriumScreen(){
     await AsyncStorage.setItem( '@user_b4_count' , JSON.stringify( newB4 ) );
   }
 
-  //Check for first login ever
+  //Check for first login ever( No Api call for uploading to db? )
   const checkForGrant = async () => {
     const firstTimeLogin = await AsyncStorage.getItem( '@first_time_login' );
     setFirstTimeLogin( firstTimeLogin );
+    
+    //If first time login is null then async value never set -> never logged in 
     if( firstTimeLogin === null ){
       grantUserRandNumButterflies();
       Alert.alert(
@@ -71,7 +68,10 @@ export default function AtriumScreen(){
     await AsyncStorage.setItem( '@first_time_login' , JSON.stringify( false ) );
   }
 
-  checkForGrant();
+  useEffect(() => {
+    checkForGrant();
+  })
+
   getUserButterflies(); 
 
     return(

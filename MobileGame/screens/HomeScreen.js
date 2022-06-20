@@ -1,47 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useCallback } from "react";
 import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function HomeScreen( { navigation }){
     //hooks to set varible from async storage
+    var interval; 
     const [ user , setUser ] = useState('');
     const [ userPollen , setUserPollen ] = useState( 0 );
     const [ logoutUser , setLogoutUser ] = useState( false );
     
+    
     //Get user data from async storage
-    const getUser = async () =>{
-      const username = await AsyncStorage.getItem( '@user' );
-      const pollen = await AsyncStorage.getItem( '@user_pollen' );
-      setUser( username );
-      setUserPollen( pollen );
+    const getUser = () => {
+      AsyncStorage.getItem( '@user' ).then( value => setUser( value ) );
+      AsyncStorage.getItem( '@user_pollen' ).then( value => setUserPollen( value ) );
     }
-    
-    //Occure once at each render
-    useEffect(() => {
-      getUser()
-    })
 
-    //Constanltly get user data for insta update to pollen count
-    function getUserContinous(){
-      let userUpdate = setInterval( function () {
-        clearInterval( userUpdate );
+    React.useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
         getUser();
-      }, 1000)
-    }
-    
-    //Check if user is logged in( check if updates need to happen )
-    const checkUser = async () => {
-      let userLoggedIn = await AsyncStorage.getItem('@is_logged_in');
-      if( userLoggedIn === 'true' ){
-       getUserContinous();
-      }
-    }
-
-    //Avoid rendering when user logged out 
-    useEffect(() => {
-      checkUser();
-    })
+      });
+  
+      // Return the function to unsubscribe from the event so it gets removed on unmount( No render on logout event )
+      return unsubscribe;
+    }, [ navigation ]);
 
     function logoutCheck(){
       Alert.alert(
@@ -58,7 +41,7 @@ export default function HomeScreen( { navigation }){
     //on log out destruct async values
     const logout = async () => {
       await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( false ) );
-      await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ));
+      await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ) );
       
       // Create a list of values to be removed
       let dataToBeRemoved = [
@@ -82,6 +65,7 @@ export default function HomeScreen( { navigation }){
       await AsyncStorage.multiRemove( dataToBeRemoved );
     }
 
+    //Wait for async func to complete then naviagte
     if( logoutUser ){
       logout().then(() => {
         navigation.navigate('Login')

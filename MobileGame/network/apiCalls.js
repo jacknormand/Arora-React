@@ -48,7 +48,6 @@ const createUserLocationReport = async () => {
   let latitude = await AsyncStorage.getItem( '@latitude' );
   latitude = parseFloat( latitude );
   longitude = parseFloat( longitude );
-  console.log( userId );
 
   //Api call to make location report 
   await fetch( locationApiIp , {
@@ -70,18 +69,19 @@ const createUserLocationReport = async () => {
 }
 
 export async function updateDatabase(){
-   createUserLocationReport();
-   let userId = await AsyncStorage.getItem( '@userId' );
-   let userPollen = await AsyncStorage.getItem( '@user_pollen' );
-   let currentButterfly = await AsyncStorage.getItem( '@current_butterfly' );
-   let userMood = await AsyncStorage.getItem( '@mood_type' );
-   let userStress = await AsyncStorage.getItem( '@stress_type' );
-   let longitude = await AsyncStorage.getItem( '@longitude' );
-   let latitude = await AsyncStorage.getItem( '@latitude' );
-   //let timeSubmmited = await AsyncStorage.getItem( '@user_current_mood_updated' );
-   //parse to JSON object
-   //timeSubmmited = JSON.parse( timeSubmmited );
-   await fetch('http://104.248.178.78:8000/userinfo/' + userId , {
+  createUserLocationReport();
+  // Need to await values here for PATCH 
+  await AsyncStorage.getItem( '@userId' ).then( value => userId = value );
+  await AsyncStorage.getItem( '@user_pollen' ).then( value => userPollen = value );
+  await AsyncStorage.getItem( '@current_butterfly' ).then( value => currentButterfly = value );
+  await AsyncStorage.getItem( '@mood_type' ).then( value => userMood = value );
+  await AsyncStorage.getItem( '@stress_type' ).then( value => userStress = value );
+  await AsyncStorage.getItem( '@longitude' ).then( value => longitude = value );
+  await AsyncStorage.getItem( '@latitude' ).then( value => latitude = value );
+  //let timeSubmmited = await AsyncStorage.getItem( '@user_current_mood_updated' );
+  //parse to JSON object
+  //timeSubmmited = JSON.parse( timeSubmmited );
+  await fetch('http://104.248.178.78:8000/userinfo/' + userId , {
     method: 'PATCH',
     headers:{
     'Content-Type':'application/json'
@@ -218,11 +218,6 @@ export async function registerAPI( user, pass, email, navigation )
       );
 
     }
-
-
-  
-  
-
 }
 
 export async function loginAPI( user, pass, navigation, value )
@@ -321,12 +316,14 @@ export async function loginAPI( user, pass, navigation, value )
 }
 
 export async function moodReportAPI( navigation ){
-    //Obtain mood api data from storage
-    let userId = await AsyncStorage.getItem( '@userId' );
-    let moodType = await AsyncStorage.getItem( '@mood_type' );
-    let stressType = await AsyncStorage.getItem( '@stress_type' );
+   
+  //Obtain mood api data from storage
+   await AsyncStorage.getItem( '@userId' ).then( value => value != null ? userId = value : console.log( "User Id: Evaluated to null" ) );
+   await AsyncStorage.getItem( '@mood_type' ).then( value => value != null ? moodType = value : console.log( " Mood Type: Evaluated to null" ) );
+   await AsyncStorage.getItem( '@stress_type' ).then( value => value != null ? stressType = value : console.log( "Stress Type: Evaluated to null" ) );
     
     //Get date and time and format it
+    /*
     var currentdate = new Date();
     let timeSubmmited = currentdate.getFullYear() + "-"
                        + (currentdate.getMonth()+1)  + "-" 
@@ -338,7 +335,8 @@ export async function moodReportAPI( navigation ){
                        + "Z"
   
     AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( timeSubmmited) );
-    
+    */ 
+
      await fetch( moodFormApiIp, {
         method: 'POST',
         headers: {
