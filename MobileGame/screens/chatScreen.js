@@ -2,67 +2,67 @@ import React , { useEffect , useCallback , useLayoutEffect} from 'react'
 import { GiftedChat , Avatar } from 'react-native-gifted-chat'
 import { ImageBackground, Alert , StyleSheet , View , TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createNewMessage } from '../network/apiCalls';
 import { Button } from 'react-native-paper';
 
 export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );
     const [ avatar , setAvatar ] = React.useState('');
     const [ username , setUsername ] = React.useState('');
-
+    const [ messageIndex , setMessageIndex ] = React.useState( 0 );
 
     // The reciver -> userid -> 1
     // The sender -> userid -> 2 and above
     const getUserData = async () => {
-      const username = await AsyncStorage.getItem( "@user" );
-      const avatar = '../assets/home/profile_filled_button.png';
-      setAvatar( avatar );
-      setUsername( username );
+      await AsyncStorage.getItem( "@user" ).then( value => setUsername( value ) );
     }
+    
     //Get the users name and avatar
     getUserData();
 
-    //temp sender message 
-    useEffect(() => {
-      setMessages([
-          {
-              _id: 1,
-              text: 'Hello developer',
-              createdAt: new Date(),
-              user: {
-                  _id: 2,
-                  name: 'temp sender',
-                  avatar: 'https://placeimg.com/140/140/any',
-              },
-          },
-      ])
-  }, []);
-    
-    /*
-    useLayoutEffect(() => {
-      navigation.setOptions({
-          headerLeft: () => (
-              <View style={{ marginLeft: 20 }}>
-                  <Avatar
-                      rounded
-                      source={require('../assets/home/profile_filled_button.png')}
-                  />
-              </View>
-          )
-       })
-      })
-    */
-    
-    //Create the message object
 
-    //User object maybe? 
+  const fetchMessages = async () => {
+    await fetch( 'http://104.248.178.78:8000/Message/' + '3' ) //hard coded message number
+    .then( response => {
+      return response.json();
+    }).then( data => {
+      setMessages([{
+        //values from db
+        _id : data.message_id,
+        createdAt: data.message_date,
+        text: data.message_text,
+        //Hard coded values for now
+        user: { 
+        _id: 2,
+        name: 'temp sender',
+        avatar: 'https://placeimg.com/140/140/any'
+        }
+      }]);
+    }).catch( error => {
+      console.error( error );
+    })
+  }
+
+  useEffect( () => {
+    const unsubscribe = navigation.addListener('focus', () => {
+        fetchMessages();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount( No render on navigation )
+    return unsubscribe;
+    }, [ navigation ] );
     
       
     //append the sent message to the message array 
     const onSend = useCallback(( messages = [] ) => {
         setMessages( previousMessages => GiftedChat.append( previousMessages, messages ) )
 
-        // We can have message database entries here 
-        // Text , Time , User , ext 
+        //Track current message
+        setMessageIndex( messageIndex + 1 );
+        
+        //Create a new message
+        createNewMessage( messages[ messageIndex ]._id , messages[ messageIndex ].text , messages[ messageIndex ].createdAt , messages[ messageIndex ].user._id , messages[ messageIndex ].user.name )
+
     }, [] )
     
     return(

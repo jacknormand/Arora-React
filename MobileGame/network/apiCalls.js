@@ -152,6 +152,33 @@ export async function createAttrium(){
 ===================================================================
 */
 
+export async function createNewMessage( messageId, messageText , messageDate , senderId , senderName ){
+  await fetch( 'http://104.248.178.78:8000/Message' , {
+   method: 'POST',
+   headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+   },
+   body: JSON.stringify({
+    "message_id" : messageId,
+    "message_text": messageText,
+    "message_date": messageDate,
+    "message_sender_id": senderId,
+    "sender_name": senderName 
+   })
+   })
+   .then(response => {
+    return response.json();
+   })
+   .then( data => {
+    console.log( data.message_id )
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   })
+}
+
+
 export async function storeUserData( userID ){
   //get current user id and fetch the user data
   await fetch( 'http://104.248.178.78:8000/userinfo/' + userID )
