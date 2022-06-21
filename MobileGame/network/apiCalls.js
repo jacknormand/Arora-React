@@ -78,9 +78,8 @@ export async function updateDatabase(){
   await AsyncStorage.getItem( '@stress_type' ).then( value => userStress = value );
   await AsyncStorage.getItem( '@longitude' ).then( value => longitude = value );
   await AsyncStorage.getItem( '@latitude' ).then( value => latitude = value );
-  //let timeSubmmited = await AsyncStorage.getItem( '@user_current_mood_updated' );
-  //parse to JSON object
-  //timeSubmmited = JSON.parse( timeSubmmited );
+  //await AsyncStorage.getItem( '@user_current_mood_updated' ).then( value => moodTime = value );
+
   await fetch('http://104.248.178.78:8000/userinfo/' + userId , {
     method: 'PATCH',
     headers:{
@@ -350,19 +349,9 @@ export async function moodReportAPI( navigation ){
    await AsyncStorage.getItem( '@stress_type' ).then( value => value != null ? stressType = value : console.log( "Stress Type: Evaluated to null" ) );
     
     //Get date and time and format it
-    /*
-    var currentdate = new Date();
-    let timeSubmmited = currentdate.getFullYear() + "-"
-                       + (currentdate.getMonth()+1)  + "-" 
-                       + currentdate.getDate() + "TO"
-                       + currentdate.getHours() + ":"  
-                       + currentdate.getMinutes() + ":" 
-                       + currentdate.getSeconds() + "."
-                       + currentdate.getMilliseconds();
-                       + "Z"
   
-    AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( timeSubmmited) );
-    */ 
+    var currentdate = new Date();
+    AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( currentdate ) );
 
      await fetch( moodFormApiIp, {
         method: 'POST',

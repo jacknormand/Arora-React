@@ -8,6 +8,7 @@ import { Button } from 'react-native-paper';
 export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );
     const [ avatar , setAvatar ] = React.useState('');
+    const [ userId , setUserId ] = React.useState( 0 )
     const [ username , setUsername ] = React.useState('');
     const [ messageIndex , setMessageIndex ] = React.useState( 0 );
 
@@ -15,6 +16,7 @@ export default function ChatScreen({navigation}){
     // The sender -> userid -> 2 and above
     const getUserData = async () => {
       await AsyncStorage.getItem( "@user" ).then( value => setUsername( value ) );
+      await AsyncStorage.getItem( "@user_id" ).then( value => setUserId( parseInt( value ) ) );
     }
     
     //Get the users name and avatar
@@ -22,10 +24,53 @@ export default function ChatScreen({navigation}){
 
 
   const fetchMessages = async () => {
-    await fetch( 'http://104.248.178.78:8000/Message/' + '3' ) //hard coded message number
+    await fetch( 'http://104.248.178.78:8000/Messages/' + '0' ) //hard coded message number
     .then( response => {
       return response.json();
     }).then( data => {
+      console.log( data );
+      let messageArrayLen = data.length;
+
+      for( let index = 0; index < messageArrayLen; index++ ){
+        let sender = 0
+        if( data[ index ].sender_name === 'username' ){
+          let sender = 1;
+        }
+        else{
+          let sender = 2;
+        }
+
+        let new_message = {
+          _id: data[ index ].message_id,
+          text: data[ index ].message_text,
+          createdAt: data[ index ].message_date,
+          user: {
+            _id: sender,
+            name: data[ index ].sender_name,
+            avatar: 'https://placeimg.com/140/140/any',
+        },
+       }
+       
+       setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) )
+
+        /*
+        setMessages([ 
+          {
+            _id: data[ index ].message_id,
+            text: data[ index ].message_text,
+            createdAt: data[ index ].message_date,
+            user: {
+              _id: sender,
+              name: data[ index ].sender_name,
+              avatar: 'https://placeimg.com/140/140/any',
+          },
+        },    
+       ]);
+       */
+
+       setMessageIndex( messageIndex + 1 );
+      }
+      /*
       setMessages([{
         //values from db
         _id : data.message_id,
@@ -38,6 +83,7 @@ export default function ChatScreen({navigation}){
         avatar: 'https://placeimg.com/140/140/any'
         }
       }]);
+      */
     }).catch( error => {
       console.error( error );
     })
@@ -61,7 +107,7 @@ export default function ChatScreen({navigation}){
         setMessageIndex( messageIndex + 1 );
         
         //Create a new message
-        createNewMessage( messages[ messageIndex ]._id , messages[ messageIndex ].text , messages[ messageIndex ].createdAt , messages[ messageIndex ].user._id , messages[ messageIndex ].user.name )
+        createNewMessage( messages[ messageIndex ].text , messages[ messageIndex ].createdAt , messages[ messageIndex ].user._id , messages[ messageIndex ].user.name )
 
     }, [] )
     
