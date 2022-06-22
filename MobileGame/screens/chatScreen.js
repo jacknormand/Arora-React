@@ -8,7 +8,6 @@ import { Button } from 'react-native-paper';
 export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );
     const [ avatar , setAvatar ] = React.useState('');
-    const [ userId , setUserId ] = React.useState( 0 )
     const [ username , setUsername ] = React.useState('');
     const [ messageIndex , setMessageIndex ] = React.useState( 0 );
 
@@ -16,46 +15,41 @@ export default function ChatScreen({navigation}){
     // The sender -> userid -> 2 and above
     const getUserData = async () => {
       await AsyncStorage.getItem( "@user" ).then( value => setUsername( value ) );
-      await AsyncStorage.getItem( "@user_id" ).then( value => setUserId( parseInt( value ) ) );
     }
     
-    //Get the users name and avatar
-    getUserData();
-
-
-  const fetchMessages = async () => {
-    await fetch( 'http://104.248.178.78:8000/Messages/' + '0' ) //hard coded message number
-    .then( response => {
-      return response.json();
-    }).then( data => {
-      console.log( data );
-      let messageArrayLen = data.length;
-
-      for( let index = 0; index < messageArrayLen; index++ ){
-        let sender = 0
-        if( data[ index ].sender_name === 'username' ){
-          let sender = 1;
-        }
-        else{
-          let sender = 2;
-        }
-
+    const onConvoStart = async () => {
+      let isFirstInteraction = await AsyncStorage.getItem( '@firstInteraction' )
+      //await AsyncStorage.getItem( '@mentorName' ).then( value => mentorName = value );
+      let mentorName = 'ThisIsATestMentorName' // Temp name
+      if( isFirstInteraction === null ){
         let new_message = {
-          _id: data[ index ].message_id,
-          text: data[ index ].message_text,
-          createdAt: data[ index ].message_date,
+          _id: 0,
+          text: "You are now connected to your mentor, " + mentorName + "!",
+          createdAt: new Date(),
           user: {
-            _id: sender,
-            name: data[ index ].sender_name,
-            avatar: 'https://placeimg.com/140/140/any',
-        },
-       }
-       
-       setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) )
+            _id: 2,
+            name: "system",
+            avatar: ''
+          },
+        }
+        createNewMessage( new_message.text , new_message.createdAt , new_message.user._id , new_message.user.name , 5 )
+      }
 
-        /*
-        setMessages([ 
-          {
+      await AsyncStorage.setItem( '@firstInteraction' , JSON.stringify( false ) );
+    }
+    
+ 
+   const fetchMessages = async () => {
+      onConvoStart();
+      var username = await AsyncStorage.getItem( "@user" );
+      return await fetch( 'http://104.248.178.78:8000/Messages/' + '0' ) //hard coded message number
+      .then( response => {
+        return response.json();
+      }).then( data => {
+        let messageArrayLen = data.length;
+        for( let index = 0; index < messageArrayLen; index++ ){
+          let sender = ( data[ index ].sender_name != username ? 2 : 1 );
+          let new_message = {
             _id: data[ index ].message_id,
             text: data[ index ].message_text,
             createdAt: data[ index ].message_date,
@@ -63,34 +57,22 @@ export default function ChatScreen({navigation}){
               _id: sender,
               name: data[ index ].sender_name,
               avatar: 'https://placeimg.com/140/140/any',
-          },
-        },    
-       ]);
-       */
+            },
+          }
+          setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) )
 
-       setMessageIndex( messageIndex + 1 );
-      }
-      /*
-      setMessages([{
-        //values from db
-        _id : data.message_id,
-        createdAt: data.message_date,
-        text: data.message_text,
-        //Hard coded values for now
-        user: { 
-        _id: 2,
-        name: 'temp sender',
-        avatar: 'https://placeimg.com/140/140/any'
+          setMessageIndex( messageIndex + 1 );
+
         }
-      }]);
-      */
-    }).catch( error => {
-      console.error( error );
-    })
-  }
+      }).catch( error => {
+        console.error( error );
+      })
+    }
+
 
   useEffect( () => {
     const unsubscribe = navigation.addListener('focus', () => {
+        getUserData();
         fetchMessages();
     });
 
@@ -107,7 +89,7 @@ export default function ChatScreen({navigation}){
         setMessageIndex( messageIndex + 1 );
         
         //Create a new message
-        createNewMessage( messages[ messageIndex ].text , messages[ messageIndex ].createdAt , messages[ messageIndex ].user._id , messages[ messageIndex ].user.name )
+        createNewMessage( messages[ messageIndex ].text , messages[ messageIndex ].createdAt , messages[ messageIndex ].user._id , messages[ messageIndex ].user.name , 5 )
 
     }, [] )
     
