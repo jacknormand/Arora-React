@@ -29,7 +29,7 @@ export default function LearnScreen({ navigation }){
 
               />
        </TouchableOpacity>
-       <TouchableOpacity style={style.box}
+       {/* <TouchableOpacity style={style.box}
               onPress={() => navigation.navigate("Meditation")}>
                 <Image
               source = {require('../assets/learnScreen/mindfullness_meditation_icon.png')}
@@ -41,7 +41,7 @@ export default function LearnScreen({ navigation }){
               style = {style.iconsArrow}
               source = {require('../assets/learnScreen/ic_action_name.png')}
               />
-       </TouchableOpacity>
+       </TouchableOpacity> */}
        <TouchableOpacity style={style.box} 
               onPress={() => navigation.navigate("WalkingInstructions")}>
                 <Image

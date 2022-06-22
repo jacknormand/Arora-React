@@ -1,11 +1,11 @@
 import React , { useEffect, useState } from 'react'
 import { View , ImageBackground , StyleSheet , Text , Image , Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { Button } from 'react-native-paper'
 /*
   TODO: Use the corresponding butterfly values for the amount of specific butterflies
 */
-export default function AtriumScreen(){
+export default function AtriumScreen({navigation}){
   //Set the user butterfly counts for all atrium
   const [ b0 , setB0 ] = React.useState( 0 );
   const [ b1 , setB1 ] = React.useState( 0 );
@@ -97,6 +97,10 @@ export default function AtriumScreen(){
 
              </View>
                <Image></Image>
+            <Button icon="arrow-left" mode="contained" style={style.backButton} 
+                    onPress={() => navigation.goBack()}
+                    color='rgba(0, 0, 0, 0.0)'>Back
+            </Button>
             </View>
           </ImageBackground>
       </View>
@@ -183,4 +187,11 @@ const style = StyleSheet.create({
            fontSize: 40,
            color: 'white'
        },
+
+       backButton:{
+        height: 50,
+        width: 100,
+        position: 'absolute', left: 5, bottom: 0,
+        borderRadius: 15,
+        },
 })

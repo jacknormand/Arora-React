@@ -15,7 +15,7 @@ export default function Footer(){
 
                      <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
                       <Image style={ style.icon } source={require('../assets/footer/butterfly_logo.png')}></Image>
-                      <Text style={style.iconText}>Practice</Text>
+                      <Text style={style.iconText}>Chat</Text>
                      </TouchableOpacity>
                      <TouchableOpacity onPress={() => navigation.navigate('Learn')}>
                       <Image style={ style.icon } source={require('../assets/footer/learnIcon.png')}></Image>

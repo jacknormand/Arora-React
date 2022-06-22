@@ -236,8 +236,8 @@ export async function registerAPI( user, pass, email, navigation )
     // FIX THIS TO ACCOUNT FOR DIFFERENT ERRORS
     else{
       Alert.alert(
-        "Credential Error",
-        "Try again",
+        "Email or username already in use",
+        "Change and try again",
         [
           { text: "Ok" }
         ]

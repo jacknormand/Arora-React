@@ -32,7 +32,7 @@ function CreateUser ({ navigation }) {
             </Button>
             <Button icon="account-plus-outline" mode="contained" style={styles.createButton} 
             onPress={() => registerAPI( user.username, user.password, user.email, navigation )}
-            color='rgba(0, 0, 0, 0.3)'>Create User
+            color='rgba(0, 0, 0, 0.3)'>Create
             </Button>
         </View>
         <View style={styles.createView}>

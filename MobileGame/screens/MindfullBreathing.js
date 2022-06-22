@@ -80,12 +80,19 @@ export default function Breathing({ navigation }){
          <View style={style.allitems}>
            <Text style={ style.breathCount }>{ breathCount } Breaths</Text>
 
+            <View style={style.contained}>
            {/* <Image source={currentAnimation} style={style.butterfly} resizeMode="contain"></Image> */}
-           <Animated.Image source={ require("../assets/breathing/b_frame1.png")} resizeMode="contain"
+           <Animated.Image source={ require("../assets/breathing/nobody.png")} resizeMode="contain"
            style={{
-            height: '25%',
+            height: '55%',
             transform: [{ scaleX: translation }],
-          }}></Animated.Image>
+          }}>
+            
+          </Animated.Image>
+
+
+          <Image style={style.bodybutterfly} source={ require("../assets/breathing/body.png")} resizeMode="contain"></Image>
+          </View>
 
            <Text style={style.text}>{ threshold ? exhaulText : displayText }</Text>
            <TouchableOpacity onPressIn={ pressed } onPressOut={ released }>
@@ -108,9 +115,14 @@ const style = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
       },
-    butterfly:{
-        height: '50%',
-        width: '75%',
+
+    contained:{
+        justifyContent: 'center',
+    },
+
+      bodybutterfly:{
+        height: '55%',
+        position: 'absolute',
       },
 
       river:{
