@@ -104,54 +104,7 @@ export async function updateDatabase(){
    })
 }
 
-//Function to create user butterfly( NOT DONE ) 
-/*
-MIGHT NOT NEED THESE BUT GOING TO CHECK ATTRIUM DATA 
-==========================================================
-export async function updateButterFlies(){
-  let userId = await AsyncStorage.getItem('@userId');
-  await fetch( regIp + 'userbutterfly' , {
-    method: 'POST',
-    headers:{
-    'Content-Type':'application/json' 
-    },
-    body: JSON.stringify({
-      "butterfly_id":2,
-      "user_id": userId
-    })
-  }).then( response => {
-    return response.json();
-  }).catch( error => {
-    console.error( error );
-  })
-}
-
-//Function to create a user attrium for first time( NOT DONE )
-export async function createAttrium(){
-  let userId = await AsyncStorage.getItem( '@userId' );
-  //Not real URL
-  await fetch( 'http://104.248.178.78:8000/ButterflyAtriums/butterflyatrium' , {
-   method: 'POST',
-   headers:{
-   'Content-Type':'application/json' 
-   },
-   body: JSON.stringify({
-    'user_id' : userId,
-    'user_b0_count' : 0,
-    'user_b1_count' : 0,
-    'user_b2_count' : 0,
-    'user_b3_count' : 0,
-  })
- }).then( response => {
-   return response.json();
- }).catch( error => {
-   console.log( error );
- })
-}
-===================================================================
-*/
-
-export async function createNewMessage( messageId, messageText , messageDate , senderId , senderName ){
+export async function createNewMessage( messageText , messageDate , senderId , senderName , reciverId ){
   await fetch( 'http://104.248.178.78:8000/Message' , {
    method: 'POST',
    headers: {
@@ -159,10 +112,10 @@ export async function createNewMessage( messageId, messageText , messageDate , s
     'Content-Type': 'application/json'
    },
    body: JSON.stringify({
-    "message_id" : messageId,
     "message_text": messageText,
     "message_date": messageDate,
     "message_sender_id": senderId,
+    "message_reciver_id": reciverId,
     "sender_name": senderName 
    })
    })
@@ -199,6 +152,19 @@ export async function storeUserData( userID ){
     })
 }
 
+export async function getMentor()
+{
+  //await AsyncStorage.getItem( '@assigned_mentor' ).then( value => mentorId = value );
+  await fetch( 'http://104.248.178.78:8000/userinfo/' + '2147483648' )
+  .then( response => {
+    return response.json();
+  }).then( data => {
+    AsyncStorage.setItem( '@mentor_name' , data.user_name ); 
+  }).catch( error => {
+    console.error( error );
+  })
+}
+
 export async function registerAPI( user, pass, email, navigation )
 {
   var userID;
@@ -227,9 +193,11 @@ export async function registerAPI( user, pass, email, navigation )
 
     // creation success
     if ( userID ){
+      // upon creation of user, set default mentor
+      // Defualt is superuser id, might be a problem. In production, the supervison will have an actual id
+      await AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( 2147483648 ) );
 
       // navigate back to login
-      // go to wellness check
       navigation.navigate("Login")
 
     }
@@ -313,6 +281,7 @@ export async function loginAPI( user, pass, navigation, value )
     //Save data to local 
     storeData( userID );
     storeUserData( userID );
+    getMentor();
 
     
     //Get user stored setting 

@@ -9,18 +9,26 @@ export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );
     const [ avatar , setAvatar ] = React.useState('');
     const [ username , setUsername ] = React.useState('');
+    const [ userId , setUserId ] = React.useState( 0 );
     const [ messageIndex , setMessageIndex ] = React.useState( 0 );
+    const [ assignedMentorId , setAssignedMentorId ] = React.useState( 0 );
+    const [ convoId , setConvoId ] = React.useState( 0 );
 
-    // The reciver -> userid -> 1
-    // The sender -> userid -> 2 and above
+    // Must have the same hash algorithm as server 
+    const getConvoId = async () => {
+    }
+
+    // Gather data stored in async that will be needed for submitting a message 
     const getUserData = async () => {
       await AsyncStorage.getItem( "@user" ).then( value => setUsername( value ) );
+      await AsyncStorage.getItem( "@userId" ).then( value => setUserId( parseInt( value ) ) );
+      await AsyncStorage.getItem( "@assigned_mentor" ).then( value => setAssignedMentorId( parseInt( value ) ) );
     }
     
+    // When the user first initalizes a convo, display a system message
     const onConvoStart = async () => {
       let isFirstInteraction = await AsyncStorage.getItem( '@firstInteraction' )
-      //await AsyncStorage.getItem( '@mentorName' ).then( value => mentorName = value );
-      let mentorName = 'ThisIsATestMentorName' // Temp name
+      //await AsyncStorage.getItem( '@mentor_name' ).then( value => mentorName = value );
       if( isFirstInteraction === null ){
         let new_message = {
           _id: 0,
@@ -69,10 +77,13 @@ export default function ChatScreen({navigation}){
       })
     }
 
-
+  // Unmounting function on navigation, then re mounts when user navigates back( updating the feed )
   useEffect( () => {
     const unsubscribe = navigation.addListener('focus', () => {
+        // check for net connection here
+        // checkForConnection()
         getUserData();
+        //getConvoId();
         fetchMessages();
     });
 
@@ -81,16 +92,16 @@ export default function ChatScreen({navigation}){
     }, [ navigation ] );
     
       
-    //append the sent message to the message array 
-    const onSend = useCallback(( messages = [] ) => {
+  //append the sent message to the message array 
+  const onSend = useCallback(( messages = [] ) => {
         setMessages( previousMessages => GiftedChat.append( previousMessages, messages ) )
 
         //Track current message
         setMessageIndex( messageIndex + 1 );
         
-        //Create a new message
-        createNewMessage( messages[ messageIndex ].text , messages[ messageIndex ].createdAt , messages[ messageIndex ].user._id , messages[ messageIndex ].user.name , 5 )
-
+        //Create a new message                           
+        createNewMessage( messages[ messageIndex ].text , messages[ messageIndex ].createdAt ,
+                          userId , messages[ messageIndex ].user.name , assignedMentorId )
     }, [] )
     
     return(
