@@ -42,6 +42,7 @@ export default function HomeScreen( { navigation }){
     const logout = async () => {
       await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( false ) );
       await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ) );
+      await AsyncStorage.setItem( '@start_new_chat' , JSON.stringify( false ) );
       
       // Create a list of values to be removed
       let dataToBeRemoved = [
@@ -59,7 +60,8 @@ export default function HomeScreen( { navigation }){
       '@user_current_mood',
       '@user_current_mood_updated',
       '@mood_type',
-      '@stress_type'
+      '@stress_type',
+      '@start_new_chat'
      ];
 
       await AsyncStorage.multiRemove( dataToBeRemoved );

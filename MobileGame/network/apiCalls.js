@@ -22,11 +22,7 @@ const locationApiIp = 'http://' + IP + ':' + port + '/' + 'locationreport';
 
 //When internet connection is detected upload to database
 //Function to upload the user data when network is detected
-/*
-  ==============================================
-  ASK ABOUT THE USER UPDATE
-  ==============================================
-*/
+
 
 const createUserLocationReport = async () => {
   //get the permission from user and get values accordingly
@@ -123,7 +119,7 @@ export async function createNewMessage( messageText , messageDate , senderId , s
     return response.json();
    })
    .then( data => {
-    console.log( data.message_id )
+    AsyncStorage.setItem( "@convo_id" , JSON.stringify( data["Convo Id"] ) );
    })
    .catch((error) => {
       console.error('Error:', error);
@@ -196,6 +192,7 @@ export async function registerAPI( user, pass, email, navigation )
       // upon creation of user, set default mentor
       // Defualt is superuser id, might be a problem. In production, the supervison will have an actual id
       await AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( 2147483648 ) );
+      await AsyncStorage.setItem( '@start_new_chat' , JSON.stringify( true ) );
 
       // navigate back to login
       navigation.navigate("Login")
@@ -254,6 +251,12 @@ export async function loginAPI( user, pass, navigation, value )
   // If info entered isnt correct, userID wont be passed back and wont exist
   if ( userID ){
 
+    await AsyncStorage.getItem( '@userId' ).then( value => user_id = value );
+
+    if( userID != user_id ){
+      await AsyncStorage.setItem( '@start_new_chat' , JSON.stringify( true ) );
+    }
+
     // if bool val undefined, then we are autlogin so set it to true
     if (value == undefined){
       value = true;
@@ -271,7 +274,7 @@ export async function loginAPI( user, pass, navigation, value )
         //Possibly for auto login
         await AsyncStorage.setItem( '@password' , pass );
         await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
-
+        await AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( 2147483648 ) );
         await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( true ) );
 
         //Might not need

@@ -4,6 +4,7 @@ import { ImageBackground, Alert , StyleSheet , View , TouchableOpacity } from 'r
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNewMessage } from '../network/apiCalls';
 import { Button } from 'react-native-paper';
+import base64 from 'react-native-base64'
 
 export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );
@@ -14,10 +15,6 @@ export default function ChatScreen({navigation}){
     const [ assignedMentorId , setAssignedMentorId ] = React.useState( 0 );
     const [ convoId , setConvoId ] = React.useState( 0 );
 
-    // Must have the same hash algorithm as server 
-    const getConvoId = async () => {
-    }
-
     // Gather data stored in async that will be needed for submitting a message 
     const getUserData = async () => {
       await AsyncStorage.getItem( "@user" ).then( value => setUsername( value ) );
@@ -25,14 +22,21 @@ export default function ChatScreen({navigation}){
       await AsyncStorage.getItem( "@assigned_mentor" ).then( value => setAssignedMentorId( parseInt( value ) ) );
     }
     
-    // When the user first initalizes a convo, display a system message
-    const onConvoStart = async () => {
-      let isFirstInteraction = await AsyncStorage.getItem( '@firstInteraction' )
-      //await AsyncStorage.getItem( '@mentor_name' ).then( value => mentorName = value );
-      if( isFirstInteraction === null ){
+   const fetchMessages = async () => {
+    // Obtain the user, mentor and other async items 
+      var user_id , mentor_id , username , newChat , firstTime , mentor_name , convoId;
+      await AsyncStorage.getItem( "@user" ).then( value => username = value );
+      await AsyncStorage.getItem( "@start_new_chat").then( value => newChat = value );
+      await AsyncStorage.getItem( "@userId" ).then( value => user_id = value );
+      await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = value );
+      await AsyncStorage.getItem( '@mentor_name' ).then( value => mentor_name = value )
+      await AsyncStorage.getItem( '@first_time_chat' ).then( value => firstTime = value );
+
+    // Check if a new chat room needs to be initalized 
+      if( newChat === "true" || firstTime === null ){
         let new_message = {
           _id: 0,
-          text: "You are now connected to your mentor, " + mentorName + "!",
+          text: "You are now connected to your mentor, " + mentor_name + "!",
           createdAt: new Date(),
           user: {
             _id: 2,
@@ -40,17 +44,22 @@ export default function ChatScreen({navigation}){
             avatar: ''
           },
         }
-        createNewMessage( new_message.text , new_message.createdAt , new_message.user._id , new_message.user.name , 5 )
+        // Init convo
+        createNewMessage( new_message.text , new_message.createdAt ,
+              user_id  , new_message.user.name , mentor_id )
       }
 
-      await AsyncStorage.setItem( '@firstInteraction' , JSON.stringify( false ) );
-    }
-    
- 
-   const fetchMessages = async () => {
-      onConvoStart();
-      var username = await AsyncStorage.getItem( "@user" );
-      return await fetch( 'http://104.248.178.78:8000/Messages/' + '0' ) //hard coded message number
+      await AsyncStorage.setItem( '@first_time_chat' , JSON.stringify( false ) );
+      await AsyncStorage.setItem( '@start_new_chat' , JSON.stringify( false ) );
+
+      // Get the convo id
+      await AsyncStorage.getItem( "@convo_id" ).then( value => convoId = value );
+
+      // Parse the id 
+      convoId = JSON.parse( convoId );
+
+      // Fetch the messages 
+      return await fetch( 'http://104.248.178.78:8000/Messages/' + convoId )
       .then( response => {
         return response.json();
       }).then( data => {
@@ -70,7 +79,6 @@ export default function ChatScreen({navigation}){
           setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) )
 
           setMessageIndex( messageIndex + 1 );
-
         }
       }).catch( error => {
         console.error( error );
@@ -93,15 +101,18 @@ export default function ChatScreen({navigation}){
     
       
   //append the sent message to the message array 
-  const onSend = useCallback(( messages = [] ) => {
+  const onSend = useCallback( async ( messages = [] ) => {
         setMessages( previousMessages => GiftedChat.append( previousMessages, messages ) )
+        var user_id , mentor_id;
+        await AsyncStorage.getItem( "@userId" ).then( value => user_id = value );
+        await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = value );
 
         //Track current message
         setMessageIndex( messageIndex + 1 );
         
         //Create a new message                           
         createNewMessage( messages[ messageIndex ].text , messages[ messageIndex ].createdAt ,
-                          userId , messages[ messageIndex ].user.name , assignedMentorId )
+                          user_id , messages[ messageIndex ].user.name , mentor_id )
     }, [] )
     
     return(
