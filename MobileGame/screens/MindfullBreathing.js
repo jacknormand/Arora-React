@@ -14,7 +14,7 @@ export default function Breathing({ navigation }){
     
     //Text for the screen based on seconds
     let displayText = 'Press and hold \nas you breathe in';
-    let exhaulText = 'Release the button and exhale';
+    let exhaulText = 'Release the button\n and exhale';
 
     //Detect if the overlay should be visable
     const setOverlay = () => {

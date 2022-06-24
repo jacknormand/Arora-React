@@ -12,7 +12,6 @@ export default function Footer(){
                       <Image style={ style.icon } source={require('../assets/footer/profile_button_unfilled.png')}></Image>
                       <Text style={style.iconText}>Profile</Text>
                      </TouchableOpacity>
-
                      <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
                       <Image style={ style.icon } source={require('../assets/footer/butterfly_logo.png')}></Image>
                       <Text style={style.iconText}>Chat</Text>

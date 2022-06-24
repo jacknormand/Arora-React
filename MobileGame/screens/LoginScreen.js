@@ -3,17 +3,13 @@ import { Switch, ImageBackground,StyleSheet, Text, View, Image, TouchableOpacity
 import { loginAPI } from '../network/apiCalls'
 import { TextInput, Button } from 'react-native-paper';
 
-
-/*
-  GOOD IDEA: FIND OUT HOW TO MAKE THE AUTOMATIC LOGIN BUTTON INTO CHECK BOX
-*/
-
 function LoginScreen ({ navigation }) {
   const [user, setUser] = useState({
     username: '',
     password: '',
   });
 
+  // stay logged in
   const [ stayLoggedinBtn , setStayLoggedinBtn ] = useState( false );
   //Set auto log in state to true
   const setLoggedIn = async () => {
@@ -26,33 +22,30 @@ function LoginScreen ({ navigation }) {
     
   }
 
+  //change from 20 if clipping issues on iOS
   const keyboardVerticalOffset = Platform.OS === 'ios' ? 20 : 0
   
     return (
-          <View style={styles.container}>
-          <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
-            <View style={styles.butterflyView}>
-              <Image
+    <View style={styles.container}>
+      <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
+          <View style={styles.butterflyView}>
+            <Image
               source = {require('../assets/loginScreen/orange_butterfly_image.png')}
-              style = {styles.butterfly}
-              />
-              <Text style={styles.title}>Arora</Text>
-            </View>
+              style = {styles.butterfly}/>
+            <Text style={styles.title}>Arora</Text>
+          </View>
 
-            {/* MIGHT BE A PROBLEM ON ANDROID ( dont think so tho)*/}
-            <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.keyboardPush}
-      keyboardVerticalOffset={keyboardVerticalOffset}
-    >
-      <View style={styles.createView}>
-      <Button icon="account-plus-outline" mode="contained" style={styles.backButton} 
+          {/* MIGHT BE A PROBLEM ON ANDROID ( dont think so tho)*/}
+          <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.keyboardPush}
+          keyboardVerticalOffset={keyboardVerticalOffset}>
+
+          <Button icon="account-plus-outline" mode="contained" style={styles.backButton} 
           onPress={() => navigation.navigate('Create')}
           color='rgba(0, 0, 0, 0.3)'>Create New User
           </Button>
-      </View>
             <View style={styles.loginView}>
-
               <TextInput 
                 style={styles.textIn}
                 autoCapitalize="none"
@@ -75,33 +68,28 @@ function LoginScreen ({ navigation }) {
                 label={"Password"}
                 mode={'outlined'}
               />
-
-              <View style={styles.bottomhalf}>
+            <View style={styles.bottomhalf}>
 
               <TouchableOpacity style={styles.loginBtn} 
               onPress={() => loginAPI( user.username, user.password, navigation, stayLoggedinBtn )}>
-                
                 <Text style={styles.loginText}>LOGIN</Text>
-                
               </TouchableOpacity>
               <View style={styles.switcher}>
                 <Text style={styles.stayloggedTXT}>Stay Logged In:</Text>
-                    <Switch
-                      trackColor={{ false: "#767577", true: "rgba(150, 181, 217, 1)" }}
-                      thumbColor={stayLoggedinBtn ? "#650427" : "#f4f3f4"}
-                      ios_backgroundColor="#3e3e3e"
-                      onValueChange={setLoggedIn}
-                      value={stayLoggedinBtn}
-
-                      />
-              </View>
-
+                  <Switch
+                    trackColor={{ false: "#767577", true: "rgba(150, 181, 217, 1)" }}
+                    thumbColor={stayLoggedinBtn ? "#650427" : "#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={setLoggedIn}
+                    value={stayLoggedinBtn}/>
               </View>
 
             </View>
-            </KeyboardAvoidingView>
-          </ImageBackground>
-        </View>
+
+          </View>
+        </KeyboardAvoidingView>
+      </ImageBackground>
+    </View>
     )
   }
 
@@ -124,6 +112,7 @@ const styles = StyleSheet.create({
     width: "95%",
     alignSelf: 'center',
     borderRadius: 20,
+    marginBottom: 5,
   },
 
   switcher: {
@@ -196,7 +185,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     
   },
-
 
 });
 

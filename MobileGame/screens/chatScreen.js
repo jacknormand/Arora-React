@@ -4,7 +4,6 @@ import { ImageBackground, Alert , StyleSheet , View , TouchableOpacity } from 'r
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNewMessage } from '../network/apiCalls';
 import { Button } from 'react-native-paper';
-import base64 from 'react-native-base64'
 
 export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );

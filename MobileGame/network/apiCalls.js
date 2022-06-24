@@ -250,7 +250,7 @@ export async function loginAPI( user, pass, navigation, value )
   // USER EXISTS and correct credentials
   // If info entered isnt correct, userID wont be passed back and wont exist
   if ( userID ){
-
+    var user_id;
     await AsyncStorage.getItem( '@userId' ).then( value => user_id = value );
 
     if( userID != user_id ){

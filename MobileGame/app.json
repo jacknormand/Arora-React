@@ -18,7 +18,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.naucanis.arora",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      }
     },
     "android": {
       "package": "com.naucanis.arora",

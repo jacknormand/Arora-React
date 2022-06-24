@@ -16,15 +16,15 @@ function CreateUser ({ navigation }) {
         email: '',
       });
 
-      const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0
+      const keyboardVerticalOffset = Platform.OS === 'ios' ? 100 : 0
   
     return (
 <View style={styles.container}>
     <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={keyboardVerticalOffset}
-      style={styles.keyboardPush}>
+
+    <View style={styles.everything}>
+    <Text style={styles.headerText}>Create User</Text> 
+    
         <View style={styles.complete}>
             <Button icon="arrow-left" mode="contained" style={styles.backButton} 
             onPress={() => navigation.goBack()}
@@ -36,6 +36,10 @@ function CreateUser ({ navigation }) {
             </Button>
         </View>
         <View style={styles.createView}>
+        <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={keyboardVerticalOffset}
+      style={styles.keyboardPush}>
             <Text style={styles.labeltext}>Enter username</Text>
             <TextInput 
             style={styles.textIn}
@@ -66,11 +70,14 @@ function CreateUser ({ navigation }) {
             activeOutlineColor={"grey"}
             selectionColor={"#650427"}
             />
+                </KeyboardAvoidingView>
         </View>
         <View style={styles.complete}>
 
         </View>
-    </KeyboardAvoidingView>
+
+    </View>
+
     </ImageBackground>
 </View>
     )
@@ -83,20 +90,36 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  headerText: {
+    textAlign: 'center',
+    fontSize: 30,
+    color: 'white',
+    fontWeight: 'bold',
+    shadowColor: 'black',
+    shadowOpacity: .5,
+    marginTop: 60,
+    marginBottom: 40,
+},
   createView: {
     backgroundColor: 'rgba(163, 163, 163, 0.8)',
-    height: '80%',
     width: "95%",
     borderRadius: 20,
     alignSelf: 'center',
+    height: "40%",
+    justifyContent: 'center',
   },
   image: {
     flex: 1,
   },
 
+  everything: {
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+
   keyboardPush: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'space-evenly',
   },
 
   backButton: {
@@ -127,6 +150,7 @@ const styles = StyleSheet.create({
     width: "85%",
     height: 40,
     marginTop: 10,
+    marginBottom: 40,
     color: 'black',
   },
   labeltext: {
