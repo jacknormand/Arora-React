@@ -23,16 +23,15 @@ export default function ChatScreen({navigation}){
     
    const fetchMessages = async () => {
     // Obtain the user, mentor and other async items 
-      var user_id , mentor_id , username , newChat , firstTime , mentor_name , convoId;
+      var user_id , mentor_id , username , mentor_name , convoId;
       await AsyncStorage.getItem( "@user" ).then( value => username = value );
-      await AsyncStorage.getItem( "@start_new_chat").then( value => newChat = value );
-      await AsyncStorage.getItem( "@userId" ).then( value => user_id = value );
-      await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = value );
+      await AsyncStorage.getItem( "@userId" ).then( value => user_id = parseInt( value ) );
+      await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = parseInt( value ) );
       await AsyncStorage.getItem( '@mentor_name' ).then( value => mentor_name = value )
-      await AsyncStorage.getItem( '@first_time_chat' ).then( value => firstTime = value );
+      await AsyncStorage.getItem( "@convo_id" ).then( value => convoId = value );
 
     // Check if a new chat room needs to be initalized 
-      if( newChat === "true" || firstTime === null ){
+      if( convoId === null ){
         let new_message = {
           _id: 0,
           text: "You are now connected to your mentor, " + mentor_name + "!",
@@ -51,7 +50,7 @@ export default function ChatScreen({navigation}){
       await AsyncStorage.setItem( '@first_time_chat' , JSON.stringify( false ) );
       await AsyncStorage.setItem( '@start_new_chat' , JSON.stringify( false ) );
 
-      // Get the convo id
+      // Get the updated convo id
       await AsyncStorage.getItem( "@convo_id" ).then( value => convoId = value );
 
       // Parse the id 
@@ -103,8 +102,8 @@ export default function ChatScreen({navigation}){
   const onSend = useCallback( async ( messages = [] ) => {
         setMessages( previousMessages => GiftedChat.append( previousMessages, messages ) )
         var user_id , mentor_id;
-        await AsyncStorage.getItem( "@userId" ).then( value => user_id = value );
-        await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = value );
+        await AsyncStorage.getItem( "@userId" ).then( value => user_id = parseInt( value ) );
+        await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = parseInt( value ) );
 
         //Track current message
         setMessageIndex( messageIndex + 1 );

@@ -61,7 +61,7 @@ export default function HomeScreen( { navigation }){
       '@user_current_mood_updated',
       '@mood_type',
       '@stress_type',
-      '@start_new_chat'
+      '@convo_id'
      ];
 
       await AsyncStorage.multiRemove( dataToBeRemoved );

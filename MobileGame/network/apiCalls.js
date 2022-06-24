@@ -250,12 +250,14 @@ export async function loginAPI( user, pass, navigation, value )
   // USER EXISTS and correct credentials
   // If info entered isnt correct, userID wont be passed back and wont exist
   if ( userID ){
-    var user_id;
-    await AsyncStorage.getItem( '@userId' ).then( value => user_id = value );
-
+    //var user_id;
+    //await AsyncStorage.getItem( '@userId' ).then( value => user_id = parseInt( value ) );
+    /*
     if( userID != user_id ){
       await AsyncStorage.setItem( '@start_new_chat' , JSON.stringify( true ) );
+      await AsyncStorage.removeItem( '@convo_id' );
     }
+    */
 
     // if bool val undefined, then we are autlogin so set it to true
     if (value == undefined){
