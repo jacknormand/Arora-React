@@ -2,6 +2,7 @@ import React, { useEffect, useState , useCallback } from "react";
 import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getConvoId } from "../network/apiCalls";
 
 export default function HomeScreen( { navigation }){
     //hooks to set varible from async storage
@@ -61,7 +62,8 @@ export default function HomeScreen( { navigation }){
       '@user_current_mood_updated',
       '@mood_type',
       '@stress_type',
-      '@convo_id'
+      "@need_sys_message",
+      "@convo_id"
      ];
 
       await AsyncStorage.multiRemove( dataToBeRemoved );

@@ -192,8 +192,6 @@ export async function registerAPI( user, pass, email, navigation )
       // upon creation of user, set default mentor
       // Defualt is superuser id, might be a problem. In production, the supervison will have an actual id
       await AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( 2147483648 ) );
-      await AsyncStorage.setItem( '@start_new_chat' , JSON.stringify( true ) );
-
       // navigate back to login
       navigation.navigate("Login")
 
@@ -209,6 +207,20 @@ export async function registerAPI( user, pass, email, navigation )
       );
 
     }
+}
+
+export async function getConvoId()
+{
+  await fetch( 'http://104.248.178.78:8000/Messages/' + 2 + 1 )
+  .then( response => {
+    return response.json();
+  })
+  .then( data => {
+    console.log( data );
+  })
+  .catch( error => {
+    console.error( error );
+  })
 }
 
 export async function loginAPI( user, pass, navigation, value )
@@ -250,14 +262,6 @@ export async function loginAPI( user, pass, navigation, value )
   // USER EXISTS and correct credentials
   // If info entered isnt correct, userID wont be passed back and wont exist
   if ( userID ){
-    //var user_id;
-    //await AsyncStorage.getItem( '@userId' ).then( value => user_id = parseInt( value ) );
-    /*
-    if( userID != user_id ){
-      await AsyncStorage.setItem( '@start_new_chat' , JSON.stringify( true ) );
-      await AsyncStorage.removeItem( '@convo_id' );
-    }
-    */
 
     // if bool val undefined, then we are autlogin so set it to true
     if (value == undefined){
