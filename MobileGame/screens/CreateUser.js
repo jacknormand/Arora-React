@@ -30,6 +30,9 @@ function CreateUser ({ navigation }) {
 
       // function to check if email address is valid
       function emailChecker(email){
+
+        // set user
+        setUser({ username: user.username, password: user.password, reenter: user.reenter, email: email });
         // check against regular exp
         if (reg.test(email) === true){
           setColor("#0f0");
@@ -39,8 +42,7 @@ function CreateUser ({ navigation }) {
           setColor("#f00");
           setValid(false);
         }
-        // set user
-        setUser({ username: user.username, password: user.password,  email: email });
+
       }
 
       function reenterChecker(pass){
