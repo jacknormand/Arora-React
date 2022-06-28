@@ -16,7 +16,7 @@ export default function ChatScreen({navigation}){
     
     // Get network status
     const network = useNetInfo();
-    const connectivity = network.isConnected;
+    const connectivity = network.isConnected; // ANNOYING -> First call -> null , Then useble
 
     // Gather data stored in async that will be needed for submitting a message 
     // Need for global at the moment 

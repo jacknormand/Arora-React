@@ -84,8 +84,8 @@ export async function updateDatabase(){
     body: JSON.stringify({ 
 	   "user_current_mood": Number( userMood ),
      "user_current_stress": Number( userStress ),
-	   "user_current_mood_updated": "2019-02-23T09:38:42.925706Z", 
-	   "user_current_location_updated":"2019-02-23T09:38:42.925706Z",
+	   "user_current_mood_updated": new Date(), 
+	   "user_current_location_updated":new Date(),
 	   "user_current_butterfly": currentButterfly,
 	   "user_current_location_lat": latitude, 
 	   "user_current_location_long": longitude, 
@@ -209,22 +209,6 @@ export async function registerAPI( user, pass, email, navigation )
     }
 }
 
-export async function getConvoId()
-{
-  var userId , mentorId;
-  await AsyncStorage.getItem( '@userId' ).then( value => userId = parseInt( value ) );
-  await AsyncStorage.getItem( '@assigned_mentor' ).then( value => mentorId = parseInt( value ) );
-  await fetch( ( 'http://104.248.178.78:8000/Messages/' + userId ) + mentorId )
-  .then( response => {
-    return response.json();
-  })
-  .then( data => {
-    console.log( data );
-  })
-  .catch( error => {
-    console.error( error );
-  })
-}
 
 export async function loginAPI( user, pass, navigation, value )
 {

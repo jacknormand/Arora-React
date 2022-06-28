@@ -1,7 +1,8 @@
 import React , { useEffect, useState } from 'react'
-import { View , ImageBackground , StyleSheet , Text , Image , Alert } from 'react-native'
+import { View , ImageBackground , StyleSheet , Text , Image , Alert , TouchableOpacity } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-paper'
+import { Overlay } from 'react-native-elements';
 /*
   TODO: Use the corresponding butterfly values for the amount of specific butterflies
 */
@@ -12,6 +13,8 @@ export default function AtriumScreen({navigation}){
   const [ b2 , setB2 ] = React.useState( 0 );
   const [ b3 , setB3 ] = React.useState( 0 );
   const [ b4 , setB4 ] = React.useState( 0 );
+  const [ overlayVisable , setOverlayVisable ] = React.useState( false );
+  const [ overlayText , setOverlayText ] = React.useState('');
   const [ firstTimeLogin , setFirstTimeLogin ] = React.useState( null );
   const blueCircle = require('../assets/atrium/blue_circle.png');
   
@@ -74,13 +77,34 @@ export default function AtriumScreen({navigation}){
 
   getUserButterflies(); 
 
+  const setOverlayFalse = () => {
+    setOverlayVisable( false );
+  }
+  const setOverlayTrue = () => {
+    setOverlayVisable( true );
+  }
+
+  // Need one for each butterfly
+  const displayGreenButterflyText = () => {
+    setOverlayText( "You clicked on the green butterfly!" );
+    setOverlayTrue();
+  }
+
     return(
       <View style={ style.main }>
           <ImageBackground source={require('../assets/atrium_background.jpg')} style={ style.backgroundImage } resizeMode="cover">
            <Text style={ style.header }>Atrium</Text>
            <View style={ style.atriumContainer }>
+           <Overlay isVisible={ overlayVisable } overlayStyle={{width: '90%',height: '90%', backgroundColor:'rgba(0, 245, 196, .7)'}}>
+            <Text>{ overlayText }</Text>
+            <TouchableOpacity style={ style.button } onPress={ setOverlayFalse }>
+              <Text style={ style.buttonText }>Close</Text>
+            </TouchableOpacity>
+           </Overlay>
              <View style={ style.align }>
+              <TouchableOpacity onPress={ displayGreenButterflyText }>
                <Image style={ style.butterflies } source={require('../assets/atrium/green_butterfly_image.png')} resizeMode="contain" />
+              </TouchableOpacity>
                <Image style={ style.blueCircle } source={ blueCircle }></Image>
                <Text style={ style.butterflyText }>{ b0 }</Text>
                <Image style={ style.butterflyEnd } source={require('../assets/atrium/red_butterfly_image.png')} resizeMode="contain" />
@@ -120,6 +144,15 @@ const style = StyleSheet.create({
         marginRight: 30,
        },
 
+       button:{
+        height: 75,
+        width: 200,
+        backgroundColor: 'black',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        borderRadius: 25,
+      },
+
        butterflyTextEnd:{
          fontSize: 30,
          position: 'absolute', 
@@ -147,6 +180,11 @@ const style = StyleSheet.create({
          marginLeft: 100,
          marginTop: 70,
        },
+
+       buttonText:{
+        color: 'white',
+        alignSelf: 'center',
+      },
 
        blueCircleEnd:{
         resizeMode: 'contain',
