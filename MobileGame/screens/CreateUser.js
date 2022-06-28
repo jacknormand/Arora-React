@@ -10,75 +10,140 @@ import { TextInput, Button } from 'react-native-paper';
 
 function CreateUser ({ navigation }) {
 
-    const [user, setUser] = useState({
-        username: '',
-        password: '',
-        email: '',
-      });
+      const [user, setUser] = useState({
+          username: '',
+          password: '',
+          reenter: '',
+          email: '',
+        });
 
-      const keyboardVerticalOffset = Platform.OS === 'ios' ? 100 : 0
+      const [validColor, setColor] = useState("#f00");
+      const [validEmail, setValid] = useState(false);
+
+      const [reenterColor, setreenterColor] = useState("#f00");
+      const [validReenter, setReenter] = useState(false);
+
+
+      const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+      const keyboardVerticalOffset = Platform.OS === 'ios' ? 10 : 0
+
+      // function to check if email address is valid
+      function emailChecker(email){
+        // check against regular exp
+        if (reg.test(email) === true){
+          setColor("#0f0");
+          setValid(true);
+        }
+        else{
+          setColor("#f00");
+          setValid(false);
+        }
+        // set user
+        setUser({ username: user.username, password: user.password,  email: email });
+      }
+
+      function reenterChecker(pass){
+
+        if(pass == ''){
+          setreenterColor("#f00");
+          setReenter(false);
+        }
+        else if (pass == user.password){
+          setreenterColor("#0f0");
+          setReenter(true);
+        }
+        else{
+          setreenterColor("#f00");
+          setReenter(false);
+        }
+
+        // set info
+        setUser({ username: user.username, password: user.password, reenter: pass, email: user.email });
+
+      }
   
     return (
 <View style={styles.container}>
     <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
-
-    <View style={styles.everything}>
     <Text style={styles.headerText}>Create User</Text> 
-    
-        <View style={styles.complete}>
-            <Button icon="arrow-left" mode="contained" style={styles.backButton} 
-            onPress={() => navigation.goBack()}
-            color='rgba(0, 0, 0, 0.3)'>Back
-            </Button>
-            <Button icon="account-plus-outline" mode="contained" style={styles.createButton} 
-            onPress={() => registerAPI( user.username, user.password, user.email, navigation )}
-            color='rgba(0, 0, 0, 0.3)'>Create
-            </Button>
-        </View>
-        <View style={styles.createView}>
-        <KeyboardAvoidingView
+      <View style={styles.complete}>
+          <Button icon="arrow-left" mode="contained" style={styles.backButton} 
+          onPress={() => navigation.goBack()}
+          color='rgba(0, 0, 0, 0.3)'>Back
+          </Button>
+          <Button icon="account-plus-outline" mode="contained" style={styles.createButton} 
+          onPress={() => registerAPI( user.username, user.password, user.email, navigation )}
+          color='rgba(0, 0, 0, 0.3)'>Create
+          </Button>
+      </View>
+
+      <View style={styles.createView}>
+      <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={keyboardVerticalOffset}
       style={styles.keyboardPush}>
-            <Text style={styles.labeltext}>Enter username</Text>
-            <TextInput 
-            style={styles.textIn}
-            autoCapitalize="none"
-            value={user.username}
-            onChangeText={text => setUser({ username: text, password: user.password, email: user.email })}
-            activeUnderlineColor={"rgba(0, 0, 0, 0.3)"}
-            selectionColor={"#650427"}
-            />
-            <Text style={styles.labeltext}>Enter password</Text>
-            <TextInput 
-            style={styles.textIn}
-            autoCapitalize="none"
-            secureTextEntry={ true }
-            value={user.password}
-            onChangeText={text => setUser({ username: user.username, password: text,  email: user.email})}
-            activeUnderlineColor={"rgba(0, 0, 0, 0.3)"}
-            activeOutlineColor={"grey"}
-            selectionColor={"#650427"}
-            />
-            <Text style={styles.labeltext}>Enter email address</Text>
-            <TextInput 
-            style={styles.textIn}
-            value={user.email}
-            autoCapitalize="none"
-            onChangeText={text => setUser({ username: user.username, password: user.password,  email: text })}
-            activeUnderlineColor={"rgba(0, 0, 0, 0.3)"}
-            activeOutlineColor={"grey"}
-            selectionColor={"#650427"}
-            />
-                </KeyboardAvoidingView>
-        </View>
-        <View style={styles.complete}>
 
+
+        <View style={styles.field}>
+        <Text style={styles.labeltext}>Enter username</Text>
+        <TextInput 
+        style={styles.textIn}
+        autoCapitalize="none"
+        value={user.username.trim()}
+        onChangeText={text => setUser({ username: text, password: user.password, reenter: user.reenter, email: user.email })}
+        activeUnderlineColor={"rgba(0, 0, 0, 0.3)"}
+        selectionColor={"#000"}
+        />
         </View>
 
+        <View style={styles.field}>
+        <Text style={styles.labeltext}>Enter password</Text>
+        <TextInput 
+        style={styles.textIn}
+        autoCapitalize="none"
+        secureTextEntry={ true }
+        value={user.password.trim()}
+        onChangeText={text => setUser({ username: user.username, password: text, reenter: user.reenter, email: user.email})}
+        activeUnderlineColor={"rgba(0, 0, 0, 0.3)"}
+        activeOutlineColor={"#000"}
+        selectionColor={"#000"}
+        />
+        </View>
+
+        <View style={styles.field}>
+        <Text style={styles.labeltext}>Re-enter password</Text>
+        <TextInput 
+        style={styles.textIn}
+        autoCapitalize="none"
+        secureTextEntry={ true }
+        value={user.reenter.trim()}
+        onChangeText={text => reenterChecker(text)}
+        activeUnderlineColor={reenterColor}
+        underlineColor={reenterColor}
+        activeOutlineColor={"#000"}
+        selectionColor={"#000"}
+        />
+        </View>
+
+        <View style={styles.field}>
+        <Text style={styles.labeltext}>Enter email address</Text>
+        <TextInput 
+        style={styles.textIn}
+        value={user.email.trim()}
+        autoCapitalize="none"
+        onChangeText={text => emailChecker(text)}
+        activeUnderlineColor={validColor}
+        underlineColor={validColor}
+        activeOutlineColor={"#000"}
+        selectionColor={"#000"}
+        />
+        </View>
+
+
+      </KeyboardAvoidingView>
     </View>
-
-    </ImageBackground>
+  </ImageBackground>
 </View>
     )
   }
@@ -112,11 +177,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  everything: {
-    flex: 1,
-    justifyContent: 'flex-start',
-  },
-
   keyboardPush: {
     flex: 1,
     justifyContent: 'space-evenly',
@@ -143,20 +203,17 @@ const styles = StyleSheet.create({
   },
 
   textIn: {
-    borderBottomColor: '#7a1133',
+    borderBottomColor: '#000',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderBottomWidth: 2,
     alignSelf: 'center',
     width: "85%",
     height: 40,
-    marginTop: 10,
-    marginBottom: 40,
     color: 'black',
   },
   labeltext: {
       textAlign: 'center',
       fontSize: 20,
-      marginTop: 15,
   }
 
 });

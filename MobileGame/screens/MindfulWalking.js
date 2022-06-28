@@ -46,8 +46,9 @@ export default function Walking({ navigation }){
         
     }
     // ends sound and then navigates out
-    function someThings(navigation){
-        setisplaying( false );
+    async function someThings(navigation){
+        await sound.pauseAsync();
+        await sound.unloadAsync();
         navigation.navigate("BreathingReward");
     }
     // KEEP THIS HERE IN CASE WE NEED IT LATER

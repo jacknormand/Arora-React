@@ -61,6 +61,10 @@ export default function BreathingReward({navigation}){
                 clearInterval( interval );
                 setShutDown( true );
                 checkNetworkAndUpdate();
+
+                setTimeout(() => {
+                    navigation.navigate("Home");
+                  }, 2000);
             }
         }, 150);
     }
@@ -153,12 +157,11 @@ export default function BreathingReward({navigation}){
           <Text style={ style.title }>{ outText }</Text>
           <Text style={ style.text }>{ pollenEarned } { pollenAdded } </Text>
           <Text style={ style.text }>{ totalPollen } { newCount }</Text>
+          {/* <TouchableOpacity style={style.bgbg} activeOpacity={1} onPress={() => setShutDown( false )}>
+            <Image style={ !imageChange ? style.image : style.imageAlt } source={ background } resizeMode="contain"></Image>
+          </TouchableOpacity> */}
 
-          <Button icon="home-outline" mode="contained" style={style.backButton} 
-          onPress={() => returnHome() }
-          color='rgba(0, 0, 0, 0.3)'>{returnHomeText}
-          </Button>
-          <TouchableOpacity activeOpacity={1} onPress={() => setShutDown( false )}>
+          <TouchableOpacity style={style.bgbg} activeOpacity={1} onPress={() => setShutDown( false )}>
             <Image style={ !imageChange ? style.image : style.imageAlt } source={ background } resizeMode="contain"></Image>
           </TouchableOpacity>
 
@@ -185,15 +188,19 @@ const style = StyleSheet.create({
     background:{
         flex: 1,
     },
+
+    bgbg:{
+        //backgroundColor: "#005892",
+    },
     image:{
         height: '92%',
         width: '100%',
+        bottom: 50,
     },
     imageAlt:{
         height: '75%',
         width: '50%',
         alignSelf: 'center',
-        bottom: 0,
     },
     text:{
         color: 'white',
@@ -201,12 +208,4 @@ const style = StyleSheet.create({
         fontSize: 20,
         alignSelf: 'center'
     },
-    backButton:{
-        height: 50,
-        width: 100,
-        justifyContent: 'center',
-        alignSelf: 'center',
-        position: 'absolute', bottom: 10,
-        borderRadius: 15,
-        },
 })
