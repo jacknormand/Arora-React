@@ -211,7 +211,10 @@ export async function registerAPI( user, pass, email, navigation )
 
 export async function getConvoId()
 {
-  await fetch( 'http://104.248.178.78:8000/Messages/' + 2 + 1 )
+  var userId , mentorId;
+  await AsyncStorage.getItem( '@userId' ).then( value => userId = parseInt( value ) );
+  await AsyncStorage.getItem( '@assigned_mentor' ).then( value => mentorId = parseInt( value ) );
+  await fetch( ( 'http://104.248.178.78:8000/Messages/' + userId ) + mentorId )
   .then( response => {
     return response.json();
   })
@@ -262,6 +265,20 @@ export async function loginAPI( user, pass, navigation, value )
   // USER EXISTS and correct credentials
   // If info entered isnt correct, userID wont be passed back and wont exist
   if ( userID ){
+
+    // Test user entered against the one stored.
+    // If diff then we need to create the convo 
+    var testUser , mentor_name , mentor_id;
+    await AsyncStorage.getItem( '@userId' ).then( value => testUser = parseInt( value ) );
+    await AsyncStorage.getItem( '@mentor_name' ).then( value => mentor_name = value );
+    await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = parseInt( value ) );
+    if( testUser != userID )
+    {
+      // Create a system message 
+      let text = "You are now connected to your mentor, " + mentor_name + "!";
+      createNewMessage( text, new Date(),
+      userID, "System", mentor_id )
+    }
 
     // if bool val undefined, then we are autlogin so set it to true
     if (value == undefined){

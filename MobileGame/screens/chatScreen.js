@@ -23,32 +23,6 @@ export default function ChatScreen({navigation}){
       await AsyncStorage.getItem( "@userId" ).then( value => setUserId( parseInt( value ) ) );
       await AsyncStorage.getItem( "@assigned_mentor" ).then( value => setAssignedMentorId( parseInt( value ) ) );
     }
-
-    const sendSystemMessage = async () => {
-      var needSysMessage , mentor_name , mentor_id , user_id;
-      await AsyncStorage.getItem( "@need_sys_message" ).then( value => needSysMessage = value );
-      await AsyncStorage.getItem( '@mentor_name' ).then( value => mentor_name = value );
-      await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = parseInt( value ) );
-      await AsyncStorage.getItem( "@userId" ).then( value => user_id = parseInt( value ) );
-
-    // Check if a new chat room needs to be initalized 
-      if( needSysMessage === null ){
-        let new_message = {
-          _id: 0,
-          text: "You are now connected to your mentor, " + mentor_name + "!",
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: "system",
-            avatar: ''
-          },
-        }
-        // Init convo
-        createNewMessage( new_message.text , new_message.createdAt ,
-              user_id  , new_message.user.name , mentor_id )
-      }
-      await AsyncStorage.setItem( '@need_sys_message' , JSON.stringify( false ) );
-    }
     
    const fetchMessages = async () => {
     // Obtain the user, mentor and other async items 
@@ -92,7 +66,6 @@ export default function ChatScreen({navigation}){
     const unsubscribe = navigation.addListener('focus', () => {
         // check for net connection here
         // checkForConnection()
-        sendSystemMessage();
         getUserData();
         //getConvoId();
         fetchMessages();

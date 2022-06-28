@@ -21,6 +21,7 @@ export default function HomeScreen( { navigation }){
     React.useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
         getUser();
+        //getConvoId();
       });
   
       // Return the function to unsubscribe from the event so it gets removed on unmount( No render on logout event )
@@ -49,7 +50,6 @@ export default function HomeScreen( { navigation }){
       let dataToBeRemoved = [
       '@user',
       '@password',
-      '@userId',
       '@user_pollen',
       '@userToken',
       '@user_b0_count',
@@ -62,8 +62,6 @@ export default function HomeScreen( { navigation }){
       '@user_current_mood_updated',
       '@mood_type',
       '@stress_type',
-      "@need_sys_message",
-      "@convo_id"
      ];
 
       await AsyncStorage.multiRemove( dataToBeRemoved );
