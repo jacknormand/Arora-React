@@ -13,11 +13,13 @@ export default function ChatScreen({navigation}){
     const [ userId , setUserId ] = React.useState( 0 );
     const [ messageIndex , setMessageIndex ] = React.useState( 0 );
     const [ assignedMentorId , setAssignedMentorId ] = React.useState( 0 );
-    const [ convoId , setConvoId ] = React.useState( 0 );
+    
+    // Get network status
     const network = useNetInfo();
     const connectivity = network.isConnected;
 
     // Gather data stored in async that will be needed for submitting a message 
+    // Need for global at the moment 
     const getUserData = async () => {
       await AsyncStorage.getItem( "@user" ).then( value => setUsername( value ) );
       await AsyncStorage.getItem( "@userId" ).then( value => setUserId( parseInt( value ) ) );
@@ -40,8 +42,13 @@ export default function ChatScreen({navigation}){
         return response.json();
       }).then( data => {
         let messageArrayLen = data.length;
+        // loop through the data sent back 
         for( let index = 0; index < messageArrayLen; index++ ){
+
+          // Check if current user sent the message, 1 if true , 2 if false 
           let sender = ( data[ index ].sender_name != username ? 2 : 1 );
+          
+          // Create the new message object 
           let new_message = {
             _id: data[ index ].message_id,
             text: data[ index ].message_text,
@@ -52,6 +59,8 @@ export default function ChatScreen({navigation}){
               avatar: 'https://placeimg.com/140/140/any',
             },
           }
+
+          // Append the new message to the existing message objects 
           setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) )
 
           setMessageIndex( messageIndex + 1 );
@@ -79,6 +88,8 @@ export default function ChatScreen({navigation}){
   //append the sent message to the message array 
   const onSend = useCallback( async ( messages = [] ) => {
         setMessages( previousMessages => GiftedChat.append( previousMessages, messages ) )
+        
+        // Get the user and mentor id for message sender and reciver ids
         var user_id , mentor_id;
         await AsyncStorage.getItem( "@userId" ).then( value => user_id = parseInt( value ) );
         await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = parseInt( value ) );

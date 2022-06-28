@@ -2,11 +2,9 @@ import React, { useEffect, useState , useCallback } from "react";
 import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { getConvoId } from "../network/apiCalls";
 
 export default function HomeScreen( { navigation }){
     //hooks to set varible from async storage
-    var interval; 
     const [ user , setUser ] = useState('');
     const [ userPollen , setUserPollen ] = useState( 0 );
     const [ logoutUser , setLogoutUser ] = useState( false );
@@ -21,7 +19,6 @@ export default function HomeScreen( { navigation }){
     React.useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
         getUser();
-        //getConvoId();
       });
   
       // Return the function to unsubscribe from the event so it gets removed on unmount( No render on logout event )
@@ -40,7 +37,7 @@ export default function HomeScreen( { navigation }){
       );
     }
 
-    //on log out destruct async values
+    //on log out remove async values
     const logout = async () => {
       await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( false ) );
       await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ) );
