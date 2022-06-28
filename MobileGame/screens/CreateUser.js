@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { ImageBackground,StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
+import { Alert, ImageBackground,StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
 import { registerAPI } from '../network/apiCalls'
 import { TextInput, Button } from 'react-native-paper';
 
@@ -28,6 +28,44 @@ function CreateUser ({ navigation }) {
 
       const keyboardVerticalOffset = Platform.OS === 'ios' ? 10 : 0
 
+      function register( navigation )
+      {
+        if (validEmail && validReenter)
+        {
+          // register if valid
+          registerAPI( user.username, user.password, user.email, navigation )
+        }
+        else if ( validEmail && !validReenter )
+        {
+          Alert.alert(
+            "Passwords don't match",
+            "Change and try again",
+            [
+              { text: "Ok" }
+            ]
+          );
+        }
+        else if ( !validEmail && validReenter )
+        {
+          Alert.alert(
+            "Email invalid",
+            "Change and try again",
+            [
+              { text: "Ok" }
+            ]
+          );
+        }
+        else
+        {
+          Alert.alert(
+            "Email invalid and passwords don't match",
+            "Change and try again",
+            [
+              { text: "Ok" }
+            ]
+          );
+        }
+      }
       // function to check if email address is valid
       function emailChecker(email){
 
@@ -75,7 +113,7 @@ function CreateUser ({ navigation }) {
           color='rgba(0, 0, 0, 0.3)'>Back
           </Button>
           <Button icon="account-plus-outline" mode="contained" style={styles.createButton} 
-          onPress={() => registerAPI( user.username, user.password, user.email, navigation )}
+          onPress={() => register( navigation )}
           color='rgba(0, 0, 0, 0.3)'>Create
           </Button>
       </View>
