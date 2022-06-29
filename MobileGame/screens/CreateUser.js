@@ -15,7 +15,11 @@ function CreateUser ({ navigation }) {
           password: '',
           reenter: '',
           email: '',
+          code: ''
         });
+      
+      const [validateCode , setValidateCode] = useState(false);
+      const validCodes = [ "100" , "340" , "299" ]; // Temp until the real codes are created
 
       const [validColor, setColor] = useState("#f00");
       const [validEmail, setValid] = useState(false);
@@ -30,10 +34,20 @@ function CreateUser ({ navigation }) {
 
       function register( navigation )
       {
-        if (validEmail && validReenter)
+        if (validEmail && validReenter && validateCode)
         {
           // register if valid
-          registerAPI( user.username, user.password, user.email, navigation )
+          registerAPI( user.username, user.password, user.email, user.code , navigation )
+        }
+        else if( validEmail && validReenter && !validateCode )
+        {
+          Alert.alert(
+            "Incorrect access code",
+            "Please enter the code given to you",
+            [
+              { text: 'ok'}
+            ]
+          );
         }
         else if ( validEmail && !validReenter )
         {
@@ -70,7 +84,7 @@ function CreateUser ({ navigation }) {
       function emailChecker(email){
 
         // set user
-        setUser({ username: user.username, password: user.password, reenter: user.reenter, email: email });
+        setUser({ username: user.username, password: user.password, reenter: user.reenter, email: email , code: user.code });
         // check against regular exp
         if (reg.test(email) === true){
           setColor("#0f0");
@@ -81,6 +95,16 @@ function CreateUser ({ navigation }) {
           setValid(false);
         }
 
+      }
+
+      function codeChecker( code ){
+        setUser({ username: user.username, password: user.password, reenter: user.reenter, email: user.email, code: code });
+        const codeArrayLen = validCodes.length;
+        for( let index = 0; index < codeArrayLen; index++ ){
+          if( code === validCodes[ index ] ){
+            setValidateCode( true );
+          }
+        }
       }
 
       function reenterChecker(pass){
@@ -99,7 +123,7 @@ function CreateUser ({ navigation }) {
         }
 
         // set info
-        setUser({ username: user.username, password: user.password, reenter: pass, email: user.email });
+        setUser({ username: user.username, password: user.password, reenter: pass, email: user.email, code: user.code });
 
       }
   
@@ -131,7 +155,7 @@ function CreateUser ({ navigation }) {
         style={styles.textIn}
         autoCapitalize="none"
         value={user.username.trim()}
-        onChangeText={text => setUser({ username: text, password: user.password, reenter: user.reenter, email: user.email })}
+        onChangeText={text => setUser({ username: text, password: user.password, reenter: user.reenter, email: user.email, code: user.code })}
         activeUnderlineColor={"rgba(0, 0, 0, 0.3)"}
         selectionColor={"#000"}
         />
@@ -144,7 +168,7 @@ function CreateUser ({ navigation }) {
         autoCapitalize="none"
         secureTextEntry={ true }
         value={user.password.trim()}
-        onChangeText={text => setUser({ username: user.username, password: text, reenter: user.reenter, email: user.email})}
+        onChangeText={text => setUser({ username: user.username, password: text, reenter: user.reenter, email: user.email , code: user.code})}
         activeUnderlineColor={"rgba(0, 0, 0, 0.3)"}
         activeOutlineColor={"#000"}
         selectionColor={"#000"}
@@ -179,7 +203,15 @@ function CreateUser ({ navigation }) {
         selectionColor={"#000"}
         />
         </View>
-
+        <View style={ styles.field }>
+        <Text style={styles.labeltext}>Enter your access code</Text>
+        <TextInput
+        value={ user.code.trim() } 
+        style={styles.textIn}
+        autoCapitalize="none"
+        onChangeText={text => codeChecker( text )}
+        />
+        </View>
 
       </KeyboardAvoidingView>
     </View>

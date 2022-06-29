@@ -3,9 +3,7 @@ import { View , ImageBackground , StyleSheet , Text , Image , Alert , TouchableO
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-paper'
 import { Overlay } from 'react-native-elements';
-/*
-  TODO: Use the corresponding butterfly values for the amount of specific butterflies
-*/
+
 export default function AtriumScreen({navigation}){
   //Set the user butterfly counts for all atrium
   const [ b0 , setB0 ] = React.useState( 0 );
@@ -46,7 +44,7 @@ export default function AtriumScreen({navigation}){
 
   const displayGreenButterfly = () => {
     setOverlayTitle( "Green Butterfly" );
-    setOverlayText("You clicked on the green butterfly!");
+    setOverlayText( "You clicked on the green butterfly!" );
     setOverlayTrue();
   }
 

@@ -74,6 +74,7 @@ export async function updateDatabase(){
   await AsyncStorage.getItem( '@stress_type' ).then( value => userStress = value );
   await AsyncStorage.getItem( '@longitude' ).then( value => longitude = value );
   await AsyncStorage.getItem( '@latitude' ).then( value => latitude = value );
+  await AsyncStorage.getItem( '@assigned_mentor').then( value => mentorId = value );
   //await AsyncStorage.getItem( '@user_current_mood_updated' ).then( value => moodTime = value );
 
   await fetch('http://104.248.178.78:8000/userinfo/' + userId , {
@@ -90,6 +91,7 @@ export async function updateDatabase(){
 	   "user_current_location_lat": latitude, 
 	   "user_current_location_long": longitude, 
 	   "user_pollen": userPollen,
+     "mentor_id": mentorId,
 	   "user_points": 3 
     })
    }).then( response => {
@@ -133,6 +135,7 @@ export async function storeUserData( userID ){
     .then( response => {
       return response.json();
     }).then( data => {
+      console.log( data );
       //Load values from database to the async storage for later use
       AsyncStorage.setItem( '@user_pollen' , JSON.stringify( data.user_pollen ));
       AsyncStorage.setItem( '@user_b0_count' , JSON.stringify( data.user_b0_count ));
@@ -143,6 +146,7 @@ export async function storeUserData( userID ){
       AsyncStorage.setItem( '@current_butterfly' , JSON.stringify( data.user_current_butterfly ));
       AsyncStorage.setItem( '@user_current_mood' , JSON.stringify( data.user_current_mood ));
       AsyncStorage.setItem( '@user_current_mood_updated' , JSON.stringify( data.user_current_mood_updated ));
+      //AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( data.mentor_id ) );
     }).catch( error => {
       console.error(error)
     })
@@ -161,7 +165,7 @@ export async function getMentor()
   })
 }
 
-export async function registerAPI( user, pass, email, navigation )
+export async function registerAPI( user, pass, email, code , navigation )
 {
   var userID;
 
@@ -189,9 +193,11 @@ export async function registerAPI( user, pass, email, navigation )
 
     // creation success
     if ( userID ){
-      // upon creation of user, set default mentor
-      // Defualt is superuser id, might be a problem. In production, the supervison will have an actual id
-      await AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( 2147483648 ) );
+
+      // change mentor based on code entered
+      if( code === "100" || code === "340" || code === "299" ){
+        await AsyncStorage.setItem( "@assigned_mentor" , JSON.stringify( 2147483648 ) );
+      }
       // navigate back to login
       navigation.navigate("Login")
 
