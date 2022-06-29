@@ -15,7 +15,7 @@ export default function AtriumScreen({navigation}){
   const [ b4 , setB4 ] = React.useState( 0 );
   const [ overlayVisable , setOverlayVisable ] = React.useState( false );
   const [ overlayText , setOverlayText ] = React.useState('');
-  const [ firstTimeLogin , setFirstTimeLogin ] = React.useState( null );
+  const [ overlayTitle , setOverlayTitle ] = React.useState('');
   const blueCircle = require('../assets/atrium/blue_circle.png');
   
   const getUserButterflies = async () => {
@@ -26,67 +26,45 @@ export default function AtriumScreen({navigation}){
     AsyncStorage.getItem( '@user_b3_count' ).then( value => setB3( value ) );
     AsyncStorage.getItem( '@user_b4_count' ).then( value => setB4( value ) );
   }
-  
-  getUserButterflies();
 
-  const grantUserRandNumButterflies = async () => {
-    //Generate the random butterfly counts
-    const b0Random = Math.floor( Math.random() * 5 );
-    const b1Random = Math.floor( Math.random() * 5 );
-    const b2Random = Math.floor( Math.random() * 5 );
-    const b3Random = Math.floor( Math.random() * 5 );
-    const b4Random = Math.floor( Math.random() * 5 );
-    
-    //add existing butterflies to the random 
-    const newB0 = b0 + b0Random;
-    const newB1 = b1 + b1Random;
-    const newB2 = b2 + b2Random;
-    const newB3 = b0 + b3Random;
-    const newB4 = b4 + b4Random;
+  useEffect( () => {
+    const unsubscribe = navigation.addListener('focus', () => {
+        getUserButterflies();
+    });
 
-    //Set new random butterfly count in async
-    await AsyncStorage.setItem( '@user_b0_count' , JSON.stringify( newB0 ) );
-    await AsyncStorage.setItem( '@user_b1_count' , JSON.stringify( newB1 ) );
-    await AsyncStorage.setItem( '@user_b2_count' , JSON.stringify( newB2 ) );
-    await AsyncStorage.setItem( '@user_b3_count' , JSON.stringify( newB3 ) );
-    await AsyncStorage.setItem( '@user_b4_count' , JSON.stringify( newB4 ) );
-  }
-
-  //Check for first login ever( No Api call for uploading to db? )
-  const checkForGrant = async () => {
-    const firstTimeLogin = await AsyncStorage.getItem( '@first_time_login' );
-    setFirstTimeLogin( firstTimeLogin );
-    
-    //If first time login is null then async value never set -> never logged in 
-    if( firstTimeLogin === null ){
-      grantUserRandNumButterflies();
-      Alert.alert(
-        'Congrats',
-        'You have been awarded some butterflies for first time login!',
-        [
-         { text: 'Awesome'}
-        ]
-      )
-    }
-    await AsyncStorage.setItem( '@first_time_login' , JSON.stringify( false ) );
-  }
-
-  useEffect(() => {
-    checkForGrant();
-  })
-
-  getUserButterflies(); 
+    // Return the function to unsubscribe from the event so it gets removed on unmount( No render on navigation )
+    return unsubscribe;
+    }, [ navigation ] );
 
   const setOverlayFalse = () => {
     setOverlayVisable( false );
   }
+  
   const setOverlayTrue = () => {
     setOverlayVisable( true );
   }
 
-  // Need one for each butterfly
-  const displayGreenButterflyText = () => {
-    setOverlayText( "You clicked on the green butterfly!" );
+  const displayGreenButterfly = () => {
+    setOverlayTitle( "Green Butterfly" );
+    setOverlayText("You clicked on the green butterfly!");
+    setOverlayTrue();
+  }
+
+  const displayRedButterfly = () => {
+    setOverlayTitle( "Red Butterfly" );
+    setOverlayText( "You pressed the red butterfly" );
+    setOverlayTrue();
+  }
+
+  const displayYellowButterfly = () => {
+    setOverlayTitle( "Yellow Butterfly" );
+    setOverlayText( "You pressed the yellow butterfly" );
+    setOverlayTrue();
+  }
+
+  const displayPurpleButterfly = () => {
+    setOverlayTitle( "Purple Butterfly" );
+    setOverlayText( "You pressed the purple butterfly" );
     setOverlayTrue();
   }
 
@@ -96,28 +74,35 @@ export default function AtriumScreen({navigation}){
            <Text style={ style.header }>Atrium</Text>
            <View style={ style.atriumContainer }>
            <Overlay isVisible={ overlayVisable } overlayStyle={{width: '90%',height: '90%', backgroundColor:'rgba(0, 245, 196, .7)'}}>
+            <Text style={ style.overlayTitle }>{ overlayTitle }</Text>
             <Text>{ overlayText }</Text>
             <TouchableOpacity style={ style.button } onPress={ setOverlayFalse }>
               <Text style={ style.buttonText }>Close</Text>
             </TouchableOpacity>
            </Overlay>
              <View style={ style.align }>
-              <TouchableOpacity onPress={ displayGreenButterflyText }>
+              <TouchableOpacity activeOpacity={1} onPress={ displayGreenButterfly }>
                <Image style={ style.butterflies } source={require('../assets/atrium/green_butterfly_image.png')} resizeMode="contain" />
-              </TouchableOpacity>
                <Image style={ style.blueCircle } source={ blueCircle }></Image>
                <Text style={ style.butterflyText }>{ b0 }</Text>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={1} onPress={ displayRedButterfly }>
                <Image style={ style.butterflyEnd } source={require('../assets/atrium/red_butterfly_image.png')} resizeMode="contain" />
                <Image style={ style.blueCircleEnd }  source={ blueCircle }></Image>
                <Text style={ style.butterflyTextEnd }>{ b1 }</Text>
+              </TouchableOpacity>
              </View>
              <View style={ style.align }>
+              <TouchableOpacity activeOpacity={1} onPress={ displayYellowButterfly } >
                <Image style={ style.butterflies } source={require('../assets/atrium/yellow_butterfly_image.png')} resizeMode="contain" />
                <Image style={ style.blueCircle }  source={ blueCircle }></Image>
                <Text style={ style.butterflyText }>{ b3 }</Text>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={1} onPress={ displayPurpleButterfly }>
                <Image style={ style.butterflyEnd } source={require('../assets/atrium/purple_butterfly_image.png')} resizeMode="contain" />
                <Image style={ style.blueCircleEnd }  source={ blueCircle }></Image>
                <Text style={ style.butterflyTextEnd }>{ b4 }</Text>
+              </TouchableOpacity>
 
              </View>
                <Image></Image>
@@ -137,11 +122,17 @@ const style = StyleSheet.create({
        },
    
        butterflyEnd:{
-        position: 'absolute',
+        position: 'relative',
         right: 0,
         height: 120,
         width: 120,
         marginRight: 30,
+       },
+
+       overlayTitle:{
+        alignSelf: 'center',
+        color: 'white',
+        fontSize: 30
        },
 
        button:{
@@ -151,6 +142,7 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         borderRadius: 25,
+        bottom: 0,
       },
 
        butterflyTextEnd:{
