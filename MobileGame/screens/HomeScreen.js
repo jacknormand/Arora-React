@@ -16,6 +16,7 @@ export default function HomeScreen( { navigation }){
       AsyncStorage.getItem( '@user_pollen' ).then( value => setUserPollen( value ) );
     }
 
+    // mount and unmount on navigation 
     React.useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
         getUser();

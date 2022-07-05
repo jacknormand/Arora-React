@@ -1,7 +1,6 @@
 import React from 'react';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-//import { useNetInfo } from '@react-native-community/netinfo';
 import * as Location from 'expo-location';
 
 // Variables to insert for port and IP
@@ -19,9 +18,6 @@ const moodFormApiIp = 'http://' + IP + ':' + port + '/' + 'moodreport';
 const registerApiIp = 'http://' + IP + ':' + port + '/' + 'userinfo';
 
 const locationApiIp = 'http://' + IP + ':' + port + '/' + 'locationreport'; 
-
-//When internet connection is detected upload to database
-//Function to upload the user data when network is detected
 
 
 const createUserLocationReport = async () => {
@@ -194,6 +190,9 @@ export async function registerAPI( user, pass, email, code , navigation )
     // creation success
     if ( userID ){
 
+      // Put acess code in async for later use and allow for multiple users per device
+      await AsyncStorage.setItem( '@acess_code' , JSON.stringify( code ) );
+
       // change mentor based on code entered
       if( code === "100" || code === "340" || code === "299" ){
         await AsyncStorage.setItem( "@assigned_mentor" , JSON.stringify( 2147483648 ) );
@@ -240,9 +239,7 @@ export async function loginAPI( user, pass, navigation, value )
   })
   })
   .then( response => {
-    //return response.json()
-    return response.json()
-    // OR RESPONSE.text might fix error, but then we have to get data out of string
+    return response.json();
   })
   .then( data => {
     userID = data.user_id;
@@ -262,6 +259,8 @@ export async function loginAPI( user, pass, navigation, value )
     await AsyncStorage.getItem( '@userId' ).then( value => testUser = parseInt( value ) );
     await AsyncStorage.getItem( '@mentor_name' ).then( value => mentor_name = value );
     await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = parseInt( value ) );
+    
+    // If the logged in user is different than stored user, create a new system message
     if( testUser != userID )
     {
       // Create a system message 
@@ -283,8 +282,6 @@ export async function loginAPI( user, pass, navigation, value )
     // Store user data into storage
     const storeData = async ( userID ) => {
         await AsyncStorage.setItem( '@user' , user );
-        
-        //Possibly for auto login
         await AsyncStorage.setItem( '@password' , pass );
         await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
         await AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( 2147483648 ) );
@@ -333,8 +330,7 @@ export async function moodReportAPI( navigation ){
    await AsyncStorage.getItem( '@mood_type' ).then( value => value != null ? moodType = value : console.log( " Mood Type: Evaluated to null" ) );
    await AsyncStorage.getItem( '@stress_type' ).then( value => value != null ? stressType = value : console.log( "Stress Type: Evaluated to null" ) );
     
-    //Get date and time and format it
-  
+    //Get date
     var currentdate = new Date();
     AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( currentdate ) );
 

@@ -18,6 +18,7 @@ function CreateUser ({ navigation }) {
           code: ''
         });
       
+        // Set code validatin and the correct codes( used later for mentor determination )
       const [validateCode , setValidateCode] = useState(false);
       const validCodes = [ "100" , "340" , "299" ]; // Temp until the real codes are created
 
@@ -96,12 +97,15 @@ function CreateUser ({ navigation }) {
         }
 
       }
-
+      // Check that user entered code is valid
       function codeChecker( code ){
         setUser({ username: user.username, password: user.password, reenter: user.reenter, email: user.email, code: code });
         const codeArrayLen = validCodes.length;
+
+        // Loop through the possible correct codes 
         for( let index = 0; index < codeArrayLen; index++ ){
           if( code === validCodes[ index ] ){
+            // Set state to true if codes match
             setValidateCode( true );
           }
         }
