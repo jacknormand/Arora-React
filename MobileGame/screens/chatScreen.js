@@ -104,12 +104,10 @@ export default function ChatScreen({navigation}){
     return(
     <View style={style.main}>
         <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode='cover' style={style.background}>
-        <View style={style.header}>
             <Button icon="arrow-left" mode="contained" style={style.backButton} 
                     onPress={() => navigation.goBack()}
                     color='rgba(0, 0, 0, 0.0)'>Back
             </Button>
-            </View>
             <GiftedChat
                 messages={ messages }
                 isTyping={ true }
@@ -141,18 +139,9 @@ const style = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, .3)',
   },
 
-  header:{
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, .4)',
-        height: '12%',
-        zIndex: 1,
-        position: 'absolute',
-  },
-
   backButton:{
-    height: 50,
-    width: 100,
-    position: 'absolute', left: 5, bottom: 0,
+    position: 'absolute', left: 5, top: 75,
     borderRadius: 15,
+    zIndex: 1,
     },
 })

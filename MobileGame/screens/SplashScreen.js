@@ -86,7 +86,7 @@ export default function SplashScreen({ navigation }){
     await AsyncStorage.getItem( '@autoLogin' ).then( value => stayLoggedIn = value );
     
     //Check that the user and password is not null and the autologin is on( disabled on adroid till proof it 100% works )
-    if( connection && user != null && pass != null && stayLoggedIn === "true" && platform != 'android' ){
+    if( connection && user != null && pass != null && stayLoggedIn === "true" ){
       loginAPI( user, pass, navigation )
     }
     //If there is no internet connection then allow user acess

@@ -214,7 +214,8 @@ function CreateUser ({ navigation }) {
         style={styles.textIn}
         autoCapitalize="none"
         onChangeText={text => codeChecker( text )}
-        underlineColor={"rgba(0, 0, 0, 0.3)"}
+        activeUnderlineColor={"rgba(0, 0, 0, 0.3)"}
+        selectionColor={"#000"}
         />
         </View>
 
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     width: "95%",
     borderRadius: 20,
     alignSelf: 'center',
-    height: "40%",
+    height: "60%",
     justifyContent: 'center',
   },
   image: {
