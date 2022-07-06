@@ -6,10 +6,29 @@ import { createNewMessage } from '../network/apiCalls';
 import { Button } from 'react-native-paper';
 import { useNetInfo } from '@react-native-community/netinfo';
 
+/*
+  TODO: Checking network connections difficult here because first state is unknown so it returns null.
+  This is an issue when using a useEffect for API calls
+*/
+
 export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );
     const [ username , setUsername ] = React.useState('');
+    const [ messageIndex , setMessageIndex ] = React.useState( 0 );
+
     //const [ isConnected, setIsConnected ] = React.useState(null);
+    let NetInfo = useNetInfo();
+    const connection = NetInfo.isConnected; // Returns null for fist state 
+    
+    const network = () => {
+      if( connection === false ){
+          Alert.alert('No connection', 
+          'Chat needs an internet connection',
+          [
+            { text: "Ok" , onPress: () => navigation.navigate("Home") }
+          ])     
+      }
+    }
 
     // Need for global at the moment 
     const getUserData = async () => {
@@ -17,7 +36,8 @@ export default function ChatScreen({navigation}){
     }
     
    const fetchMessages = async () => {
-      //Obtain the user, mentor and other async items 
+      //Obtain the user, mentor and other async items
+      network(); 
       var username, convoId;
       await AsyncStorage.getItem( "@user" ).then( value => username = value );
       await AsyncStorage.getItem( "@convo_id" ).then( value => convoId = value );
@@ -54,16 +74,8 @@ export default function ChatScreen({navigation}){
   // Unmounting function on navigation, then re mounts when user navigates back( updating the feed )
   useEffect( () => {
     const unsubscribe = navigation.addListener('focus', () => {
-      /*
-      checkNetworkAndUpdate();
-      if( !isConnected ){
-        Alert.alert('No connection', 
-        'Chat needs an internet connection',
-        [
-          { text: "Ok" , onPress: () => navigation.navigate("Home") }
-        ])
-      }
-      */ 
+      //Check for initial connection 
+      network();
       getUserData();
       fetchMessages();
     });
@@ -82,9 +94,11 @@ export default function ChatScreen({navigation}){
         await AsyncStorage.getItem( "@userId" ).then( value => user_id = parseInt( value ) );
         await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = parseInt( value ) );
         
+        setMessageIndex( messageIndex + 1 );
+
         //Create a new message                           
         createNewMessage( messages[ messageIndex ].text , messages[ messageIndex ].createdAt ,
-                          user_id , messages[ messageIndex ].user.name , mentor_id )
+                          user_id , messages[ messageIndex ].user.name , mentor_id );
     }, [] )
     
     return(
@@ -107,11 +121,8 @@ export default function ChatScreen({navigation}){
                 user={{
                 _id: 1,
                 name: username,
-                avatar: '../assets/home/profile_filled_button.png'
             }} 
             />
-
-
         </ImageBackground>
     </View>
 
