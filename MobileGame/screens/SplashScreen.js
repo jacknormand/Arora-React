@@ -58,7 +58,8 @@ export default function SplashScreen({ navigation }){
     require("../assets/breathing/breathing_game_snapshot.png"),
     require('../assets/home/profile_filled_button.png'),
     require('../assets/breathing/breathing_button.png'),
-    require('../assets/breathing/background_breathing.png')
+    require('../assets/breathing/background_breathing.png'),
+    require('../assets/walkingscreen/mindfulnesswalking.mp3')
     ];
     const cacheImages = images.map(image => {
       return Asset.fromModule(image).downloadAsync();

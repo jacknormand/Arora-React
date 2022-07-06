@@ -51,6 +51,16 @@ export default function Walking({ navigation }){
         await sound.unloadAsync();
         navigation.navigate("BreathingReward");
     }
+
+    // ends sound and then navigates out
+    async function someOtherThings(navigation){
+        await sound.pauseAsync();
+        await sound.unloadAsync();
+        navigation.goBack();
+    }
+
+
+
     // KEEP THIS HERE IN CASE WE NEED IT LATER
     // unloads sound to prevent memory leak
     //   React.useEffect(() => {
@@ -64,7 +74,7 @@ export default function Walking({ navigation }){
      <View style={ style.main }>
          <ImageBackground source={require('../assets/walkingscreen/walking_background.png')}style={ style.background } resizeMode="cover">
          <Button icon="arrow-left" mode="contained" style={style.backButton} 
-                    onPress={() => navigation.goBack()}
+                    onPress={() => someOtherThings(navigation)}
                     color='rgba(0, 0, 0, 0.0)'>Back
         </Button>
 
