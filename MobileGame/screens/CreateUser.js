@@ -31,7 +31,7 @@ function CreateUser ({ navigation }) {
 
       const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-      const keyboardVerticalOffset = Platform.OS === 'ios' ? 10 : 0
+      const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0
 
       function register( navigation )
       {
@@ -134,7 +134,13 @@ function CreateUser ({ navigation }) {
     return (
 <View style={styles.container}>
     <ImageBackground source={require('../assets/dusk_background.jpg')} style={styles.image}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={keyboardVerticalOffset}
+      style={styles.keyboardPush}>
     <Text style={styles.headerText}>Create User</Text> 
+
+    <View style={styles.newViews}>
       <View style={styles.complete}>
           <Button icon="arrow-left" mode="contained" style={styles.backButton} 
           onPress={() => navigation.goBack()}
@@ -147,10 +153,7 @@ function CreateUser ({ navigation }) {
       </View>
 
       <View style={styles.createView}>
-      <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={keyboardVerticalOffset}
-      style={styles.keyboardPush}>
+     
 
 
         <View style={styles.field}>
@@ -219,8 +222,11 @@ function CreateUser ({ navigation }) {
         />
         </View>
 
-      </KeyboardAvoidingView>
+      
     </View>
+
+    </View>
+    </KeyboardAvoidingView>
   </ImageBackground>
 </View>
     )
@@ -248,8 +254,7 @@ const styles = StyleSheet.create({
     width: "95%",
     borderRadius: 20,
     alignSelf: 'center',
-    height: "60%",
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   image: {
     flex: 1,
@@ -257,7 +262,7 @@ const styles = StyleSheet.create({
 
   keyboardPush: {
     flex: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
   },
 
   backButton: {
@@ -274,6 +279,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 
+  newViews: {
+  },
 
   complete: {
       flexDirection: 'row',
@@ -288,6 +295,7 @@ const styles = StyleSheet.create({
     width: "85%",
     height: 40,
     color: 'black',
+    marginBottom: 5,
   },
   labeltext: {
       textAlign: 'center',
