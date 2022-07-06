@@ -214,6 +214,7 @@ function CreateUser ({ navigation }) {
         style={styles.textIn}
         autoCapitalize="none"
         onChangeText={text => codeChecker( text )}
+        underlineColor={"rgba(0, 0, 0, 0.3)"}
         />
         </View>
 

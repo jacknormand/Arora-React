@@ -1,6 +1,6 @@
-import React , { useEffect , useCallback , useLayoutEffect} from 'react'
-import { GiftedChat , Avatar } from 'react-native-gifted-chat'
-import { ImageBackground, Alert , StyleSheet , View , TouchableOpacity } from 'react-native';
+import React , { useEffect , useCallback } from 'react';
+import { GiftedChat } from 'react-native-gifted-chat';
+import { Alert, ImageBackground, StyleSheet , View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNewMessage } from '../network/apiCalls';
 import { Button } from 'react-native-paper';
@@ -8,47 +8,31 @@ import { useNetInfo } from '@react-native-community/netinfo';
 
 export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );
-    const [ avatar , setAvatar ] = React.useState('');
     const [ username , setUsername ] = React.useState('');
-    const [ userId , setUserId ] = React.useState( 0 );
-    const [ messageIndex , setMessageIndex ] = React.useState( 0 );
-    const [ assignedMentorId , setAssignedMentorId ] = React.useState( 0 );
-    
-    // Get network status
-    const network = useNetInfo();
-    const connectivity = network.isConnected; // ANNOYING -> First call -> null , Then useble
+    //const [ isConnected, setIsConnected ] = React.useState(null);
 
-    // Gather data stored in async that will be needed for submitting a message 
     // Need for global at the moment 
     const getUserData = async () => {
       await AsyncStorage.getItem( "@user" ).then( value => setUsername( value ) );
-      await AsyncStorage.getItem( "@userId" ).then( value => setUserId( parseInt( value ) ) );
-      await AsyncStorage.getItem( "@assigned_mentor" ).then( value => setAssignedMentorId( parseInt( value ) ) );
     }
     
    const fetchMessages = async () => {
-    // Obtain the user, mentor and other async items 
-      var user_id, username, convoId;
+      //Obtain the user, mentor and other async items 
+      var username, convoId;
       await AsyncStorage.getItem( "@user" ).then( value => username = value );
-      await AsyncStorage.getItem( "@userId" ).then( value => user_id = parseInt( value ) );
       await AsyncStorage.getItem( "@convo_id" ).then( value => convoId = value );
 
       // Parse the id 
       convoId = JSON.parse( convoId );
 
-      // Fetch the messages 
       return await fetch( 'http://104.248.178.78:8000/Messages/' + convoId )
       .then( response => {
         return response.json();
       }).then( data => {
         let messageArrayLen = data.length;
-        // loop through the data sent back 
         for( let index = 0; index < messageArrayLen; index++ ){
-
           // Check if current user sent the message, 1 if true , 2 if false 
           let sender = ( data[ index ].sender_name != username ? 2 : 1 );
-          
-          // Create the new message object 
           let new_message = {
             _id: data[ index ].message_id,
             text: data[ index ].message_text,
@@ -56,14 +40,11 @@ export default function ChatScreen({navigation}){
             user: {
               _id: sender,
               name: data[ index ].sender_name,
-              avatar: 'https://placeimg.com/140/140/any',
+              avatar: '',
             },
-          }
-
+          };
           // Append the new message to the existing message objects 
-          setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) )
-
-          setMessageIndex( messageIndex + 1 );
+          setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) );
         }
       }).catch( error => {
         console.error( error );
@@ -73,11 +54,18 @@ export default function ChatScreen({navigation}){
   // Unmounting function on navigation, then re mounts when user navigates back( updating the feed )
   useEffect( () => {
     const unsubscribe = navigation.addListener('focus', () => {
-        // check for net connection here
-        // checkForConnection()
-        getUserData();
-        //getConvoId();
-        fetchMessages();
+      /*
+      checkNetworkAndUpdate();
+      if( !isConnected ){
+        Alert.alert('No connection', 
+        'Chat needs an internet connection',
+        [
+          { text: "Ok" , onPress: () => navigation.navigate("Home") }
+        ])
+      }
+      */ 
+      getUserData();
+      fetchMessages();
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount( No render on navigation )
@@ -88,14 +76,11 @@ export default function ChatScreen({navigation}){
   //append the sent message to the message array 
   const onSend = useCallback( async ( messages = [] ) => {
         setMessages( previousMessages => GiftedChat.append( previousMessages, messages ) )
-        
+
         // Get the user and mentor id for message sender and reciver ids
         var user_id , mentor_id;
         await AsyncStorage.getItem( "@userId" ).then( value => user_id = parseInt( value ) );
         await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = parseInt( value ) );
-
-        //Track current message
-        setMessageIndex( messageIndex + 1 );
         
         //Create a new message                           
         createNewMessage( messages[ messageIndex ].text , messages[ messageIndex ].createdAt ,

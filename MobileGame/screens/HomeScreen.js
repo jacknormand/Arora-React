@@ -49,7 +49,6 @@ export default function HomeScreen( { navigation }){
       '@user',
       '@password',
       '@user_pollen',
-      '@userToken',
       '@user_b0_count',
       '@user_b1_count',
       '@user_b2_count',

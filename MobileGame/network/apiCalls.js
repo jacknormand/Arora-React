@@ -131,7 +131,6 @@ export async function storeUserData( userID ){
     .then( response => {
       return response.json();
     }).then( data => {
-      console.log( data );
       //Load values from database to the async storage for later use
       AsyncStorage.setItem( '@user_pollen' , JSON.stringify( data.user_pollen ));
       AsyncStorage.setItem( '@user_b0_count' , JSON.stringify( data.user_b0_count ));
@@ -286,20 +285,15 @@ export async function loginAPI( user, pass, navigation, value )
         await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
         await AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( 2147483648 ) );
         await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( true ) );
-
-        //Might not need
-        await AsyncStorage.setItem( '@userToken' , token );
     }
     
     //Save data to local 
     storeData( userID );
     storeUserData( userID );
     getMentor();
-
     
     //Get user stored setting 
     const autoSignIn = await AsyncStorage.getItem( '@autoLogin' );
-
 
     //If user wants auto login then we still need a screen timer
     if( autoSignIn === "true" ){
@@ -323,20 +317,17 @@ export async function loginAPI( user, pass, navigation, value )
   }
 }
 
-export async function moodReportAPI( navigation ){
-   
-  //Obtain mood api data from storage
+export async function moodReportAPI( navigation ){  
    await AsyncStorage.getItem( '@userId' ).then( value => value != null ? userId = value : console.log( "User Id: Evaluated to null" ) );
    await AsyncStorage.getItem( '@mood_type' ).then( value => value != null ? moodType = value : console.log( " Mood Type: Evaluated to null" ) );
    await AsyncStorage.getItem( '@stress_type' ).then( value => value != null ? stressType = value : console.log( "Stress Type: Evaluated to null" ) );
-    
-    //Get date
-    var currentdate = new Date();
-    AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( currentdate ) );
+  
+   var currentdate = new Date();
+   AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( currentdate ) );
 
-     await fetch( moodFormApiIp, {
-        method: 'POST',
-        headers: {
+    await fetch( moodFormApiIp, {
+          method: 'POST',
+          headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
         },
@@ -354,5 +345,5 @@ export async function moodReportAPI( navigation ){
             console.error('Error:', error);
         });
 
-        navigation.navigate('Home')
+   navigation.navigate('Home')
 }

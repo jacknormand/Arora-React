@@ -5,12 +5,15 @@ import AppLoading from 'expo-app-loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginAPI } from '../network/apiCalls';
 import { ActivityIndicator } from 'react-native-paper';
+import { useNetInfo } from '@react-native-community/netinfo'; 
 
 
 export default function SplashScreen({ navigation }){
   let [isLoaded, setIsLoaded] = React.useState(false);
   //Disable android autologin for now
   const platform = Platform.OS;
+  const network = useNetInfo();
+  const connection = network.isConnected;
 
   // i have no idea how this code works but it caches images
   // add images here to cache them
@@ -83,8 +86,14 @@ export default function SplashScreen({ navigation }){
     await AsyncStorage.getItem( '@autoLogin' ).then( value => stayLoggedIn = value );
     
     //Check that the user and password is not null and the autologin is on( disabled on adroid till proof it 100% works )
-    if( user != null && pass != null && stayLoggedIn === "true" && platform != 'android' ){
+    if( connection && user != null && pass != null && stayLoggedIn === "true" && platform != 'android' ){
       loginAPI( user, pass, navigation )
+    }
+    //If there is no internet connection then allow user acess
+    else if( user != null && pass != null && !connection ){
+      setTimeout(() => {
+        navigation.navigate("Wellness");
+      }, 2200 );
     }
     else{
       setTimeout(() => {
