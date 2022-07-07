@@ -94,12 +94,12 @@ export default function AtriumScreen({navigation}){
               <TouchableOpacity activeOpacity={1} onPress={ displayYellowButterfly } >
                <Image style={ style.butterflies } source={require('../assets/atrium/yellow_butterfly_image.png')} resizeMode="contain" />
                <Image style={ style.blueCircle }  source={ blueCircle }></Image>
-               <Text style={ style.butterflyText }>{ b3 }</Text>
+               <Text style={ style.butterflyText }>{ b2 }</Text>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={1} onPress={ displayPurpleButterfly }>
                <Image style={ style.butterflyEnd } source={require('../assets/atrium/purple_butterfly_image.png')} resizeMode="contain" />
                <Image style={ style.blueCircleEnd }  source={ blueCircle }></Image>
-               <Text style={ style.butterflyTextEnd }>{ b4 }</Text>
+               <Text style={ style.butterflyTextEnd }>{ b3 }</Text>
               </TouchableOpacity>
 
              </View>

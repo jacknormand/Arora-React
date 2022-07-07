@@ -83,6 +83,9 @@ function LoginScreen ({ navigation }) {
                     onValueChange={setLoggedIn}
                     value={stayLoggedinBtn}/>
               </View>
+              <TouchableOpacity onPress={() => navigation.navigate("Reset")}>
+                <Text style={ styles.resetPass }>Reset Password</Text>
+              </TouchableOpacity>
 
             </View>
 
@@ -103,7 +106,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-
+  resetPass:{
+    color: 'white',
+    fontSize: 20,
+    marginTop: 10,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+  },
   keyboardPush: {
     flex: 1,
   },
