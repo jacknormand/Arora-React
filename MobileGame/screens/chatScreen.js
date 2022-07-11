@@ -4,41 +4,108 @@ import { Alert, ImageBackground, StyleSheet , View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNewMessage } from '../network/apiCalls';
 import { Button } from 'react-native-paper';
-import { useNetInfo } from '@react-native-community/netinfo';
-
-/*
-  TODO: Checking network connections difficult here because first state is unknown so it returns null.
-  This is an issue when using a useEffect for API calls
-*/
+import  NetInfo from '@react-native-community/netinfo';
 
 export default function ChatScreen({navigation}){
     const [ messages , setMessages ] = React.useState( [] );
     const [ username , setUsername ] = React.useState('');
     const [ messageIndex , setMessageIndex ] = React.useState( 0 );
-
-    //const [ isConnected, setIsConnected ] = React.useState(null);
-    let NetInfo = useNetInfo();
-    const connection = NetInfo.isConnected; // Returns null for fist state 
-    
-    const network = () => {
-      if( connection === false ){
-          Alert.alert('No connection', 
-          'Chat needs an internet connection',
-          [
-            { text: "Ok" , onPress: () => navigation.navigate("Home") }
-          ])     
-      }
-    }
+    const [ isConnected, setIsConnected ] = React.useState( true );
 
     // Need for global at the moment 
     const getUserData = async () => {
       await AsyncStorage.getItem( "@user" ).then( value => setUsername( value ) );
     }
+
+    useEffect(() => {
+      getUserData();
+
+      //Intial status
+      NetInfo.fetch().then( state => {
+        if( state.isConnected )
+        {
+          clearAsyncMessages();
+          fetchMessages();
+        }
+        else
+        {
+          getMessagesAsync();
+          Alert.alert(
+            "No internet connection",
+            "Messageing in offline mode",
+            [
+              { text: 'Ok'}
+            ]
+          )  
+        }
+      });
+
+      //Internet connection listener
+      NetInfo.addEventListener( state => {
+        if( !state.isConnected )
+        {
+          Alert.alert(
+            "No internet connection",
+            "Messageing in offline mode",
+            [
+              { text: 'Ok'}
+            ]
+          )
+          setIsConnected( false );
+        }
+        else if( state.isConnected && !isConnected ) // Detect if there was a connection change
+        {
+          setIsConnected( true );
+          fetchMessages();
+        }
+      });
+
+      const unsubscribe = navigation.addListener('focus', () => {
+      });
+  
+      // Return the function to unsubscribe from the event so it gets removed on unmount( No render on navigation )
+      return unsubscribe;
+
+    }, [ navigation ]);
+  
+
+
+    const getMessagesAsync = async () => {
+      var messageArray , username;
+      await AsyncStorage.getItem( '@messages' ).then( value => messageArray = JSON.parse( value ) );
+      await AsyncStorage.getItem( "@user" ).then( value => username = value );
+      let messageArrayLen = messageArray.length;
+      for( let index = 0; index < messageArrayLen; index++ )
+      {  
+        let sender = ( messageArray[ index ].sender_name != username ? 2 : 1 );
+        let new_message = {
+          _id: messageArray[ index ].message_id,
+          text: messageArray[ index ].message_text,
+          createdAt: messageArray[ index ].message_date,
+          user: {
+            _id: sender,
+            name: messageArray[ index ].sender_name,
+            avatar: '',
+          },
+        };
+
+        //Prevent message duplication when network state changes 
+        if( new_message != messages[ index ] )
+        {
+          // Append the new message to the existing message objects 
+          setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) );
+        }
+      }
+    }
+
+    const clearAsyncMessages = async () => {
+      await AsyncStorage.removeItem( '@messages' )
+    }
     
    const fetchMessages = async () => {
       //Obtain the user, mentor and other async items
-      network(); 
       var username, convoId;
+      let messageArray = [];
       await AsyncStorage.getItem( "@user" ).then( value => username = value );
       await AsyncStorage.getItem( "@convo_id" ).then( value => convoId = value );
 
@@ -63,28 +130,19 @@ export default function ChatScreen({navigation}){
               avatar: '',
             },
           };
+
+          // Append the new message for async 
+          messageArray[ index ] = new_message;
+
           // Append the new message to the existing message objects 
           setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) );
         }
+        AsyncStorage.setItem( '@messages' , JSON.stringify( messageArray ) );
       }).catch( error => {
         console.error( error );
       })
     }
-
-  // Unmounting function on navigation, then re mounts when user navigates back( updating the feed )
-  useEffect( () => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      //Check for initial connection 
-      network();
-      getUserData();
-      fetchMessages();
-    });
-
-    // Return the function to unsubscribe from the event so it gets removed on unmount( No render on navigation )
-    return unsubscribe;
-    }, [ navigation ] );
-    
-      
+        
   //append the sent message to the message array 
   const onSend = useCallback( async ( messages = [] ) => {
         setMessages( previousMessages => GiftedChat.append( previousMessages, messages ) )
