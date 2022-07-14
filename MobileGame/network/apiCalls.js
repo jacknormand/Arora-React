@@ -29,7 +29,13 @@ const createUserLocationReport = async () => {
     await AsyncStorage.setItem( '@latitude' , JSON.stringify( location.coords.latitude ) );
   }
   else{
-    //Temp location values for permission denied 
+    //Temp location values for permission denied
+    /*
+     const location = {
+      "longitude": location.coords.longitude,
+      "latitude": location.coords.latitude
+     }
+    */ 
     await AsyncStorage.setItem( '@longitude' , JSON.stringify( .2 ) );
     await AsyncStorage.setItem( '@latitude' , JSON.stringify( .7 ) );  
   }
@@ -132,6 +138,13 @@ export async function storeUserData( userID ){
       return response.json();
     }).then( data => {
       //Load values from database to the async storage for later use
+      /*
+       var user;
+       user = getItem( 'user' );
+       user.pollen = data.pollen;
+       user.b0Count = data.user_b0_count;
+       setItem( "user" , user );
+      */
       AsyncStorage.setItem( '@user_pollen' , JSON.stringify( data.user_pollen ));
       AsyncStorage.setItem( '@user_b0_count' , JSON.stringify( data.user_b0_count ));
       AsyncStorage.setItem( '@user_b1_count' , JSON.stringify( data.user_b1_count ));
@@ -141,16 +154,43 @@ export async function storeUserData( userID ){
       AsyncStorage.setItem( '@current_butterfly' , JSON.stringify( data.user_current_butterfly ));
       AsyncStorage.setItem( '@user_current_mood' , JSON.stringify( data.user_current_mood ));
       AsyncStorage.setItem( '@user_current_mood_updated' , JSON.stringify( data.user_current_mood_updated ));
-      //AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( data.mentor_id ) );
+      AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( data.mentor_id ) );
     }).catch( error => {
       console.error(error)
     })
 }
 
+export async function changeMentor(){
+  var userId , mentorId; 
+  await AsyncStorage.getItem( "@userId")
+  .then( value => userId = parseInt( value ) );
+
+  await AsyncStorage.getItem( '@assigned_mentor')
+  .then( value => mentorId = parseInt( value ) );
+
+  await fetch( 'http://104.248.178.78:8000/changementor/' + userId , {
+    method: 'PATCH',
+    headers: {
+     'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "mentor_id": mentorId
+    })
+    })
+    .then( response => {
+      return response.json();
+    })
+    .catch( error => {
+      console.error( error );
+  })
+}
+
 export async function getMentor()
 {
-  //await AsyncStorage.getItem( '@assigned_mentor' ).then( value => mentorId = value );
-  await fetch( 'http://104.248.178.78:8000/userinfo/' + '2147483648' )
+  var mentorId;
+  await AsyncStorage.getItem( '@assigned_mentor')
+  .then( value => mentorId = parseInt( value ) );
+  await fetch( 'http://104.248.178.78:8000/userinfo/' + mentorId )
   .then( response => {
     return response.json();
   }).then( data => {
@@ -160,7 +200,7 @@ export async function getMentor()
   })
 }
 
-export async function registerAPI( user, pass, email, code , navigation )
+export async function registerAPI( user, pass, email , navigation )
 {
   var userID;
 
@@ -188,17 +228,31 @@ export async function registerAPI( user, pass, email, code , navigation )
 
     // creation success
     if ( userID ){
+      var mentor_id, mentor_name;
+      AsyncStorage.setItem( "@userId" , JSON.stringify( userID ) );
+      AsyncStorage.setItem( '@messages' , JSON.stringify( [] ) );
+      
+      //Get supervisor info for default mentor on user create  
+      getSupervisorId();
+      changeMentor();
+      getMentor();
 
-      // Put acess code in async for later use and allow for multiple users per device
-      await AsyncStorage.setItem( '@acess_code' , JSON.stringify( code ) );
+      //Get mentor info from async for initial message
+      await AsyncStorage.getItem( "@assigned_mentor")
+      .then(value => {
+        mentor_id = parseInt( value );
+      });
+      await AsyncStorage.getItem( '@mentor_name' )
+      .then( value => { 
+        mentor_name = value;
+      });
 
-      // change mentor based on code entered
-      if( code === "100" || code === "340" || code === "299" ){
-        await AsyncStorage.setItem( "@assigned_mentor" , JSON.stringify( 2147483648 ) );
-      }
+      //Create an initial message for user upon registration 
+      let text = "You are now connected to your mentor, " + mentor_name + "!";
+      createNewMessage( text, new Date(), userID, "System", mentor_id );
+
       // navigate back to login
       navigation.navigate("Login")
-
     }
     // FIX THIS TO ACCOUNT FOR DIFFERENT ERRORS
     else{
@@ -251,22 +305,7 @@ export async function loginAPI( user, pass, navigation, value )
   // USER EXISTS and correct credentials
   // If info entered isnt correct, userID wont be passed back and wont exist
   if ( userID ){
-
-    // Test user entered against the one stored.
-    // If diff then we need to create the convo 
-    var testUser , mentor_name , mentor_id;
-    await AsyncStorage.getItem( '@userId' ).then( value => testUser = parseInt( value ) );
-    await AsyncStorage.getItem( '@mentor_name' ).then( value => mentor_name = value );
-    await AsyncStorage.getItem( "@assigned_mentor" ).then( value => mentor_id = parseInt( value ) );
-    
-    // If the logged in user is different than stored user, create a new system message
-    if( testUser != userID )
-    {
-      // Create a system message 
-      let text = "You are now connected to your mentor, " + mentor_name + "!";
-      createNewMessage( text, new Date(),
-      userID, "System", mentor_id )
-    }
+    var autoSignIn;
 
     // if bool val undefined, then we are autlogin so set it to true
     if (value == undefined){
@@ -276,24 +315,19 @@ export async function loginAPI( user, pass, navigation, value )
     // update auto login here. the reason for this is because previously, you could just click 
     // "keep me logged in" and not actually sign in, and when you restarted the app it would bypass
     // the login. putting this here instead of the login screen prevents that from happening
-    await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( value ));
-
-    // Store user data into storage
-    const storeData = async ( userID ) => {
-        await AsyncStorage.setItem( '@user' , user );
-        await AsyncStorage.setItem( '@password' , pass );
-        await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
-        await AsyncStorage.setItem( '@assigned_mentor' , JSON.stringify( 2147483648 ) );
-        await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( true ) );
-    }
+    AsyncStorage.setItem( '@autoLogin' , JSON.stringify( value ));
+    AsyncStorage.setItem( '@user' , user );
+    AsyncStorage.setItem( '@password' , pass );
+    AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
+    AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( true ) );
     
-    //Save data to local 
-    storeData( userID );
+
+    //Save data to local
     storeUserData( userID );
-    getMentor();
     
     //Get user stored setting 
-    const autoSignIn = await AsyncStorage.getItem( '@autoLogin' );
+    await AsyncStorage.getItem( '@autoLogin' )
+    .then( value => autoSignIn = value );
 
     //If user wants auto login then we still need a screen timer
     if( autoSignIn === "true" ){
@@ -317,10 +351,43 @@ export async function loginAPI( user, pass, navigation, value )
   }
 }
 
+export async function getSupervisorId(){
+  await fetch( 'http://104.248.178.78:8000/supervisor')
+  .then( response => {
+    return response.json();
+  })
+  .then( data => {
+    AsyncStorage.setItem( "@assigned_mentor" , JSON.stringify( data.user_id ));
+  })
+  .catch( error => {
+    console.log( error );
+  })
+}
+
+
+export async function ValidAccessCodes(){
+  await fetch('http://104.248.178.78:8000/AccessCodes')
+  .then( response => {
+    return response.json();
+  })
+  .then( data => {
+    AsyncStorage.setItem( "@valid_access_codes" , JSON.stringify( data ) );
+  })
+  .catch( error => {
+    console.log( error );
+  })
+}
+
 export async function moodReportAPI( navigation ){  
-   await AsyncStorage.getItem( '@userId' ).then( value => value != null ? userId = value : console.log( "User Id: Evaluated to null" ) );
-   await AsyncStorage.getItem( '@mood_type' ).then( value => value != null ? moodType = value : console.log( " Mood Type: Evaluated to null" ) );
-   await AsyncStorage.getItem( '@stress_type' ).then( value => value != null ? stressType = value : console.log( "Stress Type: Evaluated to null" ) );
+   var userId , moodType , stressType;
+
+   //Load in async storage values for API 
+   await AsyncStorage.getItem( '@userId' )
+   .then( value => userId = value );
+   await AsyncStorage.getItem( '@mood_type' )
+   .then( value => moodType = value );
+   await AsyncStorage.getItem( '@stress_type' )
+   .then( value => stressType = value );
   
    var currentdate = new Date();
    AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( currentdate ) );

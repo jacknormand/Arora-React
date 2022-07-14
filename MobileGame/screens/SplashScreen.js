@@ -85,6 +85,56 @@ export default function SplashScreen({ navigation }){
     await AsyncStorage.getItem( '@user' ).then( value => user = value );
     await AsyncStorage.getItem( '@password' ).then( value => pass = value );
     await AsyncStorage.getItem( '@autoLogin' ).then( value => stayLoggedIn = value );
+
+    /*
+      var user;
+      user = getItem( 'user' );
+
+      if( user.userId === null && user.username === null && user.password === null )
+      {
+        //init empty user object
+        const user = {
+          "pollen": 0,
+          "b0Count": 0,
+          "b1Count": 0,
+          "b2Count": 0,
+          "b3Count": 0,
+          "b4Count": 0,
+          "currentButterfly": 0,
+          "currentMood": 0,
+          "moodUpdated": "",
+          "mentorId": 0,
+          "username": "",
+          "password": "",
+          "autologin": false,
+        }
+
+        setItem( 'user' , user );
+
+        setTimeout(() => {
+         navigation.navigate("Login");
+        }, 2200);
+      }
+      else
+      {
+        if( connection && user != null && pass != null && stayLoggedIn === "true" )
+        {
+          loginAPI( user, pass, navigation )
+        }
+        else if( user != null && pass != null && !connection )
+        {
+          setTimeout(() => {
+            navigation.navigate("Wellness");
+          }, 2200 );        
+        }
+        else
+        {
+          setTimeout(() => {
+            navigation.navigate("Login");
+          }, 2200);    
+        }
+      }
+    */
     
     //Check that the user and password is not null and the autologin is on( disabled on adroid till proof it 100% works )
     if( connection && user != null && pass != null && stayLoggedIn === "true" ){

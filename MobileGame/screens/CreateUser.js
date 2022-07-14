@@ -1,7 +1,9 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { Alert, ImageBackground,StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
 import { registerAPI } from '../network/apiCalls'
 import { TextInput, Button } from 'react-native-paper';
+import { ValidAccessCodes } from '../network/apiCalls'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 /*
@@ -18,27 +20,28 @@ function CreateUser ({ navigation }) {
           code: ''
         });
       
-        // Set code validatin and the correct codes( used later for mentor determination )
+      // Set code validatin and the correct codes( used later for mentor determination )
       const [validateCode , setValidateCode] = useState(false);
-      const validCodes = [ "100" , "340" , "299" ]; // Temp until the real codes are created
-
       const [validColor, setColor] = useState("#f00");
       const [validEmail, setValid] = useState(false);
 
       const [reenterColor, setreenterColor] = useState("#f00");
       const [validReenter, setReenter] = useState(false);
-
-
+      
       const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-      const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0
+      const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0;
 
+      useEffect(() => {
+        ValidAccessCodes();
+      }, [])
+    
       function register( navigation )
       {
         if (validEmail && validReenter && validateCode)
         {
           // register if valid
-          registerAPI( user.username, user.password, user.email, user.code , navigation )
+          registerAPI( user.username, user.password, user.email, navigation )
         }
         else if( validEmail && validReenter && !validateCode )
         {
@@ -95,16 +98,20 @@ function CreateUser ({ navigation }) {
           setColor("#f00");
           setValid(false);
         }
-
       }
+
       // Check that user entered code is valid
-      function codeChecker( code ){
+      async function codeChecker( code ){
+        var validCodes;
+        await AsyncStorage.getItem( '@valid_access_codes')
+        .then( value => validCodes = JSON.parse( value ) );
         setUser({ username: user.username, password: user.password, reenter: user.reenter, email: user.email, code: code });
         const codeArrayLen = validCodes.length;
 
         // Loop through the possible correct codes 
         for( let index = 0; index < codeArrayLen; index++ ){
-          if( code === validCodes[ index ] ){
+          let currentCode = validCodes[ index ];
+          if( code === currentCode['access_code'] ){
             // Set state to true if codes match
             setValidateCode( true );
           }

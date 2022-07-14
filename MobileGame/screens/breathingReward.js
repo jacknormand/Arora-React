@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateDatabase } from '../network/apiCalls';
 import { Button } from 'react-native-paper';
 import  LottieView  from 'lottie-react-native';
+import NetInfo from '@react-native-community/netinfo'
 
 /*
   TODO: FINSISH ANIMATION( 100 or so frames )
@@ -23,9 +24,10 @@ export default function BreathingReward({navigation}){
     }
 
     // mount and unmount on navigation 
-    React.useEffect(() => {
+    useEffect(() => {
+        getUserItems();
+
         const unsubscribe = navigation.addListener('focus', () => {
-            getUserItems();
         });
         // Return the function to unsubscribe from the event so it gets removed on unmount( No render on logout event )
         return unsubscribe;

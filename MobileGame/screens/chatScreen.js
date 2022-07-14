@@ -24,7 +24,6 @@ export default function ChatScreen({navigation}){
       NetInfo.fetch().then( state => {
         if( state.isConnected )
         {
-          clearAsyncMessages();
           fetchMessages();
         }
         else
@@ -97,22 +96,25 @@ export default function ChatScreen({navigation}){
         }
       }
     }
-
-    const clearAsyncMessages = async () => {
-      await AsyncStorage.removeItem( '@messages' )
-    }
     
    const fetchMessages = async () => {
       //Obtain the user, mentor and other async items
-      var username, convoId;
-      let messageArray = [];
-      await AsyncStorage.getItem( "@user" ).then( value => username = value );
-      await AsyncStorage.getItem( "@convo_id" ).then( value => convoId = value );
-
+      var username, convoId , messageArray , mentorId , userId;
+      await AsyncStorage.getItem( "@messages" )
+      .then( value => messageArray = JSON.parse( value ) );
+      await AsyncStorage.getItem( "@user" )
+      .then( value => username = value );
+      await AsyncStorage.getItem( "@convo_id" )
+      .then( value => convoId = value );
+      await AsyncStorage.getItem( "@assigned_mentor")
+      .then( value => mentorId = parseInt( value ) );
+      console.log( mentorId );
+      await AsyncStorage.getItem( "@userId")
+      .then( value => userId = parseInt( value ) );
       // Parse the id 
       convoId = JSON.parse( convoId );
 
-      return await fetch( 'http://104.248.178.78:8000/Messages/' + convoId )
+      return await fetch( 'http://104.248.178.78:8000/MessagesBetweenUsers/' + userId + '/' + mentorId  )
       .then( response => {
         return response.json();
       }).then( data => {
@@ -131,11 +133,16 @@ export default function ChatScreen({navigation}){
             },
           };
 
-          // Append the new message for async 
-          messageArray[ index ] = new_message;
-
-          // Append the new message to the existing message objects 
-          setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) );
+          if( messages[ index ] != new_message )
+          {
+            // Append the new message to the existing message objects 
+            setMessages( previousMessages => GiftedChat.append( previousMessages, new_message ) );
+          }
+          
+          if( messageArray != null && messageArray[ index ] != new_message )
+          {
+            messageArray[ index ] = new_message;
+          }
         }
         AsyncStorage.setItem( '@messages' , JSON.stringify( messageArray ) );
       }).catch( error => {

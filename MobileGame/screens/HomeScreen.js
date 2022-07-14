@@ -1,7 +1,8 @@
 import React, { useEffect, useState , useCallback } from "react";
 import { Alert, TouchableOpacity , Text , ImageBackground , View , StyleSheet , Image } from "react-native"
 import Footer from '../components/Footer'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getItem , setItem , multiRemove } from "../network/asyncstorage";
 
 export default function HomeScreen( { navigation }){
     //hooks to set varible from async storage
@@ -40,14 +41,14 @@ export default function HomeScreen( { navigation }){
 
     //on log out remove async values
     const logout = async () => {
+
+      // Upon log out set logged info to false since async is clear of user data
       await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( false ) );
       await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ) );
-      await AsyncStorage.setItem( '@start_new_chat' , JSON.stringify( false ) );
-      
+    
       // Create a list of values to be removed
       let dataToBeRemoved = [
       '@user',
-      '@password',
       '@user_pollen',
       '@user_b0_count',
       '@user_b1_count',
@@ -59,7 +60,14 @@ export default function HomeScreen( { navigation }){
       '@user_current_mood_updated',
       '@mood_type',
       '@stress_type',
+      '@messages',
+      '@assigned_mentor',
+      '@mentor_name',
      ];
+
+     // removeItem( 'user' );
+     // removeItem( 'messages' );
+     // removeItem( 'location' );
 
       await AsyncStorage.multiRemove( dataToBeRemoved );
     }
