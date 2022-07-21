@@ -43,8 +43,8 @@ export default function HomeScreen( { navigation }){
     const logout = async () => {
 
       // Upon log out set logged info to false since async is clear of user data
-      await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( false ) );
-      await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ) );
+      AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( false) );
+      AsyncStorage.setItem( '@autoLogin' , JSON.stringify( false ) );
     
       // Create a list of values to be removed
       let dataToBeRemoved = [
@@ -63,6 +63,7 @@ export default function HomeScreen( { navigation }){
       '@messages',
       '@assigned_mentor',
       '@mentor_name',
+      '@valid_access_codes'
      ];
 
      // removeItem( 'user' );
@@ -79,8 +80,6 @@ export default function HomeScreen( { navigation }){
       })
     }
 
-
-     
     return(
         <View style={ style.main }>
             <ImageBackground source={require('../assets/dusk_background.jpg')} resizeMode="cover" style={ style.image }>

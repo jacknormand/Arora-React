@@ -13,6 +13,7 @@ import NetInfo from '@react-native-community/netinfo'
 
 export default function BreathingReward({navigation}){
     const [ pollen , setPollen ] = useState( 0 );
+    const [ isConnected , setIsConnected ] = useState( true );
 
     //const userPointsValue = AsyncStorage.getItem( '@user_points' );
     const getUserItems = async () => {
@@ -25,13 +26,37 @@ export default function BreathingReward({navigation}){
 
     // mount and unmount on navigation 
     useEffect(() => {
-        getUserItems();
-
+        //Intial status
+        NetInfo.fetch().then( state => {
+          if( state.isConnected )
+          {
+            setIsConnected( true );
+          }
+          else
+          {
+            setIsConnected( false );
+          }
+        });
+    
+        //Internet connection listener
+        NetInfo.addEventListener( state => {
+          if( !state.isConnected )
+          {
+            setIsConnected( false );
+          }
+          else if( state.isConnected && !isConnected ) // Detect if there was a connection change
+          {
+            setIsConnected( true );
+          }
+        });
+    
         const unsubscribe = navigation.addListener('focus', () => {
         });
-        // Return the function to unsubscribe from the event so it gets removed on unmount( No render on logout event )
+    
+        // Return the function to unsubscribe from the event so it gets removed on unmount( No render on navigation )
         return unsubscribe;
-    }, [ navigation ]);
+    
+      }, [ navigation ]);
 
     const updatePollenCount = async () => {
         let newCount = pollen + 10;
@@ -42,7 +67,10 @@ export default function BreathingReward({navigation}){
     //On user press, return back to home
     const returnHome = () => {
         updatePollenCount();
-        updateDatabase();
+        if( isConnected ){
+            updateDatabase();
+        }
+        
         navigation.navigate("Home");
     }
     

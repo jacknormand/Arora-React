@@ -1,15 +1,15 @@
-import React,{useState} from 'react';
+import React, { useState , useEffect } from 'react';
 import { StyleSheet, View , TouchableOpacity , Text , ImageBackground , Image } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { moodReportAPI, updateDatabase } from '../network/apiCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNetInfo } from '@react-native-community/netinfo'; 
+import NetInfo from '@react-native-community/netinfo'; 
 
 function WellnessScreen ({ navigation }) {
   const [range,setRange] = useState(0)
   const [rangeTwo,setRangeTwo] = useState(0)
-  const network = useNetInfo();
-  const connectivity = network.isConnected;
+  const [ isConnected , setIsConnected ] = useState( true );
+
   var out1
   var out2
   let moodType
@@ -71,17 +71,59 @@ function WellnessScreen ({ navigation }) {
       imgPathTwo = require('../assets/surveryScreen/2.png')
       break;
       }
+  
   //Store wellness survey questions in async in case of offline
   const updateReport = async () => {
     await AsyncStorage.setItem( '@mood_type' , JSON.stringify( moodType ));
     await AsyncStorage.setItem( '@stress_type' , JSON.stringify( stressType ));
   }
-  updateReport();
+  
+  useEffect(() => {
+    //Intial status
+    NetInfo.fetch().then( state => {
+      if( state.isConnected )
+      {
+        setIsConnected( true );
+      }
+      else
+      {
+        setIsConnected( false );
+      }
+    });
+
+    //Internet connection listener
+    NetInfo.addEventListener( state => {
+      if( !state.isConnected )
+      {
+        setIsConnected( false );
+      }
+      else if( state.isConnected && !isConnected ) // Detect if there was a connection change
+      {
+        setIsConnected( true );
+      }
+    });
+
+    const unsubscribe = navigation.addListener('focus', () => {
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount( No render on navigation )
+    return unsubscribe;
+
+  }, [ navigation ]);
 
   function checkNetworkAndUpdate( navigation ){
-    if( connectivity ){
-     moodReportAPI( navigation )
-     updateDatabase();
+    if( isConnected ){
+     updateReport()
+     .then(() => {
+      moodReportAPI( navigation );
+      updateDatabase();
+     })
+    }
+    else{
+      updateReport()
+      .then(() => {
+        navigation.navigate("Home");
+      })
     }
   }
     

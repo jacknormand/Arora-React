@@ -4,7 +4,7 @@ import { registerAPI } from '../network/apiCalls'
 import { TextInput, Button } from 'react-native-paper';
 import { ValidAccessCodes } from '../network/apiCalls'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import  NetInfo from '@react-native-community/netinfo';
 
 /*
   GOOD IDEA: FIND OUT HOW TO MAKE THE AUTOMATIC LOGIN BUTTON INTO CHECK BOX
@@ -24,6 +24,7 @@ function CreateUser ({ navigation }) {
       const [validateCode , setValidateCode] = useState(false);
       const [validColor, setColor] = useState("#f00");
       const [validEmail, setValid] = useState(false);
+      const [ isConnected , setIsConnected ] = useState( true );
 
       const [reenterColor, setreenterColor] = useState("#f00");
       const [validReenter, setReenter] = useState(false);
@@ -32,16 +33,79 @@ function CreateUser ({ navigation }) {
 
       const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0;
 
+
       useEffect(() => {
-        ValidAccessCodes();
-      }, [])
+        //Intial status
+        NetInfo.fetch().then( state => {
+          if( state.isConnected )
+          {
+            ValidAccessCodes();
+            setIsConnected( true );
+          }
+          else
+          {
+            getMessagesAsync();
+            Alert.alert(
+              "No internet connection",
+              "You must have an internet connection to register",
+              [
+                { text: 'Ok'}
+              ]
+            );
+            setIsConnected( false );  
+          }
+        });
+  
+        //Internet connection listener
+        NetInfo.addEventListener( state => {
+          if( !state.isConnected )
+          {
+            Alert.alert(
+              "No internet connection",
+              "You must have an internet connection to register",
+              [
+                { text: 'Ok'}
+              ]
+            )
+            setIsConnected( false );
+          }
+          else if( state.isConnected && !isConnected ) // Detect if there was a connection change
+          {
+            // if the valid access codes is not loaded then load them
+            AsyncStorage.getItem( "@valid_access_codes" ).then( value => {
+              if( value === null ){
+                ValidAccessCodes();
+              }
+            })
+            setIsConnected( true );
+          }
+        });
+  
+        const unsubscribe = navigation.addListener('focus', () => {
+        });
+    
+        // Return the function to unsubscribe from the event so it gets removed on unmount( No render on navigation )
+        return unsubscribe;
+  
+      }, [ navigation ]);
     
       function register( navigation )
       {
         if (validEmail && validReenter && validateCode)
         {
           // register if valid
-          registerAPI( user.username, user.password, user.email, navigation )
+          if( isConnected ){
+            registerAPI( user.username, user.password, user.email, navigation );
+          }
+          else{
+            Alert.alert(
+              "Registration Failed",
+              "You must have an internet connection to register",
+              [
+                { text: 'Ok'}
+              ]
+            );
+          }
         }
         else if( validEmail && validReenter && !validateCode )
         {

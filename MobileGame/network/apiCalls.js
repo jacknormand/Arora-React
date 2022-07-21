@@ -29,13 +29,6 @@ const createUserLocationReport = async () => {
     await AsyncStorage.setItem( '@latitude' , JSON.stringify( location.coords.latitude ) );
   }
   else{
-    //Temp location values for permission denied
-    /*
-     const location = {
-      "longitude": location.coords.longitude,
-      "latitude": location.coords.latitude
-     }
-    */ 
     await AsyncStorage.setItem( '@longitude' , JSON.stringify( .2 ) );
     await AsyncStorage.setItem( '@latitude' , JSON.stringify( .7 ) );  
   }
@@ -137,14 +130,6 @@ export async function storeUserData( userID ){
     .then( response => {
       return response.json();
     }).then( data => {
-      //Load values from database to the async storage for later use
-      /*
-       var user;
-       user = getItem( 'user' );
-       user.pollen = data.pollen;
-       user.b0Count = data.user_b0_count;
-       setItem( "user" , user );
-      */
       AsyncStorage.setItem( '@user_pollen' , JSON.stringify( data.user_pollen ));
       AsyncStorage.setItem( '@user_b0_count' , JSON.stringify( data.user_b0_count ));
       AsyncStorage.setItem( '@user_b1_count' , JSON.stringify( data.user_b1_count ));
@@ -251,8 +236,6 @@ export async function registerAPI( user, pass, email , navigation )
                 // navigate back to login
                 navigation.navigate("Login")
               })
-              // Catch all errors that might occur when dealing with promises
-              // Two levels of error to help track what went wrong
             })
           })
         })
