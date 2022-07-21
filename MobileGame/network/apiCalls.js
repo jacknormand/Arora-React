@@ -228,31 +228,38 @@ export async function registerAPI( user, pass, email , navigation )
 
     // creation success
     if ( userID ){
-      var mentor_id, mentor_name;
+      // Initalize some information
       AsyncStorage.setItem( "@userId" , JSON.stringify( userID ) );
       AsyncStorage.setItem( '@messages' , JSON.stringify( [] ) );
       
-      //Get supervisor info for default mentor on user create  
-      getSupervisorId();
-      changeMentor();
-      getMentor();
+      //Get supervisor info for default mentor on user create
+      const getMentorInfo = async ( userID ) => {
+        // Make sure all data is collected before heading to next step. We dont want to pass null here  
+        getSupervisorId()
+        .then(() => {
+          AsyncStorage.getItem( "@assigned_mentor")
+          .then( mentor_id => {
+            changeMentor();
+            getMentor()
+            .then(() => {
+              AsyncStorage.getItem("@mentor_name")
+              .then( value => {
+                //Create a first time sys message for user if no errors occured during data collection
+                let text = "You are now connected to your mentor, " + value + "!";
+                createNewMessage( text, new Date(), userID, "System", mentor_id );
 
-      //Get mentor info from async for initial message
-      await AsyncStorage.getItem( "@assigned_mentor")
-      .then(value => {
-        mentor_id = parseInt( value );
-      });
-      await AsyncStorage.getItem( '@mentor_name' )
-      .then( value => { 
-        mentor_name = value;
-      });
+                // navigate back to login
+                navigation.navigate("Login")
+              })
+              // Catch all errors that might occur when dealing with promises
+              // Two levels of error to help track what went wrong
+            })
+          })
+        })
+      }
 
-      //Create an initial message for user upon registration 
-      let text = "You are now connected to your mentor, " + mentor_name + "!";
-      createNewMessage( text, new Date(), userID, "System", mentor_id );
-
-      // navigate back to login
-      navigation.navigate("Login")
+      //Set up mentor fields for user
+      getMentorInfo( userID )
     }
     // FIX THIS TO ACCOUNT FOR DIFFERENT ERRORS
     else{
@@ -321,10 +328,15 @@ export async function loginAPI( user, pass, navigation, value )
     AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
     AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( true ) );
     
-
     //Save data to local
-    storeUserData( userID );
-    
+    storeUserData( userID )
+    .then(() => { 
+      getMentor() 
+    })
+    .catch( error => {
+      console.error( error );
+    })
+
     //Get user stored setting 
     await AsyncStorage.getItem( '@autoLogin' )
     .then( value => autoSignIn = value );
