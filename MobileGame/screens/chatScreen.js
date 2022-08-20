@@ -108,13 +108,16 @@ export default function ChatScreen({navigation}){
       .then( value => convoId = value );
       await AsyncStorage.getItem( "@assigned_mentor")
       .then( value => mentorId = parseInt( value ) );
-      console.log( mentorId );
       await AsyncStorage.getItem( "@userId")
       .then( value => userId = parseInt( value ) );
       // Parse the id 
       convoId = JSON.parse( convoId );
-
-      return await fetch( 'http://104.248.178.78:8000/MessagesBetweenUsers/' + userId + '/' + mentorId  )
+      let token = await AsyncStorage.getItem("@token");
+      return await fetch( 'http://104.248.178.78:8000/MessagesBetweenUsers/' + userId + '/' + mentorId, {
+        headers: {
+          Authorization: 'Bearer ' + JSON.parse( token )
+        }
+      })
       .then( response => {
         return response.json();
       }).then( data => {

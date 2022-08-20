@@ -15,10 +15,9 @@ const loginApiIp = 'http://' + IP + ':' + port + '/' + 'api-token-auth';
 //const moodFormApiIp = 'http://104.248.178.78:8000/moodreport';
 const moodFormApiIp = 'http://' + IP + ':' + port + '/' + 'moodreport';
 //const registerApiIp = 'http://104.248.178.78:8000/userinfo';
-const registerApiIp = 'http://' + IP + ':' + port + '/' + 'userinfo';
+const registerApiIp = 'http://' + IP + ':' + port + '/' + 'createuser';
 
-const locationApiIp = 'http://' + IP + ':' + port + '/' + 'locationreport'; 
-
+const locationApiIp = 'http://' + IP + ':' + port + '/' + 'locationreport';
 
 const createUserLocationReport = async () => {
   //get the permission from user and get values accordingly
@@ -37,6 +36,7 @@ const createUserLocationReport = async () => {
   let userId = await AsyncStorage.getItem( '@userId' );
   let longitude = await AsyncStorage.getItem( '@longitude' );
   let latitude = await AsyncStorage.getItem( '@latitude' );
+  let token = await AsyncStorage.getItem("@token");
   latitude = parseFloat( latitude );
   longitude = parseFloat( longitude );
 
@@ -44,7 +44,8 @@ const createUserLocationReport = async () => {
   await fetch( locationApiIp , {
     method: 'POST',
     headers:{
-    'Content-Type':'application/json'
+    'Content-Type':'application/json',
+    Authorization: 'Bearer ' + JSON.parse( token ) // user token here, no reason to use api token. 
     },
     body: JSON.stringify({
       "location_report_lat" :   Number( Math.round( latitude * 100 ) / 100 ),
@@ -71,11 +72,12 @@ export async function updateDatabase(){
   await AsyncStorage.getItem( '@latitude' ).then( value => latitude = value );
   await AsyncStorage.getItem( '@assigned_mentor').then( value => mentorId = value );
   //await AsyncStorage.getItem( '@user_current_mood_updated' ).then( value => moodTime = value );
-
+  let token = await AsyncStorage.getItem("@token");
   await fetch('http://104.248.178.78:8000/userinfo/' + userId , {
     method: 'PATCH',
     headers:{
-    'Content-Type':'application/json'
+    'Content-Type':'application/json',
+     Authorization: 'Bearer ' + JSON.parse( token )
     },
     body: JSON.stringify({ 
 	   "user_current_mood": Number( userMood ),
@@ -98,11 +100,13 @@ export async function updateDatabase(){
 }
 
 export async function createNewMessage( messageText , messageDate , senderId , senderName , reciverId ){
+  let token = await AsyncStorage.getItem("@token");
   await fetch( 'http://104.248.178.78:8000/Message' , {
    method: 'POST',
    headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + JSON.parse( token )
    },
    body: JSON.stringify({
     "message_text": messageText,
@@ -125,8 +129,13 @@ export async function createNewMessage( messageText , messageDate , senderId , s
 
 
 export async function storeUserData( userID ){
+  let token = await AsyncStorage.getItem("@token");
   //get current user id and fetch the user data
-  await fetch( 'http://104.248.178.78:8000/userinfo/' + userID )
+  await fetch( 'http://104.248.178.78:8000/userinfo/' + userID , {
+    headers: {
+      Authorization: 'Bearer ' + JSON.parse( token )
+    }
+    })
     .then( response => {
       return response.json();
     }).then( data => {
@@ -153,9 +162,12 @@ export async function changeMentor(){
   await AsyncStorage.getItem( '@assigned_mentor')
   .then( value => mentorId = parseInt( value ) );
 
+  let token = await AsyncStorage.getItem("@token");
+
   await fetch( 'http://104.248.178.78:8000/changementor/' + userId , {
     method: 'PATCH',
     headers: {
+      Authorization: 'Bearer ' + JSON.parse( token ),
      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -172,10 +184,17 @@ export async function changeMentor(){
 
 export async function getMentor()
 {
-  var mentorId;
+  var mentorId, token;
   await AsyncStorage.getItem( '@assigned_mentor')
   .then( value => mentorId = parseInt( value ) );
-  await fetch( 'http://104.248.178.78:8000/userinfo/' + mentorId )
+  await AsyncStorage.getItem("@token")
+  .then( value => token = value);
+  console.log(token);
+  await fetch( 'http://104.248.178.78:8000/userinfo/' + mentorId, {
+    headers:{
+      Authorization: 'Bearer ' + JSON.parse( token ),
+    }
+  })
   .then( response => {
     return response.json();
   }).then( data => {
@@ -193,7 +212,7 @@ export async function registerAPI( user, pass, email , navigation )
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       "username": user,
@@ -262,7 +281,6 @@ export async function loginAPI( user, pass, navigation, value )
 {
   var userID;
   var token;
-  
   //For future in case of no internet connection, check if the user id is not null if not then the user is still logged in. 
   // let tempId = await AsyncStorage.getItem( "@user_id" ); We know if the user has ever been logged in on the device 
   // let tempAutoLogin = await AsyncStorage.getItem( "@autoLogin" );
@@ -274,7 +292,7 @@ export async function loginAPI( user, pass, navigation, value )
   method: 'POST',
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     "username": user,
@@ -305,17 +323,36 @@ export async function loginAPI( user, pass, navigation, value )
     // update auto login here. the reason for this is because previously, you could just click 
     // "keep me logged in" and not actually sign in, and when you restarted the app it would bypass
     // the login. putting this here instead of the login screen prevents that from happening
-    AsyncStorage.setItem( '@autoLogin' , JSON.stringify( value ));
-    AsyncStorage.setItem( '@user' , user );
-    AsyncStorage.setItem( '@password' , pass );
-    AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
-    AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( true ) );
-    
-    //Save data to local
-    storeUserData( userID )
-    .then(() => { 
-      getMentor() 
-    })
+    console.log("Token: ");
+    console.log( token );
+    console.log("login: ");
+    console.log( value );
+    console.log("User: ");
+    console.log( user );
+    console.log("Pass: ");
+    console.log( pass );
+    console.log("UserId: ");
+    console.log( userID );
+    const storeLoginData = async () => {
+      await AsyncStorage.setItem('@token', JSON.stringify( token ) );
+      await AsyncStorage.setItem( '@autoLogin' , JSON.stringify( value ));
+      await AsyncStorage.setItem( '@user' , user );
+      await AsyncStorage.setItem( '@password' , pass );
+      await AsyncStorage.setItem( '@userId' , JSON.stringify( userID ) );
+      await AsyncStorage.setItem( '@is_logged_in' , JSON.stringify( true ) );
+    }
+
+    storeLoginData()
+    .then(
+      //Save data to local
+      storeUserData( userID )
+      .then(() => { 
+        getMentor() 
+      })
+      .catch( error => {
+        console.error( error );
+      })
+    )
     .catch( error => {
       console.error( error );
     })
@@ -347,7 +384,12 @@ export async function loginAPI( user, pass, navigation, value )
 }
 
 export async function getSupervisorId(){
-  await fetch( 'http://104.248.178.78:8000/supervisor')
+  let token = await AsyncStorage.getItem("@token");
+  await fetch( 'http://104.248.178.78:8000/supervisor' , {
+    headers: {
+      Authorization: 'Bearer ' + JSON.parse( token )
+    }
+  })
   .then( response => {
     return response.json();
   })
@@ -361,7 +403,7 @@ export async function getSupervisorId(){
 
 
 export async function ValidAccessCodes(){
-  await fetch('http://104.248.178.78:8000/AccessCodes')
+  await fetch('http://104.248.178.78:8000/AccessCodes' )
   .then( response => {
     return response.json();
   })
@@ -383,7 +425,7 @@ export async function moodReportAPI( navigation ){
    .then( value => moodType = value );
    await AsyncStorage.getItem( '@stress_type' )
    .then( value => stressType = value );
-  
+   let token = await AsyncStorage.getItem("@token");
    var currentdate = new Date();
    AsyncStorage.setItem('@user_current_mood_updated' , JSON.stringify( currentdate ) );
 
@@ -391,7 +433,8 @@ export async function moodReportAPI( navigation ){
           method: 'POST',
           headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + JSON.parse( token )
         },
         //TODO: Mood and Stress values arnt updating in the input types in the database( I need to fix this )
         body: JSON.stringify({
